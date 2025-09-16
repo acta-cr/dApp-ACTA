@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 
 export default function Aurora() {
   return (
-    <div className="pointer-events-none absolute inset-0 -z-0 overflow-hidden">
+    <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
       <motion.div
         aria-hidden
         className="absolute -top-1/3 left-1/2 h-[80vmax] w-[80vmax] -translate-x-1/2 rounded-full blur-3xl"

@@ -3,10 +3,11 @@
 import React, { useState } from "react";
 import { useWallet } from "@/components/modules/auth/hooks/wallet.hook";
 import { useWalletContext } from "@/providers/wallet.provider";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Key,
   Copy,
@@ -19,6 +20,8 @@ import {
   CheckCircle,
   Download,
   RotateCcw,
+  Info,
+  AlertTriangle,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -137,22 +140,32 @@ ACTA_API_URL=${apiUrl}
           </p>
         </div>
 
-        <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-8 text-center">
-          <div className="max-w-md mx-auto">
-            <div className="w-16 h-16 bg-white/5 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 border border-white/10">
-              <Key className="w-8 h-8 text-muted-foreground" />
+        <Alert className="bg-orange-500/10 border-orange-500/20 rounded-2xl">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle className="text-orange-400">Wallet Connection Required</AlertTitle>
+          <AlertDescription className="text-orange-300/80">
+            You need to connect your Stellar wallet to generate and manage API keys for ACTA services.
+          </AlertDescription>
+        </Alert>
+
+        <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
+          <CardContent className="p-8 text-center">
+            <div className="max-w-md mx-auto">
+              <div className="w-16 h-16 bg-white/5 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 border border-white/10">
+                <Key className="w-8 h-8 text-muted-foreground" />
+              </div>
+              <CardTitle className="text-xl mb-2">
+                Wallet Connection Required
+              </CardTitle>
+              <CardDescription className="mb-6">
+                You need to connect your Stellar wallet to generate and manage API
+                keys for ACTA services.
+              </CardDescription>
+              <Button className="bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all">
+                Connect Wallet
+              </Button>
             </div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">
-              Wallet Connection Required
-            </h2>
-            <p className="text-muted-foreground mb-6">
-              You need to connect your Stellar wallet to generate and manage API
-              keys for ACTA services.
-            </p>
-            <Button className="bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all">
-              Connect Wallet
-            </Button>
-          </div>
+          </CardContent>
         </Card>
       </div>
     );
@@ -176,22 +189,34 @@ ACTA_API_URL=${apiUrl}
         </Badge>
       </div>
 
+      {/* Success Alert */}
+      {hasApiKey && (
+        <Alert className="bg-green-500/10 border-green-500/20 rounded-2xl">
+          <CheckCircle className="h-4 w-4" />
+          <AlertTitle className="text-green-400">API Key Active</AlertTitle>
+          <AlertDescription className="text-green-300/80">
+            Your API key is active and ready to use. Keep it secure and never share it publicly.
+          </AlertDescription>
+        </Alert>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Main API Key Card */}
         <div className="lg:col-span-2 space-y-6">
-          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-foreground flex items-center">
+          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="flex items-center">
                 <Key className="w-5 h-5 mr-2" />
                 Your API Key
-              </h2>
+              </CardTitle>
               {hasApiKey && (
                 <Badge className="bg-green-400/20 text-green-400 border-green-400/30 backdrop-blur-sm rounded-2xl">
                   <CheckCircle className="w-3 h-3 mr-1" />
                   Active
                 </Badge>
               )}
-            </div>
+            </CardHeader>
+            <CardContent>
 
             {!hasApiKey ? (
               <div className="text-center py-8">
@@ -338,31 +363,31 @@ ACTA_API_URL=${apiUrl}
             )}
 
             {generatedKey && (
-              <div className="mt-4 p-4 bg-green-400/10 backdrop-blur-sm border border-green-400/20 rounded-lg">
-                <div className="flex items-start space-x-3">
-                  <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="text-sm font-medium text-green-400">Success</h4>
-                    <p className="text-sm text-green-400/80 mt-1">
-                      Your API key has been generated successfully. Make sure to copy it before navigating away.
-                    </p>
-                  </div>
-                </div>
+              <div className="mt-4">
+                <Alert className="bg-green-400/10 border-green-400/20 rounded-lg">
+                  <CheckCircle className="h-4 w-4" />
+                  <AlertTitle className="text-green-400">Success</AlertTitle>
+                  <AlertDescription className="text-green-400/80">
+                    Your API key has been generated successfully. Make sure to copy it before navigating away.
+                  </AlertDescription>
+                </Alert>
               </div>
             )}
+            </CardContent>
           </Card>
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Security Info */}
-          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-6">
-            <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
-              <Shield className="w-5 h-5 mr-2" />
-              Security Information
-            </h3>
-
-            <div className="space-y-4 text-sm">
+          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Shield className="w-5 h-5 mr-2" />
+                Security Information
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 text-sm">
               <div className="flex items-start space-x-3">
                 <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
                 <div>
@@ -394,25 +419,25 @@ ACTA_API_URL=${apiUrl}
                   </p>
                 </div>
               </div>
-            </div>
+            </CardContent>
           </Card>
 
           {/* Help */}
-          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-6">
-            <h3 className="text-lg font-semibold text-foreground mb-4">
-              Need Help?
-            </h3>
-
-            <div className="space-y-3">
-              <p className="text-sm text-muted-foreground">
+          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
+            <CardHeader>
+              <CardTitle>Need Help?</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <CardDescription>
                 Check out our documentation for detailed API usage examples and
                 integration guides.
-              </p>
+              </CardDescription>
 
               <Button variant="outline" className="w-full justify-start border-white/20 text-foreground hover:bg-white/5 backdrop-blur-sm rounded-2xl">
+                <Info className="w-4 h-4 mr-2" />
                 View Documentation
               </Button>
-            </div>
+            </CardContent>
           </Card>
         </div>
       </div>

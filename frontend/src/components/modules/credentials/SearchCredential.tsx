@@ -1,17 +1,31 @@
 "use client";
 
 import React, { useState } from "react";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   Search,
   CreditCard,
   AlertCircle,
   CheckCircle,
   Copy,
-  ExternalLink,
   Eye,
   EyeOff,
+  Hash,
+  Info,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -95,174 +109,227 @@ export function SearchCredential() {
       </div>
 
       {/* Search Form */}
-      <Card className="p-6 bg-background/80 backdrop-blur-xl border-white/10">
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-2">
-              Credential Hash
-            </label>
+      <Card className="bg-background/80 backdrop-blur-xl border-white/10">
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <Hash className="w-5 h-5 mr-2" />
+            Credential Search
+          </CardTitle>
+          <CardDescription>
+            Enter the unique hash identifier for the credential you want to search for.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="searchHash">Credential Hash</Label>
             <div className="flex space-x-3">
-              <input
+              <Input
+                id="searchHash"
                 type="text"
                 value={searchHash}
                 onChange={(e) => setSearchHash(e.target.value)}
                 placeholder="Enter the credential hash (e.g: 881983b6ec6efe3e6d860f3cbef387f4)"
-                className="flex-1 px-4 py-3 bg-background/50 border border-white/20 rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#1B6BFF]/50 focus:border-[#1B6BFF]/50"
+                className="flex-1 bg-background/50 border-white/20 text-foreground placeholder-muted-foreground"
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
               />
               <Button
                 onClick={handleSearch}
                 disabled={isSearching || !searchHash.trim()}
-                className="bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-xl px-6"
+                className="bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] px-6"
               >
                 {isSearching ? (
-                  <div className="flex items-center space-x-2">
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>Searching...</span>
-                  </div>
+                  <>
+                    <Search className="w-4 h-4 mr-2 animate-spin" />
+                    Searching...
+                  </>
                 ) : (
-                  <div className="flex items-center space-x-2">
-                    <Search className="w-4 h-4" />
-                    <span>Search</span>
-                  </div>
+                  <>
+                    <Search className="w-4 h-4 mr-2" />
+                    Search
+                  </>
                 )}
               </Button>
             </div>
           </div>
-        </div>
+        </CardContent>
       </Card>
 
       {/* Error Message */}
       {error && (
-        <Card className="p-4 bg-red-500/10 border-red-500/20">
-          <div className="flex items-center space-x-3">
-            <AlertCircle className="w-5 h-5 text-red-400" />
-            <div>
-              <p className="text-red-400 font-medium">Error searching for credential</p>
-              <p className="text-red-300 text-sm">{error}</p>
-            </div>
-          </div>
-        </Card>
+        <Alert className="bg-red-500/10 border-red-500/20 rounded-2xl">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle className="text-red-400">Error searching for credential</AlertTitle>
+          <AlertDescription className="text-red-300/80">
+            {error}
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {/* Success Alert */}
+      {credentialInfo && (
+        <Alert className="bg-green-500/10 border-green-500/20 rounded-2xl">
+          <CheckCircle className="h-4 w-4" />
+          <AlertTitle className="text-green-400">Credential Found</AlertTitle>
+          <AlertDescription className="text-green-300/80">
+            Successfully found credential with hash: {credentialInfo.hash.substring(0, 16)}...
+          </AlertDescription>
+        </Alert>
       )}
 
       {/* Credential Result */}
       {credentialInfo && (
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-foreground">Credential Found</h2>
+            <h2 className="text-xl font-semibold text-foreground">Credential Details</h2>
             <Button
               variant="outline"
               onClick={() => setIsFlipped(!isFlipped)}
               className="border-white/20 text-foreground hover:bg-white/5"
             >
               {isFlipped ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
-              {isFlipped ? 'Hide Details' : 'View Details'}
+              {isFlipped ? 'Show Card View' : 'Show Table View'}
             </Button>
           </div>
 
-          {/* Credential Card */}
-          <div className="perspective-1000">
-            <div className={`relative w-full h-64 transition-transform duration-700 transform-style-preserve-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
-              {/* Front of Card */}
-              <div className="absolute inset-0 w-full h-full backface-hidden">
-                <Card className="h-full p-6 bg-gradient-to-br from-[#1B6BFF]/20 to-[#8F43FF]/20 border-[#1B6BFF]/30 backdrop-blur-xl">
-                  <div className="flex flex-col h-full justify-between">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center space-x-3">
-                        <CreditCard className="w-8 h-8 text-[#1B6BFF]" />
-                        <div>
-                          <h3 className="text-lg font-bold text-foreground">{credentialInfo.fullData.name}</h3>
-                          <p className="text-sm text-muted-foreground">{credentialInfo.fullData.issuer}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <CheckCircle className="w-5 h-5 text-green-400" />
-                        <span className="text-sm text-green-400 font-medium">{credentialInfo.status}</span>
+          {!isFlipped ? (
+            /* Card View */
+            <Card className="bg-gradient-to-br from-[#1B6BFF]/20 to-[#8F43FF]/20 border-[#1B6BFF]/30 backdrop-blur-xl">
+              <CardContent className="p-6">
+                <div className="flex flex-col space-y-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center space-x-3">
+                      <CreditCard className="w-8 h-8 text-[#1B6BFF]" />
+                      <div>
+                        <h3 className="text-lg font-bold text-foreground">{credentialInfo.fullData.name}</h3>
+                        <p className="text-sm text-muted-foreground">{credentialInfo.fullData.issuer}</p>
                       </div>
                     </div>
+                    <Badge className="bg-green-400/20 text-green-400 border-green-400/30">
+                      <CheckCircle className="w-3 h-3 mr-1" />
+                      {credentialInfo.status}
+                    </Badge>
+                  </div>
 
-                    <div className="space-y-2">
-                      <p className="text-foreground font-medium">{credentialInfo.fullData.recipient}</p>
-                      <p className="text-sm text-muted-foreground">{credentialInfo.fullData.description}</p>
-                      <div className="flex flex-wrap gap-2 mt-3">
-                        {credentialInfo.fullData.skills.map((skill, index) => (
-                          <span
-                            key={index}
-                            className="px-2 py-1 bg-[#1B6BFF]/20 text-[#1B6BFF] text-xs rounded-lg border border-[#1B6BFF]/30"
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+                  <Separator />
 
-                    <div className="flex justify-between items-center text-xs text-muted-foreground">
-                      <span>Issued: {formatDate(credentialInfo.fullData.dateIssued)}</span>
-                      <span>Hash: {credentialInfo.hash.substring(0, 8)}...</span>
+                  <div className="space-y-2">
+                    <p className="text-foreground font-medium">{credentialInfo.fullData.recipient}</p>
+                    <p className="text-sm text-muted-foreground">{credentialInfo.fullData.description}</p>
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {credentialInfo.fullData.skills.map((skill, index) => (
+                        <Badge
+                          key={index}
+                          variant="outline"
+                          className="bg-[#1B6BFF]/20 text-[#1B6BFF] border-[#1B6BFF]/30"
+                        >
+                          {skill}
+                        </Badge>
+                      ))}
                     </div>
                   </div>
-                </Card>
-              </div>
 
-              {/* Back of Card */}
-              <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180">
-                <Card className="h-full p-6 bg-background/80 backdrop-blur-xl border-white/10">
-                  <div className="space-y-4 h-full overflow-y-auto">
-                    <h3 className="text-lg font-bold text-foreground mb-4">Technical Details</h3>
-                    
-                    <div className="space-y-3">
-                      <div>
-                        <label className="text-sm font-medium text-muted-foreground">Contract ID</label>
-                        <div className="flex items-center space-x-2 mt-1">
-                          <code className="flex-1 px-3 py-2 bg-background/50 border border-white/20 rounded-lg text-xs font-mono text-foreground break-all">
-                            {credentialInfo.contractId}
-                          </code>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => copyToClipboard(credentialInfo.contractId, "Contract ID")}
-                            className="border-white/20 hover:bg-white/5"
-                          >
-                            <Copy className="w-3 h-3" />
-                          </Button>
-                        </div>
-                      </div>
+                  <Separator />
 
-                      <div>
-                        <label className="text-sm font-medium text-muted-foreground">Hash</label>
-                        <div className="flex items-center space-x-2 mt-1">
-                          <code className="flex-1 px-3 py-2 bg-background/50 border border-white/20 rounded-lg text-xs font-mono text-foreground break-all">
-                            {credentialInfo.hash}
-                          </code>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => copyToClipboard(credentialInfo.hash, "Hash")}
-                            className="border-white/20 hover:bg-white/5"
-                          >
-                            <Copy className="w-3 h-3" />
-                          </Button>
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="text-sm font-medium text-muted-foreground">Creation Date</label>
-                        <p className="text-sm text-foreground mt-1">{formatDate(credentialInfo.fullData.createdAt)}</p>
-                      </div>
-
-                      <div>
-                        <label className="text-sm font-medium text-muted-foreground">Status</label>
-                        <div className="flex items-center space-x-2 mt-1">
-                          <CheckCircle className="w-4 h-4 text-green-400" />
-                          <span className="text-sm text-green-400 font-medium">Valid</span>
-                        </div>
-                      </div>
-                    </div>
+                  <div className="flex justify-between items-center text-xs text-muted-foreground">
+                    <span>Issued: {formatDate(credentialInfo.fullData.dateIssued)}</span>
+                    <span>Hash: {credentialInfo.hash.substring(0, 8)}...</span>
                   </div>
-                </Card>
-              </div>
-            </div>
-          </div>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            /* Table View */
+            <Card className="bg-background/80 backdrop-blur-xl border-white/10">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Info className="w-5 h-5 mr-2" />
+                  Technical Details
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-muted-foreground">Property</TableHead>
+                      <TableHead className="text-muted-foreground">Value</TableHead>
+                      <TableHead className="text-muted-foreground w-20">Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell className="font-medium">Name</TableCell>
+                      <TableCell>{credentialInfo.fullData.name}</TableCell>
+                      <TableCell></TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium">Issuer</TableCell>
+                      <TableCell>{credentialInfo.fullData.issuer}</TableCell>
+                      <TableCell></TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium">Recipient</TableCell>
+                      <TableCell>{credentialInfo.fullData.recipient}</TableCell>
+                      <TableCell></TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium">Contract ID</TableCell>
+                      <TableCell>
+                        <code className="text-xs bg-background/50 p-1 rounded border">
+                          {credentialInfo.contractId.substring(0, 20)}...
+                        </code>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => copyToClipboard(credentialInfo.contractId, "Contract ID")}
+                        >
+                          <Copy className="w-3 h-3" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium">Hash</TableCell>
+                      <TableCell>
+                        <code className="text-xs bg-background/50 p-1 rounded border">
+                          {credentialInfo.hash.substring(0, 20)}...
+                        </code>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => copyToClipboard(credentialInfo.hash, "Hash")}
+                        >
+                          <Copy className="w-3 h-3" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium">Date Issued</TableCell>
+                      <TableCell>{formatDate(credentialInfo.fullData.dateIssued)}</TableCell>
+                      <TableCell></TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium">Created At</TableCell>
+                      <TableCell>{formatDate(credentialInfo.fullData.createdAt)}</TableCell>
+                      <TableCell></TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium">Status</TableCell>
+                      <TableCell>
+                        <Badge className="bg-green-400/20 text-green-400 border-green-400/30">
+                          <CheckCircle className="w-3 h-3 mr-1" />
+                          {credentialInfo.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell></TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          )}
         </div>
       )}
     </div>

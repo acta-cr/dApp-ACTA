@@ -9,6 +9,7 @@ import { ApiKey } from "@/components/modules/api-key/ApiKey";
 import { CreateCredential } from "@/components/modules/credentials/CreateCredential";
 import { SearchCredential } from "@/components/modules/credentials/SearchCredential";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Wallet } from "lucide-react";
 import Aurora from "@/components/Aurora";
 import { Particles } from "@/components/magicui/particles";
@@ -22,13 +23,13 @@ export function DashboardLayout() {
   // If not connected, show connection screen
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-background to-slate-800 text-foreground overflow-x-hidden">
         {/* Background layers */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-[#1B1F2E]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-900/50 via-background/80 to-slate-800/50" />
           <Aurora />
           <Particles
-            className="absolute inset-0 z-0"
+            className="absolute inset-0 z-10"
             quantity={60}
             staticity={40}
             ease={70}
@@ -39,40 +40,39 @@ export function DashboardLayout() {
           />
         </div>
 
-        {/* Background effects for connection section */}
-        <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
-          <div className="pointer-events-none absolute inset-0 z-0">
-            <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-[#1B6BFF]/25 blur-3xl" />
-            <div className="absolute -bottom-24 -right-24 h-80 w-80 rounded-full bg-[#8F43FF]/25 blur-3xl" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent [mask-image:radial-gradient(350px_200px_at_50%_0%,#000_40%,transparent_80%)]" />
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0,transparent_23%,rgba(255,255,255,.06)_24%,transparent_25%),linear-gradient(to_bottom,transparent_0,transparent_23%,rgba(255,255,255,.06)_24%,transparent_25%)] bg-[size:44px_44px] opacity-40" />
-          </div>
+        {/* Connection section */}
+        <div className="relative z-20 min-h-screen flex items-center justify-center p-4">
+          <div className="w-full max-w-md">
+            <Card className="bg-card/50 backdrop-blur-xl border-white/20 shadow-2xl">
+              <CardHeader className="text-center pb-4">
+                <div className="w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <img src="/logo.png" alt="ACTA Logo" className="w-16 h-16" />
+                </div>
+                <CardTitle className="text-3xl font-bold text-foreground mb-2">
+                  ACTA dApp
+                </CardTitle>
+                <CardDescription className="text-base text-muted-foreground">
+                  Connect your Stellar wallet to access the dashboard and generate API keys
+                </CardDescription>
+              </CardHeader>
 
-          <div className="relative z-10 bg-background/80 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl p-8 max-w-md w-full text-center">
-            <div className="w-16 h-16 flex items-center justify-center mx-auto mb-6">
-              <img src="/logo.png" alt="ACTA Logo" className="w-16 h-16" />
-            </div>
-            <div className="mb-6">
-              <h1 className="text-3xl font-bold text-foreground mb-2">
-                ACTA dApp
-              </h1>
-              <p className="text-muted-foreground">
-                Connect your Stellar wallet to access the dashboard and generate
-                API keys
-              </p>
-            </div>
+              <CardContent className="space-y-6">
+                <Button
+                  onClick={handleConnect}
+                  size="lg"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-500/40 w-full h-12"
+                >
+                  <Wallet className="w-5 h-5 mr-2" />
+                  Connect Stellar Wallet
+                </Button>
 
-            <Button
-              onClick={handleConnect}
-              className="bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#1B6BFF]/40 w-full"
-            >
-              <Wallet className="w-5 h-5 mr-2" />
-              Connect Stellar Wallet
-            </Button>
-
-            <div className="mt-6 text-xs text-muted-foreground/70">
-              <p>Supports Freighter, Albedo, xBull, Lobstr, and Rabet wallets</p>
-            </div>
+                <div className="text-center">
+                  <p className="text-xs text-muted-foreground/80 leading-relaxed">
+                    Supports Freighter, Albedo, xBull, Lobstr, and Rabet wallets
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
@@ -99,13 +99,13 @@ export function DashboardLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-background to-slate-800 text-foreground">
       {/* Background layers */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-[#1B1F2E]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/50 via-background/80 to-slate-800/50" />
         <Aurora />
         <Particles
-          className="absolute inset-0 z-0"
+          className="absolute inset-0 z-10"
           quantity={60}
           staticity={40}
           ease={70}
@@ -117,19 +117,13 @@ export function DashboardLayout() {
       </div>
 
       {/* Main container */}
-      <div className="relative z-10 min-h-screen flex">
-        {/* Sidebar */}
+      <div className="relative z-20">
         <Sidebar
           activeSection={activeSection}
           onSectionChange={setActiveSection}
-        />
-
-        {/* Main Content */}
-        <div className="flex-1 lg:ml-80">
-          <main className="p-6 lg:p-8 pt-16 lg:pt-8">
-            {renderActiveSection()}
-          </main>
-        </div>
+        >
+          {renderActiveSection()}
+        </Sidebar>
       </div>
     </div>
   );
