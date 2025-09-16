@@ -1,45 +1,33 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   CreditCard,
   Sparkles,
-  Eye,
-  EyeOff,
   CheckCircle,
-  ExternalLink,
-  Key,
-  Copy,
   User,
   Building,
   Info,
 } from "lucide-react";
 import { toast } from "sonner";
-import QRCode from "qrcode";
 import { apiService, CredentialContract } from "@/services/api.service";
 import { useWallet } from "@/components/modules/auth/hooks/wallet.hook";
 import { useWalletContext } from "@/providers/wallet.provider";
 
 export function MyCredentials() {
   const { walletAddress } = useWallet();
-  const { userProfile, isLoadingUser } = useWalletContext();
-  const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
-  const [showQrModal, setShowQrModal] = useState(false);
+  const { isLoadingUser } = useWalletContext();
   const [userCredentials, setUserCredentials] = useState<CredentialContract[]>([]);
-  const [showDetailModal, setShowDetailModal] = useState(false);
-  const [selectedCredential, setSelectedCredential] = useState<CredentialContract | null>(null);
-  const [detailCardFlipped, setDetailCardFlipped] = useState(false);
 
   // Load user credentials
   useEffect(() => {
     const loadUserCredentials = async () => {
       if (walletAddress) {
         try {
-          const credentials = await apiService.getUserCredentials(walletAddress);
+          const credentials = await apiService.getUserCredentials();
           setUserCredentials(credentials);
         } catch (error) {
           console.error("Error loading user credentials:", error);
@@ -159,11 +147,6 @@ export function MyCredentials() {
     }
   };
 
-  const openDetailModal = (credential: CredentialContract) => {
-    setSelectedCredential(credential);
-    setShowDetailModal(true);
-    setDetailCardFlipped(false);
-  };
 
   if (isLoadingUser) {
     return (
@@ -211,7 +194,7 @@ export function MyCredentials() {
               <Card key={`my-creds-${credential.id}-${index}`} className="group cursor-pointer hover:scale-105 transition-transform bg-background/80 backdrop-blur-xl border-white/10">
                 <CardContent
                   className="p-0"
-                  onClick={() => openDetailModal(credential)}
+                  onClick={() => console.log('Credential clicked:', credential)}
                 >
                   <div
                     className={`relative w-full h-56 ${credential.customization?.selectedGradient === "custom" ? "" : "bg-gradient-to-br " + getCredentialGradientClasses(credential.customization)} rounded-xl shadow-xl overflow-hidden`}
