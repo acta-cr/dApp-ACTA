@@ -29,9 +29,15 @@ Open [http://localhost:3000](http://localhost:3000)
 
 ## Configuration
 
-The app connects to the API at `http://localhost:4000/api` by default.
+The API endpoint is configured via the `NEXT_PUBLIC_API_URL` environment variable in `.env`:
 
-Set `NEXT_PUBLIC_API_URL` environment variable to change API endpoint.
+```bash
+# Production (default)
+NEXT_PUBLIC_API_URL=https://acta-api.vercel.app/api
+
+# For local development
+# NEXT_PUBLIC_API_URL=http://localhost:4000/api
+```
 
 ## Tech Stack
 

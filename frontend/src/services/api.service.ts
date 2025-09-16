@@ -95,24 +95,11 @@ export class APIService {
   }
 
   private getApiUrl(): string {
-    // Use environment variable if set
-    if (process.env.NEXT_PUBLIC_API_URL) {
-      return process.env.NEXT_PUBLIC_API_URL;
+    // Use environment variable - this should always be set
+    if (!process.env.NEXT_PUBLIC_API_URL) {
+      throw new Error('NEXT_PUBLIC_API_URL environment variable is not configured');
     }
-    
-    // For development, try to detect current environment
-    if (typeof window !== 'undefined') {
-      const protocol = window.location.protocol;
-      const hostname = window.location.hostname;
-      
-      // If running on localhost, use port 4000 for API v2
-      if (hostname === 'localhost' || hostname === '127.0.0.1') {
-        return `${protocol}//${hostname}:4000/api`;
-      }
-    }
-    
-    // Final fallback for API v2
-    return 'http://localhost:4000/api';
+    return process.env.NEXT_PUBLIC_API_URL;
   }
 
   /**

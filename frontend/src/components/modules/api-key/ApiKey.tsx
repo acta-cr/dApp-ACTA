@@ -100,7 +100,7 @@ export function ApiKey() {
 
   const generateEnvContent = () => {
     if (!apiKeyToShow) return "";
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/v1';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     return `# ACTA API Configuration
 ACTA_API_KEY=${apiKeyToShow}
 ACTA_API_URL=${apiUrl}
