@@ -17,6 +17,15 @@ import { apiService, CredentialContract } from "@/services/api.service";
 import { useWallet } from "@/components/modules/auth/hooks/wallet.hook";
 import { useWalletContext } from "@/providers/wallet.provider";
 
+interface CredentialCustomization {
+  selectedGradient?: string;
+  customGradient?: { start: string; end: string };
+  selectedTemplate?: string;
+  selectedLogo?: string;
+  customLogoUrl?: string;
+  customLogoText?: string;
+}
+
 export function MyCredentials() {
   const { walletAddress } = useWallet();
   const { isLoadingUser } = useWalletContext();
@@ -40,7 +49,7 @@ export function MyCredentials() {
   }, [walletAddress]);
 
   // Helper functions for credential display
-  const getCredentialGradientClasses = (customization: any) => {
+  const getCredentialGradientClasses = (customization: CredentialCustomization | undefined) => {
     if (!customization) return "from-blue-500 to-purple-600";
 
     switch (customization.selectedGradient) {
@@ -57,7 +66,7 @@ export function MyCredentials() {
     }
   };
 
-  const getCredentialGradientStyle = (customization: any) => {
+  const getCredentialGradientStyle = (customization: CredentialCustomization | undefined) => {
     if (customization?.selectedGradient === "custom" && customization?.customGradient) {
       return {
         background: `linear-gradient(135deg, ${customization.customGradient.start} 0%, ${customization.customGradient.end} 100%)`,
@@ -66,7 +75,7 @@ export function MyCredentials() {
     return {};
   };
 
-  const getCredentialTemplate = (customization: any) => {
+  const getCredentialTemplate = (customization: CredentialCustomization | undefined) => {
     if (!customization) return null;
 
     switch (customization.selectedTemplate) {
@@ -102,7 +111,7 @@ export function MyCredentials() {
     }
   };
 
-  const getCredentialLogoComponent = (customization: any) => {
+  const getCredentialLogoComponent = (customization: CredentialCustomization | undefined) => {
     if (!customization) return <CreditCard className="w-6 h-6" />;
 
     switch (customization.selectedLogo) {
@@ -118,6 +127,7 @@ export function MyCredentials() {
         return <Building className="w-6 h-6" />;
       case "custom":
         if (customization.customLogoUrl) {
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           return <img src={customization.customLogoUrl} alt="Logo" className="w-6 h-6 rounded" />;
         }
         return <CreditCard className="w-6 h-6" />;
@@ -126,7 +136,7 @@ export function MyCredentials() {
     }
   };
 
-  const getCredentialLogoText = (customization: any) => {
+  const getCredentialLogoText = (customization: CredentialCustomization | undefined) => {
     if (!customization) return "ACTA";
 
     switch (customization.selectedLogo) {
@@ -258,7 +268,7 @@ export function MyCredentials() {
                             Issued By
                           </p>
                           <p className="text-sm font-medium">
-                            {credential.issuedBy || "ACTA"}
+                            {"ACTA"}
                           </p>
                         </div>
                         <div className="flex flex-col items-end">

@@ -72,6 +72,7 @@ export function Sidebar({ activeSection, onSectionChange, children }: SidebarPro
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 flex items-center justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/logo.png" alt="ACTA Logo" className="w-10 h-10" />
               </div>
               <div>

@@ -46,6 +46,7 @@ export function DashboardLayout() {
             <Card className="bg-card/50 backdrop-blur-xl border-white/20 shadow-2xl">
               <CardHeader className="text-center pb-4">
                 <div className="w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/logo.png" alt="ACTA Logo" className="w-16 h-16" />
                 </div>
                 <CardTitle className="text-3xl font-bold text-foreground mb-2">
