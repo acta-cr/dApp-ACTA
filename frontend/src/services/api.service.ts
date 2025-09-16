@@ -119,8 +119,7 @@ export class APIService {
    * Create a new credential via API (which will deploy to Stellar)
    */
   async createCredential(
-    credentialData: CreateCredentialRequest,
-    apiKey: string
+    credentialData: CreateCredentialRequest
   ): Promise<CreateCredentialResponse> {
     console.log('Creating credential with data:', credentialData);
     console.log('Using API URL:', `${this.baseURL}/credentials`);
@@ -315,7 +314,7 @@ export class APIService {
    * Get all credentials for a user (optional feature)
    * Note: This endpoint is not implemented in API v2 yet
    */
-  async getUserCredentials(apiKey: string): Promise<CredentialContract[]> {
+  async getUserCredentials(): Promise<CredentialContract[]> {
     try {
       // For now, return empty array since this endpoint is not implemented in API v2
       console.log('getUserCredentials not implemented in API v2 yet');

@@ -897,7 +897,7 @@ Backend offline - mock data`;
               No Credentials Yet
             </h3>
             <p className="text-muted-foreground mb-6">
-              You haven't created any credentials yet. Start by creating your first credential.
+              You haven&apos;t created any credentials yet. Start by creating your first credential.
             </p>
             <Button
               onClick={() => window.location.href = "/credentials"}
