@@ -96,7 +96,7 @@ export class APIService {
 
   private getApiUrl(): string {
     // Use environment variable - fallback for build time
-    return process.env.NEXT_PUBLIC_API_URL || 'https://acta-api.vercel.app/v1';
+    return process.env.NEXT_PUBLIC_API_URL || 'https://acta-api.vercel.app';
   }
 
   /**

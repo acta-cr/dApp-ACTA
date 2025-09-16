@@ -32,11 +32,11 @@ Open [http://localhost:3000](http://localhost:3000)
 The API endpoint is configured via the `NEXT_PUBLIC_API_URL` environment variable in `.env`:
 
 ```bash
-# Production (default)
-NEXT_PUBLIC_API_URL=https://acta-api.vercel.app/v1
+# Production (default - Railway deployment)
+NEXT_PUBLIC_API_URL=https://acta-api.vercel.app
 
 # For local development
-# NEXT_PUBLIC_API_URL=http://localhost:4000/v1
+# NEXT_PUBLIC_API_URL=http://localhost:4000
 ```
 
 ## Tech Stack
