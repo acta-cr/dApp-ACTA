@@ -22,10 +22,10 @@ export const ApiKeyManager: React.FC = () => {
       const newApiKey = await generateApiKey();
       setGeneratedKey(newApiKey);
       setShowApiKey(true);
-      toast.success('API Key generada exitosamente!');
+      toast.success('API Key generated successfully!');
     } catch (error) {
       console.error('Error generating API key:', error);
-      toast.error('Error al generar la API Key');
+      toast.error('Error generating API Key');
     } finally {
       setIsGenerating(false);
     }
@@ -35,7 +35,7 @@ export const ApiKeyManager: React.FC = () => {
     const keyToCopy = generatedKey || userProfile?.api_key;
     if (keyToCopy) {
       navigator.clipboard.writeText(keyToCopy);
-      toast.success('API Key copiada al portapapeles');
+      toast.success('API Key copied to clipboard');
     }
   };
 
@@ -45,10 +45,10 @@ export const ApiKeyManager: React.FC = () => {
       const newApiKey = await regenerateApiKey();
       setGeneratedKey(newApiKey);
       setShowApiKey(true);
-      toast.success('API Key regenerada exitosamente!');
+      toast.success('API Key regenerated successfully!');
     } catch (error) {
       console.error('Error regenerating API key:', error);
-      toast.error('Error al regenerar la API Key');
+      toast.error('Error regenerating API Key');
     } finally {
       setIsRegenerating(false);
     }
@@ -60,10 +60,10 @@ export const ApiKeyManager: React.FC = () => {
       await deleteApiKey();
       setGeneratedKey(null);
       setShowApiKey(false);
-      toast.success('API Key eliminada exitosamente');
+      toast.success('API Key deleted successfully');
     } catch (error) {
       console.error('Error deleting API key:', error);
-      toast.error('Error al eliminar la API Key');
+      toast.error('Error deleting API Key');
     } finally {
       setIsDeleting(false);
     }
@@ -72,10 +72,10 @@ export const ApiKeyManager: React.FC = () => {
   const handleRefresh = async () => {
     try {
       await refreshUserProfile();
-      toast.success('Estado actualizado');
+      toast.success('Status updated');
     } catch (error) {
       console.error('Error refreshing profile:', error);
-      toast.error('Error al actualizar el estado');
+      toast.error('Error updating status');
     }
   };
 
@@ -88,7 +88,7 @@ export const ApiKeyManager: React.FC = () => {
             API Key Management
           </CardTitle>
           <CardDescription>
-            Cargando información del usuario...
+            Loading user information...
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -113,7 +113,7 @@ export const ApiKeyManager: React.FC = () => {
               API Key Management
             </CardTitle>
             <CardDescription>
-              Gestiona tu API key para crear credenciales
+              Manage your API key to create credentials
             </CardDescription>
           </div>
           <Button 
@@ -123,7 +123,7 @@ export const ApiKeyManager: React.FC = () => {
             className="flex items-center gap-1"
           >
             <RefreshCw className="w-4 h-4" />
-            Actualizar
+            Refresh
           </Button>
         </div>
       </CardHeader>
@@ -131,7 +131,7 @@ export const ApiKeyManager: React.FC = () => {
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium">Estado:</span>
           <Badge variant={hasApiKey ? "default" : "secondary"}>
-            {hasApiKey ? "API Key Activa" : "Sin API Key"}
+            {hasApiKey ? "Active API Key" : "No API Key"}
           </Badge>
         </div>
 
@@ -148,12 +148,12 @@ export const ApiKeyManager: React.FC = () => {
                 {showApiKey ? (
                   <>
                     <EyeOff className="w-4 h-4" />
-                    Ocultar
+                    Hide
                   </>
                 ) : (
                   <>
                     <Eye className="w-4 h-4" />
-                    Mostrar
+                    Show
                   </>
                 )}
               </Button>
@@ -173,15 +173,15 @@ export const ApiKeyManager: React.FC = () => {
                 className="flex items-center gap-1"
               >
                 <Copy className="w-4 h-4" />
-                Copiar
+                Copy
               </Button>
             </div>
 
             {generatedKey && (
               <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
                 <p className="text-sm text-green-800">
-                  <strong>¡Importante!</strong> Guarda esta API key de forma segura. 
-                  No podrás verla nuevamente después de cerrar esta ventana.
+                  <strong>Important!</strong> Save this API key securely.
+                  You won't be able to see it again after closing this window.
                 </p>
               </div>
             )}
@@ -191,7 +191,7 @@ export const ApiKeyManager: React.FC = () => {
         {!hasApiKey && (
           <div className="space-y-3">
             <p className="text-sm text-gray-600">
-              Necesitas una API key para crear credenciales. Genera una ahora.
+              You need an API key to create credentials. Generate one now.
             </p>
             <Button
               onClick={handleGenerateApiKey}
@@ -201,12 +201,12 @@ export const ApiKeyManager: React.FC = () => {
               {isGenerating ? (
                 <>
                   <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                  Generando...
+                  Generating...
                 </>
               ) : (
                 <>
                   <Key className="w-4 h-4 mr-2" />
-                  Generar API Key
+                  Generate API Key
                 </>
               )}
             </Button>
@@ -226,12 +226,12 @@ export const ApiKeyManager: React.FC = () => {
                 {isRegenerating ? (
                   <>
                     <RefreshCw className="w-4 h-4 animate-spin" />
-                    Regenerando...
+                    Regenerating...
                   </>
                 ) : (
                   <>
                     <RotateCcw className="w-4 h-4" />
-                    Regenerar
+                    Regenerate
                   </>
                 )}
               </Button>
@@ -245,12 +245,12 @@ export const ApiKeyManager: React.FC = () => {
                 {isDeleting ? (
                   <>
                     <RefreshCw className="w-4 h-4 animate-spin" />
-                    Eliminando...
+                    Deleting...
                   </>
                 ) : (
                   <>
                     <Trash2 className="w-4 h-4" />
-                    Eliminar
+                    Delete
                   </>
                 )}
               </Button>
@@ -262,7 +262,7 @@ export const ApiKeyManager: React.FC = () => {
               </p>
               {userProfile?.created_at && (
                 <p>
-                  Registrado: {new Date(userProfile.created_at).toLocaleDateString()}
+                  Registered: {new Date(userProfile.created_at).toLocaleDateString()}
                 </p>
               )}
             </div>

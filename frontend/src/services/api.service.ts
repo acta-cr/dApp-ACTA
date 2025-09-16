@@ -23,8 +23,8 @@ export interface CredentialContract {
 }
 
 export interface CreateCredentialRequest {
-  templateId?: string; // UUID del template, usaremos uno fijo para MVP
-  data?: Record<string, string | number | boolean>; // Datos específicos de la credencial
+  templateId?: string; // Template UUID, we'll use a fixed one for MVP
+  data?: Record<string, string | number | boolean>; // Credential specific data
   holder: string;
   category: string;
   description: string;

@@ -118,7 +118,7 @@ export const Particles: React.FC<ParticlesProps> = ({
   useEffect(() => {
     initCanvas();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refresh, quantity, size]); // si cambias cantidad/tamaño, reseed
+  }, [refresh, quantity, size]); // if you change quantity/size, reseed
 
   const initCanvas = () => {
     resizeCanvas();

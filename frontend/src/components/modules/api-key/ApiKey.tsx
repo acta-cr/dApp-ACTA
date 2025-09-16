@@ -44,10 +44,10 @@ export function ApiKey() {
       const newApiKey = await generateApiKey();
       setGeneratedKey(newApiKey);
       setShowKey(true);
-      toast.success('API Key generada exitosamente!');
+      toast.success('API Key generated successfully!');
     } catch (error) {
       console.error('Error generating API key:', error);
-      toast.error('Error al generar la API Key');
+      toast.error('Error generating API Key');
     } finally {
       setIsGenerating(false);
     }
@@ -59,10 +59,10 @@ export function ApiKey() {
       const newApiKey = await regenerateApiKey();
       setGeneratedKey(newApiKey);
       setShowKey(true);
-      toast.success('API Key regenerada exitosamente!');
+      toast.success('API Key regenerated successfully!');
     } catch (error) {
       console.error('Error regenerating API key:', error);
-      toast.error('Error al regenerar la API Key');
+      toast.error('Error regenerating API Key');
     } finally {
       setIsRegenerating(false);
     }
@@ -74,10 +74,10 @@ export function ApiKey() {
       await deleteApiKey();
       setGeneratedKey(null);
       setShowKey(false);
-      toast.success('API Key eliminada exitosamente');
+      toast.success('API Key deleted successfully');
     } catch (error) {
       console.error('Error deleting API key:', error);
-      toast.error('Error al eliminar la API Key');
+      toast.error('Error deleting API Key');
     } finally {
       setIsDeleting(false);
     }
@@ -87,11 +87,11 @@ export function ApiKey() {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
-      toast.success('API Key copiada al portapapeles');
+      toast.success('API Key copied to clipboard');
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error("Failed to copy to clipboard:", err);
-      toast.error('Error al copiar API Key');
+      toast.error('Error copying API Key');
     }
   };
 
@@ -122,7 +122,7 @@ ACTA_API_URL=${apiUrl}
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    toast.success('Archivo .env descargado');
+    toast.success('.env file downloaded');
   };
 
   if (!isConnected) {
