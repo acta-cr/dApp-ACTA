@@ -95,11 +95,8 @@ export class APIService {
   }
 
   private getApiUrl(): string {
-    // Use environment variable - this should always be set
-    if (!process.env.NEXT_PUBLIC_API_URL) {
-      throw new Error('NEXT_PUBLIC_API_URL environment variable is not configured');
-    }
-    return process.env.NEXT_PUBLIC_API_URL;
+    // Use environment variable - fallback for build time
+    return process.env.NEXT_PUBLIC_API_URL || 'https://acta-api.vercel.app/v1';
   }
 
   /**
