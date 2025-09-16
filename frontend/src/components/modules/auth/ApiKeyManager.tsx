@@ -181,7 +181,7 @@ export const ApiKeyManager: React.FC = () => {
               <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
                 <p className="text-sm text-green-800">
                   <strong>Important!</strong> Save this API key securely.
-                  You won't be able to see it again after closing this window.
+                  You won&apos;t be able to see it again after closing this window.
                 </p>
               </div>
             )}
