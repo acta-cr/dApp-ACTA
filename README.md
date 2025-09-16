@@ -33,10 +33,10 @@ The API endpoint is configured via the `NEXT_PUBLIC_API_URL` environment variabl
 
 ```bash
 # Production (default)
-NEXT_PUBLIC_API_URL=https://acta-api.vercel.app/api
+NEXT_PUBLIC_API_URL=https://acta-api.vercel.app/v1
 
 # For local development
-# NEXT_PUBLIC_API_URL=http://localhost:4000/api
+# NEXT_PUBLIC_API_URL=http://localhost:4000/v1
 ```
 
 ## Tech Stack
