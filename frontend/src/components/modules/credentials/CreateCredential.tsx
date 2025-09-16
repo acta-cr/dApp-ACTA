@@ -487,16 +487,13 @@ export function CreateCredential({ showOnlyMyCredentials = false }: CreateCreden
         description: "Deploying to blockchain",
       });
 
-      const result = await apiService.createCredential(
-        {
-          holder: credentialData.holder,
-          category: credentialData.category,
-          description: credentialData.description || "",
-          expiresAt: credentialData.expires,
-          issuerWallet: walletAddress, // Include wallet address
-        },
-        userProfile.api_key
-      );
+      const result = await apiService.createCredential({
+        holder: credentialData.holder,
+        category: credentialData.category,
+        description: credentialData.description || "",
+        expiresAt: credentialData.expires,
+        issuerWallet: walletAddress, // Include wallet address
+      });
 
       if (!result.success) {
         throw new Error(result.message || "Failed to create credential");
@@ -1240,8 +1237,7 @@ Backend offline - mock data`;
                               const stellarUrl = `https://stellar.expert/explorer/testnet/tx/${selectedCredential.transactionHash}`;
                               // Check if this might be a mock hash
                               const isMockData = !selectedCredential.transactionHash ||
-                                selectedCredential.transactionHash === "unknown" ||
-                                !selectedCredential.status;
+                                selectedCredential.transactionHash === "unknown";
 
                               if (isMockData) {
                                 toast.warning("Demo Mode", {
@@ -1259,7 +1255,7 @@ Backend offline - mock data`;
                       <p className="text-sm text-foreground font-mono bg-white/5 backdrop-blur-sm p-2 rounded break-all">
                         {selectedCredential.transactionHash}
                       </p>
-                      {(!selectedCredential.status || selectedCredential.transactionHash === "unknown") && (
+                      {(selectedCredential.transactionHash === "unknown") && (
                         <p className="text-xs text-orange-400 mt-2 flex items-center">
                           <AlertCircle className="w-3 h-3 mr-1" />
                           Demo data - Backend offline
@@ -2503,8 +2499,7 @@ Backend offline - mock data`;
 
                             // Check if this might be a mock hash
                             const isMockData = !selectedCredential.transactionHash ||
-                              selectedCredential.transactionHash === "unknown" ||
-                              !selectedCredential.status;
+                              selectedCredential.transactionHash === "unknown";
 
                             if (isMockData) {
                               toast.warning("Demo Mode", {
@@ -2522,7 +2517,7 @@ Backend offline - mock data`;
                     <p className="text-sm text-foreground font-mono bg-white/5 backdrop-blur-sm p-2 rounded break-all">
                       {selectedCredential.transactionHash}
                     </p>
-                    {(!selectedCredential.status || selectedCredential.transactionHash === "unknown") && (
+                    {(selectedCredential.transactionHash === "unknown") && (
                       <p className="text-xs text-orange-400 mt-2 flex items-center">
                         <AlertCircle className="w-3 h-3 mr-1" />
                         Demo data - Backend offline
@@ -2538,26 +2533,13 @@ Backend offline - mock data`;
                       Credential Status
                     </label>
                     <div className="flex items-center space-x-2">
-                      <div className={`w-3 h-3 rounded-full ${
-                        selectedCredential.status === 'active' ? 'bg-green-500' : 
-                        selectedCredential.status === 'revoked' ? 'bg-red-500' : 
-                        'bg-yellow-500'
-                      }`}></div>
-                      <span className={`text-sm font-medium capitalize ${
-                        selectedCredential.status === 'active' ? 'text-green-400' : 
-                        selectedCredential.status === 'revoked' ? 'text-red-400' : 
-                        'text-yellow-400'
-                      }`}>
-                        {selectedCredential.status || 'Unknown'}
+                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                      <span className="text-sm font-medium capitalize text-green-400">
+                        Active
                       </span>
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
-                      {selectedCredential.status === 'active' 
-                        ? 'This credential is active and ready for verification'
-                        : selectedCredential.status === 'revoked'
-                        ? 'This credential has been revoked and is no longer valid'
-                        : 'Status information from Stellar blockchain'
-                      }
+                      This credential is active and ready for verification
                     </p>
                   </Card>
 
