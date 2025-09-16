@@ -7,12 +7,13 @@ import { Dashboard } from "@/components/modules/dashboard/Dashboard";
 import { Profile } from "@/components/modules/profile/Profile";
 import { ApiKey } from "@/components/modules/api-key/ApiKey";
 import { CreateCredential } from "@/components/modules/credentials/CreateCredential";
+import { SearchCredential } from "@/components/modules/credentials/SearchCredential";
 import { Button } from "@/components/ui/button";
 import { Wallet } from "lucide-react";
 import Aurora from "@/components/Aurora";
 import { Particles } from "@/components/magicui/particles";
 
-type SectionType = "dashboard" | "profile" | "api-key" | "credentials" | "my-credentials";
+type SectionType = "dashboard" | "profile" | "api-key" | "credentials" | "my-credentials" | "search-credential";
 
 export function DashboardLayout() {
   const { isConnected, handleConnect } = useWallet();
@@ -90,6 +91,8 @@ export function DashboardLayout() {
         return <CreateCredential />;
       case "my-credentials":
         return <CreateCredential showOnlyMyCredentials={true} />;
+      case "search-credential":
+        return <SearchCredential />;
       default:
         return <Dashboard />;
     }

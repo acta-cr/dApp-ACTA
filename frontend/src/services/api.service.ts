@@ -10,6 +10,7 @@ export interface CredentialContract {
   schema?: string;
   contractAddress: string;
   transactionHash: string;
+  hash?: string; // Credential hash for verification
   verificationUrl: string;
   qrCode?: string; // QR code data URL for local display
   customization?: {
@@ -73,6 +74,18 @@ export class APIService {
     return Array.from({length: 64}, () =>
       Math.floor(Math.random() * 16).toString(16)
     ).join('');
+  }
+
+  /**
+   * Generate a mock credential hash for development
+   */
+  private generateMockCredentialHash(): string {
+    const chars = '0123456789abcdef';
+    let result = '';
+    for (let i = 0; i < 32; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
   }
 
   /**
@@ -199,6 +212,7 @@ export class APIService {
           schema: credentialData.schema || "https://schema.org/Certificate",
           contractAddress: contractId,
           transactionHash: transactionHash,
+          hash: this.generateMockCredentialHash(),
           verificationUrl: `https://verify.acta.io/credentials/${contractId}`,
         },
         message: isRealStellarContract

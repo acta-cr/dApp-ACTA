@@ -10,12 +10,13 @@ import {
   LogOut, 
   Menu,
   X,
-  CreditCard
+  CreditCard,
+  Search
 } from 'lucide-react';
 
 interface SidebarProps {
-  activeSection: 'dashboard' | 'profile' | 'api-key' | 'credentials' | 'my-credentials';
-  onSectionChange: (section: 'dashboard' | 'profile' | 'api-key' | 'credentials' | 'my-credentials') => void;
+  activeSection: 'dashboard' | 'profile' | 'api-key' | 'credentials' | 'my-credentials' | 'search-credential';
+  onSectionChange: (section: 'dashboard' | 'profile' | 'api-key' | 'credentials' | 'my-credentials' | 'search-credential') => void;
 }
 
 export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
@@ -52,6 +53,12 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
       label: 'My Credentials',
       icon: CreditCard,
       description: 'View & Manage'
+    },
+    {
+      id: 'search-credential' as const,
+      label: 'Search Credential',
+      icon: Search,
+      description: 'Search by Hash'
     }
   ];
 
