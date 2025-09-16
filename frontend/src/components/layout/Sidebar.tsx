@@ -66,7 +66,7 @@ export function Sidebar({ activeSection, onSectionChange, children }: SidebarPro
   return (
     <div className="flex w-full min-h-screen bg-transparent">
       {/* Sidebar */}
-      <aside className={`fixed lg:static inset-y-0 left-0 z-50 w-80 transform transition-transform duration-300 ease-in-out lg:transform-none ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} bg-card/50 backdrop-blur-xl border-r border-white/20 shadow-2xl`}>
+      <aside className={`fixed lg:static inset-y-0 left-0 z-50 w-80 transform transition-transform duration-300 ease-in-out lg:transform-none ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} bg-black/40 backdrop-blur-xl border-r border-white/20 shadow-2xl`}>
         {/* Header */}
         <div className="p-6 border-b border-white/20">
           <div className="flex items-center justify-between">
@@ -147,7 +147,7 @@ export function Sidebar({ activeSection, onSectionChange, children }: SidebarPro
         <header className="flex h-16 items-center gap-2 px-4 lg:hidden border-b border-white/20">
           <button
             onClick={() => setIsOpen(true)}
-            className="p-2 bg-card/50 backdrop-blur-xl border border-white/20 text-foreground hover:bg-card/70 shadow-2xl rounded-2xl"
+            className="p-2 bg-black/40 backdrop-blur-xl border border-white/20 text-foreground hover:bg-black/60 shadow-2xl rounded-2xl"
           >
             <Menu className="w-5 h-5" />
           </button>
