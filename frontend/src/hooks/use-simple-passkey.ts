@@ -34,6 +34,21 @@ const generateWalletFromPasskey = async (credentialId: string, rawId: string): P
   }
 }
 
+// Helper function to get the correct RP ID based on environment
+const getRpId = () => {
+  if (typeof window === 'undefined') return 'localhost'
+  
+  const hostname = window.location.hostname
+  
+  // For localhost development
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    return 'localhost'
+  }
+  
+  // For production (Vercel or other domains)
+  return hostname
+}
+
 // Helper function to create WebAuthn options locally
 const createLocalPasskeyOptions = () => {
   const challenge = window.crypto.getRandomValues(new Uint8Array(32))
@@ -47,7 +62,7 @@ const createLocalPasskeyOptions = () => {
     challenge: challengeB64,
     rp: {
       name: 'ACTA dApp',
-      id: 'localhost'
+      id: getRpId()
     },
     user: {
       id: userIdB64,
@@ -176,7 +191,7 @@ export const useSimplePasskey = () => {
       const optionsJSON = {
         challenge,
         timeout: 60000,
-        rpId: 'localhost',
+        rpId: getRpId(),
         allowCredentials: [{
           type: 'public-key' as const,
           id: storedCredentialId
