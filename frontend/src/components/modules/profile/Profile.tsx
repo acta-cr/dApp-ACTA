@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useWallet } from '@/components/modules/auth/hooks/wallet.hook';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -19,12 +19,64 @@ import {
   Info,
   ExternalLink,
   Settings,
-  Activity
+  Activity,
+  Eye,
+  EyeOff,
+  Key
 } from 'lucide-react';
+import { Keypair } from '@stellar/stellar-sdk';
 
 export function Profile() {
   const { isConnected, walletAddress } = useWallet();
   const [copied, setCopied] = useState(false);
+  const [showSecretKey, setShowSecretKey] = useState(false);
+  const [walletSecret, setWalletSecret] = useState<string | null>(null);
+  const [credentialId, setCredentialId] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  // Generate wallet secret from stored passkey data
+  const generateWalletFromPasskey = async (credentialId: string, rawId: string): Promise<{ keypair: Keypair; address: string; secret: string }> => {
+    // Use credential ID and raw ID as entropy for deterministic key generation
+    const combinedData = new TextEncoder().encode(credentialId + rawId)
+    const hashBuffer = await window.crypto.subtle.digest('SHA-256', combinedData)
+    const entropy = new Uint8Array(hashBuffer)
+
+    // Generate Stellar keypair from entropy
+    const keypair = Keypair.fromRawEd25519Seed(Buffer.from(entropy))
+
+    return {
+      keypair,
+      address: keypair.publicKey(),
+      secret: keypair.secret()
+    }
+  }
+
+  // Load wallet information from localStorage
+  useEffect(() => {
+    const loadWalletInfo = async () => {
+      if (isConnected && walletAddress) {
+        const storedCredentialId = localStorage.getItem('passkey_credential_id');
+        const storedUserId = localStorage.getItem('passkey_user_id');
+        
+        if (storedCredentialId && storedUserId) {
+          setCredentialId(storedCredentialId);
+          setUserId(storedUserId);
+          
+          // Generate secret key for display (only when needed)
+          try {
+            // We need to reconstruct the rawId from the credential
+            // For now, we'll use the credentialId as rawId since we don't store rawId separately
+            const wallet = await generateWalletFromPasskey(storedCredentialId, storedCredentialId);
+            setWalletSecret(wallet.secret);
+          } catch (error) {
+            console.error('Error generating wallet secret:', error);
+          }
+        }
+      }
+    };
+
+    loadWalletInfo();
+  }, [isConnected, walletAddress]);
 
   const copyToClipboard = async (text: string) => {
     try {
@@ -32,8 +84,12 @@ export function Profile() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy to clipboard:', err);
+      console.error('Failed to copy text: ', err);
     }
+  };
+
+  const toggleSecretKeyVisibility = () => {
+    setShowSecretKey(!showSecretKey);
   };
 
 
@@ -168,6 +224,109 @@ export function Profile() {
                     <p className="text-xs text-muted-foreground/70 mt-1">
                       Your Stellar public key used for identification and transactions
                     </p>
+                  </div>
+
+                  {/* Secret Key */}
+                  {walletSecret && (
+                    <div>
+                      <label className="text-sm font-medium text-muted-foreground flex items-center mb-2">
+                        <Key className="w-4 h-4 mr-1" />
+                        Secret Key
+                      </label>
+                      <div className="flex items-center space-x-3 p-4 bg-red-500/10 backdrop-blur-sm rounded-lg border border-red-500/20">
+                        <code className="flex-1 text-sm text-foreground font-mono break-all">
+                          {showSecretKey ? walletSecret : '•'.repeat(56)}
+                        </code>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={toggleSecretKeyVisibility}
+                          className="flex-shrink-0"
+                        >
+                          {showSecretKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </Button>
+                        {showSecretKey && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => copyToClipboard(walletSecret)}
+                            className="flex-shrink-0"
+                          >
+                            {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                          </Button>
+                        )}
+                      </div>
+                      <p className="text-xs text-red-400/70 mt-1">
+                        ⚠️ Keep this private! Never share your secret key with anyone.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Passkey Information */}
+                  {(credentialId || userId) && (
+                    <div>
+                      <label className="text-sm font-medium text-muted-foreground flex items-center mb-2">
+                        <Shield className="w-4 h-4 mr-1" />
+                        Passkey Information
+                      </label>
+                      <div className="space-y-3">
+                        {credentialId && (
+                          <div className="flex justify-between items-center p-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10">
+                            <span className="text-sm text-muted-foreground">Credential ID</span>
+                            <div className="flex items-center space-x-2">
+                              <code className="text-xs text-foreground bg-white/5 backdrop-blur-sm px-2 py-1 rounded border border-white/10 max-w-xs truncate">
+                                {credentialId.slice(0, 8)}...{credentialId.slice(-8)}
+                              </code>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => copyToClipboard(credentialId)}
+                              >
+                                {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                        {userId && (
+                          <div className="flex justify-between items-center p-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10">
+                            <span className="text-sm text-muted-foreground">User ID</span>
+                            <div className="flex items-center space-x-2">
+                              <code className="text-xs text-foreground bg-white/5 backdrop-blur-sm px-2 py-1 rounded border border-white/10 max-w-xs truncate">
+                                {userId.slice(0, 8)}...{userId.slice(-8)}
+                              </code>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => copyToClipboard(userId)}
+                              >
+                                {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Stellar Expert Links */}
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground flex items-center mb-2">
+                      <ExternalLink className="w-4 h-4 mr-1" />
+                      Wallet Explorer
+                    </label>
+                    <div className="space-y-2">
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start border-blue-400/30 text-blue-400 hover:bg-blue-400/10 backdrop-blur-sm rounded-lg"
+                        onClick={() => window.open(`https://stellar.expert/explorer/testnet/account/${walletAddress}`, '_blank')}
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        View on Stellar Expert (Testnet)
+                      </Button>
+                      <p className="text-xs text-muted-foreground/70">
+                        Check your balance, transaction history, and account details
+                      </p>
+                    </div>
                   </div>
 
                   <Separator />
