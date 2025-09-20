@@ -1,7 +1,14 @@
 "use client";
 
-import { DashboardLayout } from '@/components/layout/DashboardLayout';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  return <DashboardLayout />;
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push('/dashboard');
+  }, [router]);
+
+  return null;
 }

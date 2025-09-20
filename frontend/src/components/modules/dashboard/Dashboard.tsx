@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useWallet } from "@/components/modules/auth/hooks/wallet.hook";
-import { useApiKey } from "@/hooks/useApiKey.hook";
+import { useWalletContext } from "@/providers/wallet.provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,7 @@ import {
 
 export function Dashboard() {
   const { isConnected, walletAddress } = useWallet();
-  const { apiKey } = useApiKey();
+  const { userProfile } = useWalletContext();
 
   const formatAddress = (address: string) => {
     return `${address.slice(0, 8)}...${address.slice(-8)}`;
@@ -34,7 +34,7 @@ export function Dashboard() {
       icon: isConnected ? CheckCircle : AlertCircle,
       color: isConnected ? "text-green-600" : "text-gray-400",
     },
-    ...(apiKey
+    ...(userProfile?.has_api_key
       ? [
           {
             action: "API Key Generated",
@@ -75,7 +75,7 @@ export function Dashboard() {
         </Alert>
       )}
 
-      {isConnected && !apiKey && (
+      {isConnected && !userProfile?.has_api_key && (
         <Alert className="bg-[rgba(255,255,255,0.03)] border border-blue-500/20 rounded-3xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_20px_40px_rgba(0,0,0,0.35)]">
           <Key className="h-4 w-4 text-blue-400" />
           <AlertTitle className="text-blue-400">API Key Recommended</AlertTitle>

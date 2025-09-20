@@ -1,25 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useWallet } from "@/components/modules/auth/hooks/wallet.hook";
-import { Sidebar } from "./Sidebar";
-import { Dashboard } from "@/components/modules/dashboard/Dashboard";
-import { Profile } from "@/components/modules/profile/Profile";
-import { ApiKey } from "@/components/modules/api-key/ApiKey";
-import { CreateCredential } from "@/components/modules/credentials/CreateCredential";
-import { SearchCredential } from "@/components/modules/credentials/SearchCredential";
+import { Sidebar } from "@/components/layout/Sidebar";
 import { SimplePasskeyModal } from "@/components/modules/auth/ui/SimplePasskeyModal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { KeyRound } from "lucide-react";
-import Aurora from "@/components/Aurora";
 import { Particles } from "@/components/magicui/particles";
 
-type SectionType = "dashboard" | "profile" | "api-key" | "credentials" | "my-credentials" | "search-credential";
-
-export function DashboardLayout() {
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { isConnected, handleConnect, isModalOpen, setIsModalOpen, handlePasskeySuccess } = useWallet();
-  const [activeSection, setActiveSection] = useState<SectionType>("dashboard");
 
   // If not connected, show connection screen
   if (!isConnected) {
@@ -90,25 +85,6 @@ export function DashboardLayout() {
     );
   }
 
-  const renderActiveSection = () => {
-    switch (activeSection) {
-      case "dashboard":
-        return <Dashboard />;
-      case "profile":
-        return <Profile />;
-      case "api-key":
-        return <ApiKey />;
-      case "credentials":
-        return <CreateCredential />;
-      case "my-credentials":
-        return <CreateCredential showOnlyMyCredentials={true} />;
-      case "search-credential":
-        return <SearchCredential />;
-      default:
-        return <Dashboard />;
-    }
-  };
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Background layers */}
@@ -128,11 +104,8 @@ export function DashboardLayout() {
 
       {/* Main container */}
       <div className="relative z-10">
-        <Sidebar
-          activeSection={activeSection}
-          onSectionChange={setActiveSection}
-        >
-          {renderActiveSection()}
+        <Sidebar>
+          {children}
         </Sidebar>
       </div>
     </div>

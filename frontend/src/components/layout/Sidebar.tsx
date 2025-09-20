@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useWallet } from '@/components/modules/auth/hooks/wallet.hook';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,48 +17,47 @@ import {
 } from 'lucide-react';
 
 interface SidebarProps {
-  activeSection: 'dashboard' | 'profile' | 'api-key' | 'credentials' | 'my-credentials' | 'search-credential';
-  onSectionChange: (section: 'dashboard' | 'profile' | 'api-key' | 'credentials' | 'my-credentials' | 'search-credential') => void;
   children?: React.ReactNode;
 }
 
-export function Sidebar({ activeSection, onSectionChange, children }: SidebarProps) {
+export function Sidebar({ children }: SidebarProps) {
   const { handleDisconnect } = useWallet();
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   const menuItems = [
     {
-      id: 'dashboard' as const,
+      href: '/dashboard',
       label: 'Dashboard',
       icon: LayoutDashboard,
       description: 'Overview & Stats'
     },
     {
-      id: 'profile' as const,
+      href: '/profile',
       label: 'Profile',
       icon: User,
       description: 'Wallet Information'
     },
     {
-      id: 'api-key' as const,
+      href: '/api-key',
       label: 'API Key',
       icon: Key,
       description: 'Generate & Manage'
     },
     {
-      id: 'credentials' as const,
+      href: '/credentials',
       label: 'Create Credential',
       icon: CreditCard,
       description: 'Create & Issue'
     },
     {
-      id: 'my-credentials' as const,
+      href: '/my-credentials',
       label: 'My Credentials',
       icon: CreditCard,
       description: 'View & Manage'
     },
     {
-      id: 'search-credential' as const,
+      href: '/search-credential',
       label: 'Search Credential',
       icon: Search,
       description: 'Search by Hash'
@@ -94,15 +95,13 @@ export function Sidebar({ activeSection, onSectionChange, children }: SidebarPro
           <ul className="space-y-2">
             {menuItems.map((item) => {
               const Icon = item.icon;
-              const isActive = activeSection === item.id;
+              const isActive = pathname === item.href;
 
               return (
-                <li key={item.id}>
-                  <button
-                    onClick={() => {
-                      onSectionChange(item.id);
-                      setIsOpen(false);
-                    }}
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
                     className={`w-full flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all duration-300 ${
                       isActive
                         ? 'bg-[rgba(255,255,255,0.05)] border border-white/20 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_20px_rgba(0,0,0,0.25)] hover:-translate-y-0.5'
@@ -114,7 +113,7 @@ export function Sidebar({ activeSection, onSectionChange, children }: SidebarPro
                       <p className="text-sm font-medium">{item.label}</p>
                       <p className="text-xs opacity-60">{item.description}</p>
                     </div>
-                  </button>
+                  </Link>
                 </li>
               );
             })}
