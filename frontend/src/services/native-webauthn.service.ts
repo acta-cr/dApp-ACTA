@@ -1,19 +1,54 @@
 // Servicio WebAuthn nativo sin dependencias externas
+
+// Interfaces para opciones de WebAuthn
+interface WebAuthnUser {
+  id: string | ArrayBuffer | { data: number[] }
+  name: string
+  displayName: string
+}
+
+interface WebAuthnCredential {
+  id: string
+  type: string
+  transports?: AuthenticatorTransport[]
+}
+
+interface WebAuthnRegistrationOptions {
+  challenge: string | ArrayBuffer
+  rp: PublicKeyCredentialRpEntity
+  user: WebAuthnUser
+  pubKeyCredParams: PublicKeyCredentialParameters[]
+  authenticatorSelection?: AuthenticatorSelectionCriteria
+  timeout?: number
+  attestation?: AttestationConveyancePreference
+  excludeCredentials?: WebAuthnCredential[]
+  publicKey?: WebAuthnRegistrationOptions
+}
+
+interface WebAuthnAuthenticationOptions {
+  challenge: string | ArrayBuffer
+  allowCredentials?: WebAuthnCredential[]
+  userVerification?: UserVerificationRequirement
+  timeout?: number
+  rpId?: string
+  publicKey?: WebAuthnAuthenticationOptions
+}
+
 export interface WebAuthnCreatePasskeyInput {
-  optionsJSON: any
+  optionsJSON: WebAuthnRegistrationOptions
 }
 
 export interface WebAuthnCreatePasskeyResult {
-  rawResponse: any
+  rawResponse: PublicKeyCredential
   credentialId: string
 }
 
 export interface WebAuthnAuthenticateWithPasskeyInput {
-  optionsJSON: any
+  optionsJSON: WebAuthnAuthenticationOptions
 }
 
 export interface WebAuthnAuthenticateWithPasskeyResult {
-  rawResponse: any
+  rawResponse: PublicKeyCredential
   clientDataJSON: string
   authenticatorData: string
   signature: string
@@ -50,7 +85,7 @@ function base64UrlToArrayBuffer(base64url: string): ArrayBuffer {
 }
 
 // Procesar opciones de registro
-function processRegistrationOptions(options: any): CredentialCreationOptions {
+function processRegistrationOptions(options: WebAuthnRegistrationOptions): CredentialCreationOptions {
   // Check if options has publicKey property (new format) or is the direct options object (old format)
   const opts = options.publicKey || options;
 
@@ -59,7 +94,11 @@ function processRegistrationOptions(options: any): CredentialCreationOptions {
       challenge: typeof opts.challenge === 'string' ? base64UrlToArrayBuffer(opts.challenge) : opts.challenge,
       rp: opts.rp,
       user: {
-        id: typeof opts.user.id === 'string' ? base64UrlToArrayBuffer(opts.user.id) : new Uint8Array(opts.user.id.data || []),
+        id: typeof opts.user.id === 'string' 
+          ? base64UrlToArrayBuffer(opts.user.id) 
+          : opts.user.id instanceof ArrayBuffer 
+            ? opts.user.id 
+            : new Uint8Array((opts.user.id as { data: number[] }).data || []),
         name: opts.user.name,
         displayName: opts.user.displayName,
       },
@@ -67,9 +106,9 @@ function processRegistrationOptions(options: any): CredentialCreationOptions {
       authenticatorSelection: opts.authenticatorSelection,
       timeout: opts.timeout,
       attestation: opts.attestation as AttestationConveyancePreference,
-      excludeCredentials: opts.excludeCredentials?.map((cred: any) => ({
+      excludeCredentials: opts.excludeCredentials?.map((cred: WebAuthnCredential) => ({
         id: base64UrlToArrayBuffer(cred.id),
-        type: cred.type,
+        type: cred.type as 'public-key',
         transports: cred.transports,
       })) || [],
     }
@@ -77,16 +116,16 @@ function processRegistrationOptions(options: any): CredentialCreationOptions {
 }
 
 // Procesar opciones de autenticación
-function processAuthenticationOptions(options: any): CredentialRequestOptions {
+function processAuthenticationOptions(options: WebAuthnAuthenticationOptions): CredentialRequestOptions {
   // Check if options has publicKey property (new format) or is the direct options object (old format)
   const opts = options.publicKey || options;
 
   return {
     publicKey: {
       challenge: typeof opts.challenge === 'string' ? base64UrlToArrayBuffer(opts.challenge) : opts.challenge,
-      allowCredentials: opts.allowCredentials?.map((cred: any) => ({
+      allowCredentials: opts.allowCredentials?.map((cred: WebAuthnCredential) => ({
         id: typeof cred.id === 'string' ? base64UrlToArrayBuffer(cred.id) : cred.id,
-        type: cred.type,
+        type: cred.type as 'public-key',
         transports: cred.transports,
       })) || [],
       userVerification: opts.userVerification as UserVerificationRequirement,
@@ -127,7 +166,7 @@ export class NativeWebAuthnService {
         response: {
           clientDataJSON: arrayBufferToBase64Url(response.clientDataJSON),
           attestationObject: arrayBufferToBase64Url(response.attestationObject),
-          transports: (response as any).getTransports?.() || []
+          transports: (response as AuthenticatorAttestationResponse & { getTransports?: () => AuthenticatorTransport[] }).getTransports?.() || []
         },
         type: credential.type,
       };
@@ -135,7 +174,7 @@ export class NativeWebAuthnService {
       console.log('Passkey created successfully:', rawResponse);
 
       return {
-        rawResponse,
+        rawResponse: rawResponse as unknown as PublicKeyCredential,
         credentialId: credential.id,
       };
     } catch (error) {
@@ -183,7 +222,7 @@ export class NativeWebAuthnService {
       console.log('Authentication successful:', rawResponse);
 
       return {
-        rawResponse,
+        rawResponse: rawResponse as unknown as PublicKeyCredential,
         clientDataJSON: rawResponse.response.clientDataJSON,
         authenticatorData: rawResponse.response.authenticatorData,
         signature: rawResponse.response.signature,

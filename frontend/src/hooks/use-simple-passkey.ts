@@ -25,7 +25,7 @@ const generateWalletFromPasskey = async (credentialId: string, rawId: string): P
   const entropy = new Uint8Array(hashBuffer)
 
   // Generate Stellar keypair from entropy
-  const keypair = Keypair.fromRawEd25519Seed(entropy)
+  const keypair = Keypair.fromRawEd25519Seed(Buffer.from(entropy))
 
   return {
     keypair,
@@ -44,35 +44,30 @@ const createLocalPasskeyOptions = () => {
   const userIdB64 = btoa(String.fromCharCode(...userId)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
 
   return {
-    publicKey: {
-      challenge: challengeB64,
-      rp: {
-        name: 'ACTA dApp',
-        id: 'localhost'
-      },
-      user: {
-        id: userIdB64,
-        name: `user_${userIdB64.slice(0, 8)}`,
-        displayName: `User ${userIdB64.slice(0, 8)}`
-      },
-      pubKeyCredParams: [
-        { type: 'public-key', alg: -7 }, // ES256
-        { type: 'public-key', alg: -35 }, // ES384
-        { type: 'public-key', alg: -36 } // ES512
-      ],
-      timeout: 60000,
-      attestation: 'none',
-      authenticatorSelection: {
-        authenticatorAttachment: 'platform',
-        userVerification: 'preferred',
-        residentKey: 'preferred',
-        requireResidentKey: false
-      },
-      extensions: {
-        credProps: true
-      },
-      excludeCredentials: []
-    }
+    challenge: challengeB64,
+    rp: {
+      name: 'ACTA dApp',
+      id: 'localhost'
+    },
+    user: {
+      id: userIdB64,
+      name: `user_${userIdB64.slice(0, 8)}`,
+      displayName: `User ${userIdB64.slice(0, 8)}`
+    },
+    pubKeyCredParams: [
+      { type: 'public-key' as const, alg: -7 }, // ES256
+      { type: 'public-key' as const, alg: -35 }, // ES384
+      { type: 'public-key' as const, alg: -36 } // ES512
+    ],
+    timeout: 60000,
+    attestation: 'none' as AttestationConveyancePreference,
+    authenticatorSelection: {
+      authenticatorAttachment: 'platform' as AuthenticatorAttachment,
+      userVerification: 'preferred' as UserVerificationRequirement,
+      residentKey: 'preferred' as ResidentKeyRequirement,
+      requireResidentKey: false
+    },
+    excludeCredentials: []
   }
 }
 
@@ -116,7 +111,10 @@ export const useSimplePasskey = () => {
       console.log('Passkey created:', rawResponse)
 
       // Step 3: Generate Stellar wallet from passkey
-      const wallet = await generateWalletFromPasskey(credentialId, rawResponse.rawId)
+      // Convert ArrayBuffer to base64url string
+      const rawIdString = btoa(String.fromCharCode(...new Uint8Array(rawResponse.rawId)))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
+      const wallet = await generateWalletFromPasskey(credentialId, rawIdString)
 
       // Log Stellar Expert link for verification
       console.log('🌟 Stellar Wallet Created Successfully!')
@@ -132,7 +130,7 @@ export const useSimplePasskey = () => {
       }
 
       // Step 5: Store wallet info locally
-      const userId = optionsJSON.publicKey.user.id
+      const userId = optionsJSON.user.id
       const token = `local_passkey_${Date.now()}_${credentialId.slice(0, 8)}`
 
       // Store the credential mapping for future authentication
@@ -176,16 +174,14 @@ export const useSimplePasskey = () => {
       const challengeBytes = window.crypto.getRandomValues(new Uint8Array(32))
       const challenge = btoa(String.fromCharCode(...challengeBytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
       const optionsJSON = {
-        publicKey: {
-          challenge,
-          timeout: 60000,
-          rpId: 'localhost',
-          allowCredentials: [{
-            type: 'public-key',
-            id: storedCredentialId
-          }],
-          userVerification: 'preferred'
-        }
+        challenge,
+        timeout: 60000,
+        rpId: 'localhost',
+        allowCredentials: [{
+          type: 'public-key' as const,
+          id: storedCredentialId
+        }],
+        userVerification: 'preferred' as UserVerificationRequirement
       }
 
       console.log('Authenticating with local options:', optionsJSON)
@@ -195,7 +191,10 @@ export const useSimplePasskey = () => {
       console.log('Authentication successful:', rawResponse)
 
       // Step 4: Regenerate wallet from stored credential info
-      const wallet = await generateWalletFromPasskey(storedCredentialId, rawResponse.rawId)
+      // Convert ArrayBuffer to base64url string
+      const rawIdString = btoa(String.fromCharCode(...new Uint8Array(rawResponse.rawId)))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
+      const wallet = await generateWalletFromPasskey(storedCredentialId, rawIdString)
 
       // Log wallet info for verification
       console.log('🔓 Stellar Wallet Authenticated!')
