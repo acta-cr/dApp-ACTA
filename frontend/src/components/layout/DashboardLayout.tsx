@@ -8,16 +8,17 @@ import { Profile } from "@/components/modules/profile/Profile";
 import { ApiKey } from "@/components/modules/api-key/ApiKey";
 import { CreateCredential } from "@/components/modules/credentials/CreateCredential";
 import { SearchCredential } from "@/components/modules/credentials/SearchCredential";
+import { SimplePasskeyModal } from "@/components/modules/auth/ui/SimplePasskeyModal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Wallet } from "lucide-react";
+import { KeyRound } from "lucide-react";
 import Aurora from "@/components/Aurora";
 import { Particles } from "@/components/magicui/particles";
 
 type SectionType = "dashboard" | "profile" | "api-key" | "credentials" | "my-credentials" | "search-credential";
 
 export function DashboardLayout() {
-  const { isConnected, handleConnect } = useWallet();
+  const { isConnected, handleConnect, isModalOpen, setIsModalOpen, handlePasskeySuccess } = useWallet();
   const [activeSection, setActiveSection] = useState<SectionType>("dashboard");
 
   // If not connected, show connection screen
@@ -52,7 +53,7 @@ export function DashboardLayout() {
                   ACTA dApp
                 </CardTitle>
                 <CardDescription className="text-base text-white/85">
-                  Connect your Stellar wallet to access the dashboard and generate API keys
+                  Authenticate with your passkey to access your Stellar wallet and dashboard
                 </CardDescription>
               </CardHeader>
 
@@ -62,13 +63,13 @@ export function DashboardLayout() {
                   size="lg"
                   className="w-full h-12 bg-[rgba(255,255,255,0.03)] border border-white/10 text-transparent bg-clip-text bg-[linear-gradient(180deg,#F0E7CC_0%,#E9F8D8_55%,#FFFFFF_100%)] hover:bg-[rgba(255,255,255,0.05)] rounded-2xl font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_20px_40px_rgba(0,0,0,0.35)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_24px_60px_rgba(0,0,0,0.45)] hover:ring-1 hover:ring-white/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/20"
                 >
-                  <Wallet className="w-5 h-5 mr-2 text-white" />
-                  <span className="text-white">Connect Stellar Wallet</span>
+                  <KeyRound className="w-5 h-5 mr-2 text-white" />
+                  <span className="text-white">Authenticate with Passkey</span>
                 </Button>
 
                 <div className="text-center">
                   <p className="text-xs text-white/70 leading-relaxed">
-                    Supports Freighter, Albedo, xBull, Lobstr, and Rabet wallets
+                    Secure biometric authentication creates your Stellar wallet automatically
                   </p>
                 </div>
               </CardContent>
@@ -78,6 +79,13 @@ export function DashboardLayout() {
             </Card>
           </div>
         </div>
+
+        {/* Simple Passkey Modal */}
+        <SimplePasskeyModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSuccess={handlePasskeySuccess}
+        />
       </div>
     );
   }
