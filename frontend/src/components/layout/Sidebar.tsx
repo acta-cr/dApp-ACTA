@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import { useWallet } from '@/components/modules/auth/hooks/wallet.hook';
+import React, { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useWallet } from "@/components/modules/auth/hooks/wallet.hook";
 import {
   Sidebar as SidebarPrimitive,
   SidebarContent,
@@ -20,7 +20,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   LayoutDashboard,
   User,
@@ -32,7 +32,7 @@ import {
   FileText,
   ChevronDown,
   ChevronRight,
-} from 'lucide-react';
+} from "lucide-react";
 
 interface AppSidebarProps {
   children?: React.ReactNode;
@@ -40,38 +40,38 @@ interface AppSidebarProps {
 
 const platformItems = [
   {
-    href: '/dashboard',
-    label: 'Dashboard',
+    href: "/dashboard",
+    label: "Dashboard",
     icon: LayoutDashboard,
   },
   {
-    href: '/profile',
-    label: 'Profile',
+    href: "/profile",
+    label: "Profile",
     icon: User,
   },
   {
-    href: '/api-key',
-    label: 'API Key',
+    href: "/api-key",
+    label: "API Key",
     icon: Key,
-  }
+  },
 ];
 
 const credentialItems = [
   {
-    href: '/credentials',
-    label: 'Create',
+    href: "/credentials",
+    label: "Create",
     icon: Plus,
   },
   {
-    href: '/my-credentials',
-    label: 'My Credentials',
+    href: "/my-credentials",
+    label: "Access",
     icon: FileText,
   },
   {
-    href: '/search-credential',
-    label: 'Search',
+    href: "/search-credential",
+    label: "Search",
     icon: Search,
-  }
+  },
 ];
 
 function AppSidebar() {
@@ -84,14 +84,20 @@ function AppSidebar() {
       <SidebarHeader className="px-4 py-3">
         <div className="flex items-center space-x-2">
           <div className="w-7 h-7 flex items-center justify-center">
-            <Image src="/logo.png" alt="ACTA Logo" width={20} height={20} className="w-5 h-5" />
+            <Image
+              src="/logo.png"
+              alt="ACTA Logo"
+              width={20}
+              height={20}
+              className="w-5 h-5"
+            />
           </div>
           <div>
             <h1 className="text-base font-semibold">ACTA</h1>
           </div>
         </div>
       </SidebarHeader>
-      
+
       <SidebarContent className="px-3 py-2">
         <SidebarGroup>
           <SidebarGroupLabel className="text-xs font-medium text-muted-foreground mb-1 px-1">
@@ -99,13 +105,17 @@ function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-0">
-              {platformItems.map((item) => {
+              {platformItems.map(item => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
-                
+
                 return (
                   <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild isActive={isActive} className="h-8 px-2">
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive}
+                      className="h-8 px-2"
+                    >
                       <Link href={item.href}>
                         <Icon className="w-4 h-4" />
                         <span className="text-sm">{item.label}</span>
@@ -119,7 +129,7 @@ function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup className="mt-4">
-          <SidebarGroupLabel 
+          <SidebarGroupLabel
             className="text-xs font-medium text-muted-foreground mb-1 px-1 flex items-center justify-between cursor-pointer hover:text-foreground"
             onClick={() => setIsCredentialsOpen(!isCredentialsOpen)}
           >
@@ -133,13 +143,17 @@ function AppSidebar() {
           {isCredentialsOpen && (
             <SidebarGroupContent>
               <SidebarMenu className="space-y-0">
-                {credentialItems.map((item) => {
+                {credentialItems.map(item => {
                   const Icon = item.icon;
                   const isActive = pathname === item.href;
-                  
+
                   return (
                     <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton asChild isActive={isActive} className="h-8 px-2">
+                      <SidebarMenuButton
+                        asChild
+                        isActive={isActive}
+                        className="h-8 px-2"
+                      >
                         <Link href={item.href}>
                           <Icon className="w-4 h-4" />
                           <span className="text-sm">{item.label}</span>
@@ -153,7 +167,7 @@ function AppSidebar() {
           )}
         </SidebarGroup>
       </SidebarContent>
-      
+
       <SidebarFooter className="border-t p-3">
         <div className="flex items-center space-x-2 mb-2">
           <div className="w-7 h-7 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
@@ -162,7 +176,9 @@ function AppSidebar() {
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium">User</p>
             <p className="text-xs text-muted-foreground truncate">
-              {walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : 'No wallet connected'}
+              {walletAddress
+                ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
+                : "No wallet connected"}
             </p>
           </div>
         </div>
@@ -188,9 +204,7 @@ export default function Sidebar({ children }: AppSidebarProps) {
           <SidebarTrigger className="-ml-1" />
           <div className="flex-1" />
         </header>
-        <div className="flex flex-1 flex-col p-4">
-          {children}
-        </div>
+        <div className="flex flex-1 flex-col p-4">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );
