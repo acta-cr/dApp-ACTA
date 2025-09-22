@@ -38,7 +38,9 @@ interface CreateCredentialProps {
   showOnlyMyCredentials?: boolean;
 }
 
-export function CreateCredential({ showOnlyMyCredentials = false }: CreateCredentialProps = {}) {
+export function CreateCredential({
+  showOnlyMyCredentials = false,
+}: CreateCredentialProps = {}) {
   const { walletAddress } = useWallet();
   const { userProfile, isLoadingUser } = useWalletContext();
   const { authenticate, isLoading: isAuthenticating } = useSimplePasskey();
@@ -229,7 +231,13 @@ export function CreateCredential({ showOnlyMyCredentials = false }: CreateCreden
             className="w-8 h-8 object-contain"
           />
         ) : (
-          <Image src="/white.png" alt="ACTA" width={32} height={32} className="w-8 h-8" />
+          <Image
+            src="/white.png"
+            alt="ACTA"
+            width={32}
+            height={32}
+            className="w-8 h-8"
+          />
         );
       case "custom-text":
         return (
@@ -237,7 +245,15 @@ export function CreateCredential({ showOnlyMyCredentials = false }: CreateCreden
         );
       case "acta":
       default:
-        return <Image src="/white.png" alt="ACTA" width={32} height={32} className="w-8 h-8" />;
+        return (
+          <Image
+            src="/white.png"
+            alt="ACTA"
+            width={32}
+            height={32}
+            className="w-8 h-8"
+          />
+        );
     }
   };
 
@@ -355,7 +371,13 @@ export function CreateCredential({ showOnlyMyCredentials = false }: CreateCreden
             className="w-8 h-8 object-contain"
           />
         ) : (
-          <Image src="/white.png" alt="ACTA" width={32} height={32} className="w-8 h-8" />
+          <Image
+            src="/white.png"
+            alt="ACTA"
+            width={32}
+            height={32}
+            className="w-8 h-8"
+          />
         );
       case "custom-text":
         return (
@@ -365,7 +387,15 @@ export function CreateCredential({ showOnlyMyCredentials = false }: CreateCreden
         );
       case "acta":
       default:
-        return <Image src="/white.png" alt="ACTA" width={32} height={32} className="w-8 h-8" />;
+        return (
+          <Image
+            src="/white.png"
+            alt="ACTA"
+            width={32}
+            height={32}
+            className="w-8 h-8"
+          />
+        );
     }
   };
 
@@ -445,7 +475,10 @@ export function CreateCredential({ showOnlyMyCredentials = false }: CreateCreden
   };
 
   // Helper function to determine the correct Stellar network and create URLs
-  const createStellarExpertUrl = (transactionHash: string, isSimulated = false) => {
+  const createStellarExpertUrl = (
+    transactionHash: string,
+    isSimulated = false
+  ) => {
     const cleanHash = transactionHash?.trim();
 
     // Try both networks - for now default to testnet but we could make this configurable
@@ -457,7 +490,9 @@ export function CreateCredential({ showOnlyMyCredentials = false }: CreateCreden
     console.log("   Mainnet:", mainnetUrl);
 
     if (isSimulated) {
-      console.log("⚠️  WARNING: This is a simulated transaction hash - will not be found on Stellar Expert");
+      console.log(
+        "⚠️  WARNING: This is a simulated transaction hash - will not be found on Stellar Expert"
+      );
     } else {
       console.log("🔍 Using testnet URL by default");
     }
@@ -490,7 +525,8 @@ export function CreateCredential({ showOnlyMyCredentials = false }: CreateCreden
     try {
       // Step 1: Authenticate with passkey before creating credential
       toast.info("Authentication required", {
-        description: "Please authenticate with your passkey to sign the transaction",
+        description:
+          "Please authenticate with your passkey to sign the transaction",
       });
 
       const authResult = await authenticate();
@@ -532,9 +568,15 @@ export function CreateCredential({ showOnlyMyCredentials = false }: CreateCreden
 
       // Step 2: Generate QR code with Stellar Expert URL
       const isSimulated = result.message.includes("simulated");
-      const stellarExpertUrl = createStellarExpertUrl(contract.transactionHash, isSimulated);
+      const stellarExpertUrl = createStellarExpertUrl(
+        contract.transactionHash,
+        isSimulated
+      );
       console.log("🔗 QR Code URL:", stellarExpertUrl);
-      console.log("🔍 Transaction hash for QR:", JSON.stringify(contract.transactionHash));
+      console.log(
+        "🔍 Transaction hash for QR:",
+        JSON.stringify(contract.transactionHash)
+      );
       console.log("🎭 Is simulated transaction:", isSimulated);
       const qrDataUrl = await QRCode.toDataURL(stellarExpertUrl, {
         width: 200,
@@ -606,13 +648,20 @@ Backend offline - mock data`;
               label: "View on Stellar",
               onClick: () => {
                 const isSimulated = result.message.includes("simulated");
-                const stellarUrl = createStellarExpertUrl(contract.transactionHash, isSimulated);
+                const stellarUrl = createStellarExpertUrl(
+                  contract.transactionHash,
+                  isSimulated
+                );
                 console.log("🔗 Opening Stellar URL:", stellarUrl);
-                console.log("🔍 Raw transaction hash:", JSON.stringify(contract.transactionHash));
+                console.log(
+                  "🔍 Raw transaction hash:",
+                  JSON.stringify(contract.transactionHash)
+                );
 
                 if (isSimulated) {
                   toast.warning("Simulated Transaction", {
-                    description: "This is a simulation - transaction won't be found on Stellar Expert",
+                    description:
+                      "This is a simulation - transaction won't be found on Stellar Expert",
                     duration: 4000,
                   });
                 }
@@ -748,7 +797,10 @@ Backend offline - mock data`;
               {userCredentials.map((credential, index) => {
                 const isFlipped = false;
                 return (
-                  <div key={`my-creds-${credential.id}-${index}`} className="group">
+                  <div
+                    key={`my-creds-${credential.id}-${index}`}
+                    className="group"
+                  >
                     <div className="relative w-full max-w-md mx-auto cursor-pointer hover:scale-105 transition-transform">
                       <div
                         className={`mini-credential-card ${isFlipped ? "flipped" : ""}`}
@@ -905,10 +957,11 @@ Backend offline - mock data`;
               No Credentials Yet
             </h3>
             <p className="text-muted-foreground mb-6">
-              You haven&apos;t created any credentials yet. Start by creating your first credential.
+              You haven&apos;t created any credentials yet. Start by creating
+              your first credential.
             </p>
             <Button
-              onClick={() => window.location.href = "/credentials"}
+              onClick={() => (window.location.href = "/credentials")}
               className="bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all"
             >
               Create Your First Credential
@@ -942,7 +995,10 @@ Backend offline - mock data`;
                 <p className="text-sm text-muted-foreground mb-4">
                   Scan this QR code to view the transaction on Stellar Expert
                 </p>
-                <Button onClick={() => setShowQrModal(false)} className="w-full">
+                <Button
+                  onClick={() => setShowQrModal(false)}
+                  className="w-full"
+                >
                   Close
                 </Button>
               </div>
@@ -1026,7 +1082,8 @@ Backend offline - mock data`;
                                   Holder
                                 </p>
                                 <p className="text-lg font-semibold truncate">
-                                  {selectedCredential.holder || "Unknown Holder"}
+                                  {selectedCredential.holder ||
+                                    "Unknown Holder"}
                                 </p>
                               </div>
 
@@ -1109,7 +1166,9 @@ Backend offline - mock data`;
                             <div className="flex items-center justify-between pt-4 border-t border-gray-600">
                               <div className="flex items-center space-x-2">
                                 <Sparkles className="w-4 h-4" />
-                                <span className="text-xs">Stellar Verified</span>
+                                <span className="text-xs">
+                                  Stellar Verified
+                                </span>
                               </div>
                               <div className="text-right">
                                 <p className="text-xs text-gray-300">
@@ -1117,7 +1176,10 @@ Backend offline - mock data`;
                                 </p>
                                 <p className="text-xs text-gray-400 mt-1">
                                   Contract:{" "}
-                                  {selectedCredential.contractAddress.slice(0, 4)}
+                                  {selectedCredential.contractAddress.slice(
+                                    0,
+                                    4
+                                  )}
                                   ...
                                   {selectedCredential.contractAddress.slice(-4)}
                                 </p>
@@ -1137,7 +1199,7 @@ Backend offline - mock data`;
                     <div className="inline-block p-4 bg-white/10 backdrop-blur-sm rounded-lg shadow-lg border border-white/20">
                       <div className="bg-white rounded p-3">
                         <Image
-                          src={selectedCredential.qrCode || ''}
+                          src={selectedCredential.qrCode || ""}
                           alt="Verification QR Code"
                           width={192}
                           height={192}
@@ -1146,7 +1208,8 @@ Backend offline - mock data`;
                       </div>
                     </div>
                     <p className="text-sm text-muted-foreground mt-3">
-                      Scan this QR code to view the transaction on Stellar Expert
+                      Scan this QR code to view the transaction on Stellar
+                      Expert
                     </p>
                     <Button
                       variant="outline"
@@ -1190,7 +1253,9 @@ Backend offline - mock data`;
                           variant="ghost"
                           size="sm"
                           onClick={() => {
-                            navigator.clipboard.writeText(selectedCredential.id);
+                            navigator.clipboard.writeText(
+                              selectedCredential.id
+                            );
                             toast.success("Credential ID copied!");
                           }}
                         >
@@ -1251,12 +1316,15 @@ Backend offline - mock data`;
                             onClick={() => {
                               const stellarUrl = `https://stellar.expert/explorer/testnet/tx/${selectedCredential.transactionHash}`;
                               // Check if this might be a mock hash
-                              const isMockData = !selectedCredential.transactionHash ||
-                                selectedCredential.transactionHash === "unknown";
+                              const isMockData =
+                                !selectedCredential.transactionHash ||
+                                selectedCredential.transactionHash ===
+                                  "unknown";
 
                               if (isMockData) {
                                 toast.warning("Demo Mode", {
-                                  description: "Backend offline - mock data shown",
+                                  description:
+                                    "Backend offline - mock data shown",
                                   duration: 3000,
                                 });
                               }
@@ -1270,7 +1338,7 @@ Backend offline - mock data`;
                       <p className="text-sm text-foreground font-mono bg-white/5 backdrop-blur-sm p-2 rounded break-all">
                         {selectedCredential.transactionHash}
                       </p>
-                      {(selectedCredential.transactionHash === "unknown") && (
+                      {selectedCredential.transactionHash === "unknown" && (
                         <p className="text-xs text-orange-400 mt-2 flex items-center">
                           <AlertCircle className="w-3 h-3 mr-1" />
                           Demo data - Backend offline
@@ -1278,16 +1346,22 @@ Backend offline - mock data`;
                       )}
                     </Card>
 
-
                     {/* Actions */}
                     <div className="flex flex-col space-y-2">
                       <Button
                         variant="outline"
                         onClick={() => {
-                          const cleanHash = selectedCredential.transactionHash?.trim();
+                          const cleanHash =
+                            selectedCredential.transactionHash?.trim();
                           const stellarUrl = `https://stellar.expert/explorer/testnet/tx/${cleanHash}`;
-                          console.log("🔗 View on Stellar Explorer button:", stellarUrl);
-                          console.log("🔍 Raw hash:", JSON.stringify(selectedCredential.transactionHash));
+                          console.log(
+                            "🔗 View on Stellar Explorer button:",
+                            stellarUrl
+                          );
+                          console.log(
+                            "🔍 Raw hash:",
+                            JSON.stringify(selectedCredential.transactionHash)
+                          );
                           window.open(stellarUrl, "_blank");
                         }}
                         className="w-full"
@@ -1375,14 +1449,6 @@ Backend offline - mock data`;
             Design and issue new digital credentials
           </p>
         </div>
-
-        {/* API Key Status */}
-        {userProfile?.has_api_key && (
-          <div className="flex items-center gap-2 px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
-            <CheckCircle className="w-4 h-4" />
-            API Key Active
-          </div>
-        )}
       </div>
 
       {/* Main Content Layout */}
@@ -1923,20 +1989,46 @@ Backend offline - mock data`;
                     className="w-full px-3 py-2 bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B6BFF] focus:border-[#1B6BFF] text-foreground appearance-none cursor-pointer [&>option]:bg-gray-800 [&>option]:text-white [&>option:checked]:bg-blue-600"
                     style={{
                       backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23a1a1aa' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
-                      backgroundPosition: 'right 0.5rem center',
-                      backgroundRepeat: 'no-repeat',
-                      backgroundSize: '1.5em 1.5em',
-                      paddingRight: '2.5rem'
+                      backgroundPosition: "right 0.5rem center",
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "1.5em 1.5em",
+                      paddingRight: "2.5rem",
                     }}
                     required
                   >
-                    <option value="" className="text-gray-400 bg-gray-800">Select category</option>
-                    <option value="Identity" className="text-white bg-gray-800">Identity</option>
-                    <option value="Education" className="text-white bg-gray-800">Education</option>
-                    <option value="Certification" className="text-white bg-gray-800">Certification</option>
-                    <option value="License" className="text-white bg-gray-800">License</option>
-                    <option value="Membership" className="text-white bg-gray-800">Membership</option>
-                    <option value="Achievement" className="text-white bg-gray-800">Achievement</option>
+                    <option value="" className="text-gray-400 bg-gray-800">
+                      Select category
+                    </option>
+                    <option value="Identity" className="text-white bg-gray-800">
+                      Identity
+                    </option>
+                    <option
+                      value="Education"
+                      className="text-white bg-gray-800"
+                    >
+                      Education
+                    </option>
+                    <option
+                      value="Certification"
+                      className="text-white bg-gray-800"
+                    >
+                      Certification
+                    </option>
+                    <option value="License" className="text-white bg-gray-800">
+                      License
+                    </option>
+                    <option
+                      value="Membership"
+                      className="text-white bg-gray-800"
+                    >
+                      Membership
+                    </option>
+                    <option
+                      value="Achievement"
+                      className="text-white bg-gray-800"
+                    >
+                      Achievement
+                    </option>
                   </select>
                 </div>
 
@@ -1991,7 +2083,9 @@ Backend offline - mock data`;
 
               <Button
                 onClick={handleCreateCredential}
-                disabled={isCreating || isAuthenticating || !userProfile?.has_api_key}
+                disabled={
+                  isCreating || isAuthenticating || !userProfile?.has_api_key
+                }
                 className="bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-10 px-4 font-semibold shadow-lg transition-all"
               >
                 {isAuthenticating ? (
@@ -2015,7 +2109,6 @@ Backend offline - mock data`;
           </Card>
         </div>
       </div>
-
 
       {/* QR Code Modal */}
       {showQrModal && qrCodeUrl && (
@@ -2238,7 +2331,7 @@ Backend offline - mock data`;
                   <div className="inline-block p-4 bg-white/10 backdrop-blur-sm rounded-lg shadow-lg border border-white/20">
                     <div className="bg-white rounded p-3">
                       <Image
-                        src={selectedCredential.qrCode || ''}
+                        src={selectedCredential.qrCode || ""}
                         alt="Verification QR Code"
                         width={192}
                         height={192}
@@ -2351,20 +2444,32 @@ Backend offline - mock data`;
                           size="sm"
                           onClick={() => {
                             // Clean the transaction hash of any potential whitespace or special characters
-                            const cleanHash = selectedCredential.transactionHash?.trim();
+                            const cleanHash =
+                              selectedCredential.transactionHash?.trim();
                             const stellarUrl = `https://stellar.expert/explorer/testnet/tx/${cleanHash}`;
 
-                            console.log("🔗 Modal: Opening Stellar URL:", stellarUrl);
-                            console.log("🔍 Modal: Raw transaction hash:", JSON.stringify(selectedCredential.transactionHash));
-                            console.log("🧹 Modal: Cleaned transaction hash:", JSON.stringify(cleanHash));
+                            console.log(
+                              "🔗 Modal: Opening Stellar URL:",
+                              stellarUrl
+                            );
+                            console.log(
+                              "🔍 Modal: Raw transaction hash:",
+                              JSON.stringify(selectedCredential.transactionHash)
+                            );
+                            console.log(
+                              "🧹 Modal: Cleaned transaction hash:",
+                              JSON.stringify(cleanHash)
+                            );
 
                             // Check if this might be a mock hash
-                            const isMockData = !selectedCredential.transactionHash ||
+                            const isMockData =
+                              !selectedCredential.transactionHash ||
                               selectedCredential.transactionHash === "unknown";
 
                             if (isMockData) {
                               toast.warning("Demo Mode", {
-                                description: "Backend offline - mock data shown",
+                                description:
+                                  "Backend offline - mock data shown",
                                 duration: 3000,
                               });
                             }
@@ -2378,7 +2483,7 @@ Backend offline - mock data`;
                     <p className="text-sm text-foreground font-mono bg-white/5 backdrop-blur-sm p-2 rounded break-all">
                       {selectedCredential.transactionHash}
                     </p>
-                    {(selectedCredential.transactionHash === "unknown") && (
+                    {selectedCredential.transactionHash === "unknown" && (
                       <p className="text-xs text-orange-400 mt-2 flex items-center">
                         <AlertCircle className="w-3 h-3 mr-1" />
                         Demo data - Backend offline
@@ -2397,7 +2502,9 @@ Backend offline - mock data`;
                           variant="ghost"
                           size="sm"
                           onClick={() => {
-                            navigator.clipboard.writeText(selectedCredential.hash!);
+                            navigator.clipboard.writeText(
+                              selectedCredential.hash!
+                            );
                             toast.success("Credential hash copied!");
                           }}
                         >
@@ -2406,7 +2513,8 @@ Backend offline - mock data`;
                       )}
                     </div>
                     <p className="text-sm text-foreground font-mono bg-white/5 backdrop-blur-sm p-2 rounded break-all">
-                      {selectedCredential.hash || "Hash not available for this credential"}
+                      {selectedCredential.hash ||
+                        "Hash not available for this credential"}
                     </p>
                     {!selectedCredential.hash && (
                       <p className="text-xs text-orange-400 mt-2 flex items-center">
@@ -2437,10 +2545,17 @@ Backend offline - mock data`;
                     <Button
                       variant="outline"
                       onClick={() => {
-                        const cleanHash = selectedCredential.transactionHash?.trim();
+                        const cleanHash =
+                          selectedCredential.transactionHash?.trim();
                         const stellarUrl = `https://stellar.expert/explorer/testnet/tx/${cleanHash}`;
-                        console.log("🔗 View on Stellar Explorer button (2nd modal):", stellarUrl);
-                        console.log("🔍 Raw hash (2nd modal):", JSON.stringify(selectedCredential.transactionHash));
+                        console.log(
+                          "🔗 View on Stellar Explorer button (2nd modal):",
+                          stellarUrl
+                        );
+                        console.log(
+                          "🔍 Raw hash (2nd modal):",
+                          JSON.stringify(selectedCredential.transactionHash)
+                        );
                         window.open(stellarUrl, "_blank");
                       }}
                       className="w-full"
