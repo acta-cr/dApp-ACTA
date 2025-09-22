@@ -4,6 +4,20 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useWallet } from '@/components/modules/auth/hooks/wallet.hook';
+import {
+  Sidebar as SidebarPrimitive,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+} from "@/components/ui/sidebar";
 import { Button } from '@/components/ui/button';
 import {
   LayoutDashboard,
@@ -12,152 +26,168 @@ import {
   LogOut,
   CreditCard,
   Search,
-  Menu,
-  X
+  Plus,
+  FileText,
+  ChevronDown,
+  ChevronRight,
 } from 'lucide-react';
 
-interface SidebarProps {
+interface AppSidebarProps {
   children?: React.ReactNode;
 }
 
-export function Sidebar({ children }: SidebarProps) {
-  const { handleDisconnect } = useWallet();
-  const [isOpen, setIsOpen] = useState(false);
-  const pathname = usePathname();
+const platformItems = [
+  {
+    href: '/dashboard',
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+  },
+  {
+    href: '/profile',
+    label: 'Profile',
+    icon: User,
+  },
+  {
+    href: '/api-key',
+    label: 'API Key',
+    icon: Key,
+  }
+];
 
-  const menuItems = [
-    {
-      href: '/dashboard',
-      label: 'Dashboard',
-      icon: LayoutDashboard,
-      description: 'Overview & Stats'
-    },
-    {
-      href: '/profile',
-      label: 'Profile',
-      icon: User,
-      description: 'Wallet Information'
-    },
-    {
-      href: '/api-key',
-      label: 'API Key',
-      icon: Key,
-      description: 'Generate & Manage'
-    },
-    {
-      href: '/credentials',
-      label: 'Create Credential',
-      icon: CreditCard,
-      description: 'Create & Issue'
-    },
-    {
-      href: '/my-credentials',
-      label: 'My Credentials',
-      icon: CreditCard,
-      description: 'View & Manage'
-    },
-    {
-      href: '/search-credential',
-      label: 'Search Credential',
-      icon: Search,
-      description: 'Search by Hash'
-    }
-  ];
+const credentialItems = [
+  {
+    href: '/credentials',
+    label: 'Create',
+    icon: Plus,
+  },
+  {
+    href: '/my-credentials',
+    label: 'My Credentials',
+    icon: FileText,
+  },
+  {
+    href: '/search-credential',
+    label: 'Search',
+    icon: Search,
+  }
+];
+
+function AppSidebar() {
+  const { handleDisconnect, walletAddress } = useWallet();
+  const pathname = usePathname();
+  const [isCredentialsOpen, setIsCredentialsOpen] = useState(false);
 
   return (
-    <div className="flex w-full min-h-screen bg-transparent">
-      {/* Sidebar */}
-      <aside className={`fixed lg:static inset-y-0 left-0 z-50 w-80 transform transition-transform duration-300 ease-in-out lg:transform-none ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} bg-[rgba(255,255,255,0.03)] backdrop-blur-xl border-r border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_20px_40px_rgba(0,0,0,0.35)]`}>
-        {/* Header */}
-        <div className="p-6 border-b border-white/10">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 flex items-center justify-center">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logo.png" alt="ACTA Logo" className="w-10 h-10" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-white drop-shadow-[0_0_14px_rgba(255,255,255,0.25)]">ACTA</h1>
-                <p className="text-sm text-white/70">dApp Dashboard</p>
-              </div>
-            </div>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="lg:hidden p-2 rounded-xl hover:bg-white/10 text-white/80"
-            >
-              <X className="w-5 h-5" />
-            </button>
+    <SidebarPrimitive className="border-r">
+      <SidebarHeader className="px-4 py-3">
+        <div className="flex items-center space-x-2">
+          <div className="w-7 h-7 flex items-center justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.png" alt="ACTA Logo" className="w-5 h-5" />
+          </div>
+          <div>
+            <h1 className="text-base font-semibold">ACTA</h1>
           </div>
         </div>
+      </SidebarHeader>
+      
+      <SidebarContent className="px-3 py-2">
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-xs font-medium text-muted-foreground mb-1 px-1">
+            Platform
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu className="space-y-0">
+              {platformItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = pathname === item.href;
+                
+                return (
+                  <SidebarMenuItem key={item.href}>
+                    <SidebarMenuButton asChild isActive={isActive} className="h-8 px-2">
+                      <Link href={item.href}>
+                        <Icon className="w-4 h-4" />
+                        <span className="text-sm">{item.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
 
-        {/* Menu */}
-        <nav className="flex-1 p-4">
-          <ul className="space-y-2">
-            {menuItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname === item.href;
-
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    onClick={() => setIsOpen(false)}
-                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all duration-300 ${
-                      isActive
-                        ? 'bg-[rgba(255,255,255,0.05)] border border-white/20 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_20px_rgba(0,0,0,0.25)] hover:-translate-y-0.5'
-                        : 'text-white/70 hover:bg-white/5 hover:text-white hover:-translate-y-0.5'
-                    }`}
-                  >
-                    <Icon className="w-5 h-5" />
-                    <div className="flex-1 text-left">
-                      <p className="text-sm font-medium">{item.label}</p>
-                      <p className="text-xs opacity-60">{item.description}</p>
-                    </div>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-
-        {/* Footer */}
-        <div className="p-4 border-t border-white/10">
-          <Button
-            variant="ghost"
-            onClick={handleDisconnect}
-            className="w-full justify-start text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/20 rounded-2xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(239,68,68,0.3)]"
+        <SidebarGroup className="mt-4">
+          <SidebarGroupLabel 
+            className="text-xs font-medium text-muted-foreground mb-1 px-1 flex items-center justify-between cursor-pointer hover:text-foreground"
+            onClick={() => setIsCredentialsOpen(!isCredentialsOpen)}
           >
-            <LogOut className="w-4 h-4 mr-2" />
-            Disconnect Wallet
-          </Button>
+            <span>Credentials</span>
+            {isCredentialsOpen ? (
+              <ChevronDown className="w-3 h-3" />
+            ) : (
+              <ChevronRight className="w-3 h-3" />
+            )}
+          </SidebarGroupLabel>
+          {isCredentialsOpen && (
+            <SidebarGroupContent>
+              <SidebarMenu className="space-y-0">
+                {credentialItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = pathname === item.href;
+                  
+                  return (
+                    <SidebarMenuItem key={item.href}>
+                      <SidebarMenuButton asChild isActive={isActive} className="h-8 px-2">
+                        <Link href={item.href}>
+                          <Icon className="w-4 h-4" />
+                          <span className="text-sm">{item.label}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          )}
+        </SidebarGroup>
+      </SidebarContent>
+      
+      <SidebarFooter className="border-t p-3">
+        <div className="flex items-center space-x-2 mb-2">
+          <div className="w-7 h-7 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
+            <span className="text-white text-xs font-medium">U</span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium">User</p>
+            <p className="text-xs text-muted-foreground truncate">
+              {walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : 'No wallet connected'}
+            </p>
+          </div>
         </div>
-      </aside>
+        <Button
+          variant="ghost"
+          onClick={handleDisconnect}
+          className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10 h-8 px-2"
+        >
+          <LogOut className="w-4 h-4 mr-2" />
+          <span className="text-sm">Disconnect</span>
+        </Button>
+      </SidebarFooter>
+    </SidebarPrimitive>
+  );
+}
 
-      {/* Overlay for mobile */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
-
-      {/* Main content */}
-      <div className="flex-1 flex flex-col min-h-screen lg:ml-0">
-        {/* Mobile header */}
-        <header className="flex h-16 items-center gap-2 px-4 lg:hidden border-b border-white/10">
-          <button
-            onClick={() => setIsOpen(true)}
-            className="p-2 bg-[rgba(255,255,255,0.03)] backdrop-blur-xl border border-white/10 text-white hover:bg-[rgba(255,255,255,0.05)] shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_20px_rgba(0,0,0,0.25)] rounded-2xl transition-all duration-300 hover:-translate-y-0.5"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
-        </header>
-
-        {/* Main content area */}
-        <main className="flex-1 p-6 lg:p-8 bg-transparent">
+export default function Sidebar({ children }: AppSidebarProps) {
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <header className="h-16 shrink-0 border-b border-white/10"></header>
+        <div className="flex flex-1 flex-col p-4">
           {children}
-        </main>
-      </div>
-    </div>
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

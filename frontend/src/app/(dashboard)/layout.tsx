@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useWallet } from "@/components/modules/auth/hooks/wallet.hook";
-import { Sidebar } from "@/components/layout/Sidebar";
+import Sidebar from "@/components/layout/Sidebar";
 import { SimplePasskeyModal } from "@/components/modules/auth/ui/SimplePasskeyModal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

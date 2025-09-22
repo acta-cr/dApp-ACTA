@@ -6,20 +6,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
   Wallet,
   Copy,
   Check,
-  Globe,
-  Shield,
-  Clock,
   Info,
   ExternalLink,
   Settings,
-  Activity,
+  Shield,
   Eye,
   EyeOff,
   Key
@@ -93,12 +89,6 @@ export function Profile() {
   };
 
 
-  const walletInfo = {
-    network: 'Stellar Testnet',
-    networkUrl: 'https://horizon-testnet.stellar.org',
-    passphrase: 'Test SDF Network ; September 2015',
-    connectedAt: new Date().toLocaleString()
-  };
 
   if (!isConnected) {
     return (
@@ -156,7 +146,7 @@ export function Profile() {
 
             <div className="flex-1 space-y-4">
               <div>
-                <h2 className="text-2xl font-bold text-foreground">Stellar Wallet</h2>
+                <h2 className="text-2xl font-bold text-foreground">{walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-6)}` : 'Stellar Wallet'}</h2>
                 <p className="text-muted-foreground">Connected to ACTA dApp</p>
               </div>
 
@@ -175,14 +165,10 @@ export function Profile() {
 
       {/* Tabs Section */}
       <Tabs defaultValue="details" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3 bg-background/60 backdrop-blur-xl border border-white/10 rounded-2xl">
+        <TabsList className="grid w-full grid-cols-2 bg-background/60 backdrop-blur-xl border border-white/10 rounded-2xl">
           <TabsTrigger value="details" className="data-[state=active]:bg-white/10 rounded-xl">
             <Wallet className="w-4 h-4 mr-2" />
             Wallet Details
-          </TabsTrigger>
-          <TabsTrigger value="activity" className="data-[state=active]:bg-white/10 rounded-xl">
-            <Activity className="w-4 h-4 mr-2" />
-            Activity
           </TabsTrigger>
           <TabsTrigger value="settings" className="data-[state=active]:bg-white/10 rounded-xl">
             <Settings className="w-4 h-4 mr-2" />
@@ -191,8 +177,7 @@ export function Profile() {
         </TabsList>
 
         <TabsContent value="details" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-            <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+          <div className="space-y-4 sm:space-y-6">
 
               <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
                 <CardHeader>
@@ -210,7 +195,7 @@ export function Profile() {
                     </label>
                     <div className="flex items-center space-x-3 p-4 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10">
                       <code className="flex-1 text-sm text-foreground font-mono break-all">
-                        {walletAddress}
+                        {walletAddress ? `${walletAddress.slice(0, 8)}...${walletAddress.slice(-8)}` : ''}
                       </code>
                       <Button
                         variant="ghost"
@@ -329,145 +314,12 @@ export function Profile() {
                     </div>
                   </div>
 
-                  <Separator />
-
-                  {/* Network Information */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground flex items-center mb-2">
-                        <Globe className="w-4 h-4 mr-1" />
-                        Network
-                      </label>
-                      <div className="p-3 bg-orange-400/10 backdrop-blur-sm rounded-lg border border-orange-400/20">
-                        <p className="text-sm font-medium text-orange-400">{walletInfo.network}</p>
-                        <p className="text-xs text-orange-400/70 mt-1">Development environment</p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground flex items-center mb-2">
-                        <Shield className="w-4 h-4 mr-1" />
-                        Security
-                      </label>
-                      <div className="p-3 bg-green-400/10 backdrop-blur-sm rounded-lg border border-green-400/20">
-                        <p className="text-sm font-medium text-green-400">Signature Auth</p>
-                        <p className="text-xs text-green-400/70 mt-1">Wallet-signed authentication</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <Separator />
-
-                  {/* Technical Details */}
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground mb-3 block">
-                      Network Configuration
-                    </label>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center p-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10">
-                        <span className="text-sm text-muted-foreground">Horizon URL</span>
-                        <div className="flex items-center space-x-2">
-                          <code className="text-xs text-foreground bg-white/5 backdrop-blur-sm px-2 py-1 rounded border border-white/10">
-                            horizon-testnet.stellar.org
-                          </code>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => window.open(walletInfo.networkUrl, '_blank')}
-                          >
-                            <ExternalLink className="w-3 h-3" />
-                          </Button>
-                        </div>
-                      </div>
-
-                      <div className="flex justify-between items-center p-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10">
-                        <span className="text-sm text-muted-foreground">Network Passphrase</span>
-                        <code className="text-xs text-foreground bg-white/5 backdrop-blur-sm px-2 py-1 rounded border border-white/10 max-w-xs truncate">
-                          {walletInfo.passphrase}
-                        </code>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Sidebar */}
-            <div className="space-y-4 sm:space-y-6">
-              {/* Connection Status */}
-              <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Clock className="w-5 h-5 mr-2" />
-                    Connection Status
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Status</span>
-                    <Badge className="bg-green-400/20 text-green-400 border-green-400/30 backdrop-blur-sm rounded-2xl">Active</Badge>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Connected Since</span>
-                    <span className="text-sm text-foreground">Just now</span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Network</span>
-                    <Badge variant="outline" className="border-white/20 text-muted-foreground backdrop-blur-sm rounded-2xl">Testnet</Badge>
-                  </div>
                 </CardContent>
               </Card>
 
-              {/* Quick Actions */}
-              <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
-                <CardHeader>
-                  <CardTitle>Quick Actions</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <Button variant="outline" className="w-full justify-start border-white/20 text-foreground hover:bg-white/5 backdrop-blur-sm rounded-2xl">
-                    <Copy className="w-4 h-4 mr-2" />
-                    Copy Address
-                  </Button>
-
-                  <Button variant="outline" className="w-full justify-start border-white/20 text-foreground hover:bg-white/5 backdrop-blur-sm rounded-2xl">
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    View on Explorer
-                  </Button>
-
-                  <Button variant="outline" className="w-full justify-start text-red-400 border-red-400/30 hover:bg-red-400/10 backdrop-blur-sm rounded-2xl">
-                    <Wallet className="w-4 h-4 mr-2" />
-                    Disconnect Wallet
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
           </div>
         </TabsContent>
 
-        <TabsContent value="activity" className="space-y-6">
-          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Activity className="w-5 h-5 mr-2" />
-                Recent Activity
-              </CardTitle>
-              <CardDescription>
-                View your recent wallet activities and transactions
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8">
-                <Activity className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">No recent activity</p>
-                <p className="text-sm text-muted-foreground/70 mt-1">
-                  Your wallet activities will appear here
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
 
         <TabsContent value="settings" className="space-y-6">
           <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
