@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { useWallet } from "@/components/modules/auth/hooks/wallet.hook";
 import Sidebar from "@/components/layout/Sidebar";
 import { SimplePasskeyModal } from "@/components/modules/auth/ui/SimplePasskeyModal";
@@ -41,8 +42,7 @@ export default function DashboardLayout({
             <Card className="bg-[rgba(255,255,255,0.03)] border border-white/10 rounded-3xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_20px_40px_rgba(0,0,0,0.35)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_24px_60px_rgba(0,0,0,0.45)] hover:ring-1 hover:ring-white/10 after:pointer-events-none after:absolute after:inset-0 after:rounded-3xl after:border after:border-white/5">
               <CardHeader className="text-center pb-4">
                 <div className="w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/logo.png" alt="ACTA Logo" className="w-16 h-16" />
+                  <Image src="/logo.png" alt="ACTA Logo" width={64} height={64} className="w-16 h-16" />
                 </div>
                 <CardTitle className="text-3xl font-bold text-white mb-2 drop-shadow-[0_0_14px_rgba(255,255,255,0.25)]">
                   ACTA dApp

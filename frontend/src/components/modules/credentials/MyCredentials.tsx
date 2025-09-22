@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -127,8 +128,7 @@ export function MyCredentials() {
         return <Building className="w-6 h-6" />;
       case "custom":
         if (customization.customLogoUrl) {
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          return <img src={customization.customLogoUrl} alt="Logo" className="w-6 h-6 rounded" />;
+          return <Image src={customization.customLogoUrl} alt="Logo" width={24} height={24} className="w-6 h-6 rounded" />;
         }
         return <CreditCard className="w-6 h-6" />;
       default:

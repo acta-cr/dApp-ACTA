@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useWallet } from '@/components/modules/auth/hooks/wallet.hook';
 import {
@@ -83,8 +84,7 @@ function AppSidebar() {
       <SidebarHeader className="px-4 py-3">
         <div className="flex items-center space-x-2">
           <div className="w-7 h-7 flex items-center justify-center">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.png" alt="ACTA Logo" className="w-5 h-5" />
+            <Image src="/logo.png" alt="ACTA Logo" width={20} height={20} className="w-5 h-5" />
           </div>
           <div>
             <h1 className="text-base font-semibold">ACTA</h1>

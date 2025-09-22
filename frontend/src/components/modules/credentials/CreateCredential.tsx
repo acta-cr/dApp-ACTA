@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -220,13 +221,15 @@ export function CreateCredential({ showOnlyMyCredentials = false }: CreateCreden
         return <Shield className="w-8 h-8" />;
       case "custom-image":
         return customLogoUrl ? (
-          <img
+          <Image
             src={customLogoUrl}
             alt="Custom Logo"
+            width={32}
+            height={32}
             className="w-8 h-8 object-contain"
           />
         ) : (
-          <img src="/white.png" alt="ACTA" className="w-8 h-8" />
+          <Image src="/white.png" alt="ACTA" width={32} height={32} className="w-8 h-8" />
         );
       case "custom-text":
         return (
@@ -234,7 +237,7 @@ export function CreateCredential({ showOnlyMyCredentials = false }: CreateCreden
         );
       case "acta":
       default:
-        return <img src="/white.png" alt="ACTA" className="w-8 h-8" />;
+        return <Image src="/white.png" alt="ACTA" width={32} height={32} className="w-8 h-8" />;
     }
   };
 
@@ -344,13 +347,15 @@ export function CreateCredential({ showOnlyMyCredentials = false }: CreateCreden
         return <Shield className="w-8 h-8" />;
       case "custom-image":
         return customization?.customLogoUrl ? (
-          <img
+          <Image
             src={customization.customLogoUrl}
             alt="Custom Logo"
+            width={32}
+            height={32}
             className="w-8 h-8 object-contain"
           />
         ) : (
-          <img src="/white.png" alt="ACTA" className="w-8 h-8" />
+          <Image src="/white.png" alt="ACTA" width={32} height={32} className="w-8 h-8" />
         );
       case "custom-text":
         return (
@@ -360,7 +365,7 @@ export function CreateCredential({ showOnlyMyCredentials = false }: CreateCreden
         );
       case "acta":
       default:
-        return <img src="/white.png" alt="ACTA" className="w-8 h-8" />;
+        return <Image src="/white.png" alt="ACTA" width={32} height={32} className="w-8 h-8" />;
     }
   };
 
@@ -926,9 +931,11 @@ Backend offline - mock data`;
                   Scan QR Code for Stellar Explorer
                 </h3>
                 <div className="flex justify-center mb-4">
-                  <img
+                  <Image
                     src={qrCodeUrl}
                     alt="QR Code"
+                    width={256}
+                    height={256}
                     className="w-64 h-64 border rounded-lg"
                   />
                 </div>
@@ -1129,9 +1136,11 @@ Backend offline - mock data`;
                     </h3>
                     <div className="inline-block p-4 bg-white/10 backdrop-blur-sm rounded-lg shadow-lg border border-white/20">
                       <div className="bg-white rounded p-3">
-                        <img
-                          src={selectedCredential.qrCode}
+                        <Image
+                          src={selectedCredential.qrCode || ''}
                           alt="Verification QR Code"
+                          width={192}
+                          height={192}
                           className="w-48 h-48 mx-auto"
                         />
                       </div>
@@ -1696,9 +1705,11 @@ Backend offline - mock data`;
                       onClick={() => setSelectedLogo("acta")}
                       className={`p-3 ${selectedLogo === "acta" ? "bg-blue-500/20 border-blue-400/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-blue-500/30 transition-colors flex items-center justify-center`}
                     >
-                      <img
+                      <Image
                         src="/white.png"
                         alt="ACTA"
+                        width={24}
+                        height={24}
                         className="w-6 h-6 mr-2"
                       />
                       <span className="text-sm font-medium">ACTA</span>
@@ -1770,9 +1781,11 @@ Backend offline - mock data`;
                       <div className="border-2 border-dashed border-white/30 rounded-lg p-4 text-center hover:border-blue-400/60 transition-colors bg-white/5 backdrop-blur-sm">
                         {customLogoUrl ? (
                           <div className="space-y-2">
-                            <img
+                            <Image
                               src={customLogoUrl}
                               alt="Logo preview"
+                              width={64}
+                              height={64}
                               className="w-16 h-16 object-contain mx-auto"
                             />
                             <p className="text-sm text-green-400">
@@ -2019,9 +2032,11 @@ Backend offline - mock data`;
                 Scan QR Code for Stellar Explorer
               </h3>
               <div className="flex justify-center mb-4">
-                <img
+                <Image
                   src={qrCodeUrl}
                   alt="QR Code"
+                  width={256}
+                  height={256}
                   className="w-64 h-64 border rounded-lg"
                 />
               </div>
@@ -2222,9 +2237,11 @@ Backend offline - mock data`;
                   </h3>
                   <div className="inline-block p-4 bg-white/10 backdrop-blur-sm rounded-lg shadow-lg border border-white/20">
                     <div className="bg-white rounded p-3">
-                      <img
-                        src={selectedCredential.qrCode}
+                      <Image
+                        src={selectedCredential.qrCode || ''}
                         alt="Verification QR Code"
+                        width={192}
+                        height={192}
                         className="w-48 h-48 mx-auto"
                       />
                     </div>
