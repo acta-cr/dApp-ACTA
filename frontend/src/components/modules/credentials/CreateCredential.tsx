@@ -226,7 +226,7 @@ export function CreateCredential({
   const getLogoComponent = (logo: string) => {
     switch (logo) {
       case "shield":
-        return <Shield className="w-8 h-8" />;
+        return <Shield className="w-8 h-8 text-[#F0E7CC]" />;
       case "custom-image":
         return customLogoUrl ? (
           <Image
@@ -366,7 +366,7 @@ export function CreateCredential({
     const logo = customization?.selectedLogo || "acta";
     switch (logo) {
       case "shield":
-        return <Shield className="w-8 h-8" />;
+        return <Shield className="w-8 h-8 text-[#F0E7CC]" />;
       case "custom-image":
         return customization?.customLogoUrl ? (
           <Image
@@ -522,9 +522,11 @@ export function CreateCredential({
     if (!credentialData.holder) missingFields.push("Holder Name");
     if (!credentialData.category) missingFields.push("Category");
     if (!credentialData.expires) missingFields.push("Expires On");
-    
+
     if (missingFields.length > 0) {
-      toast.error(`Please fill in the following required fields: ${missingFields.join(", ")}`);
+      toast.error(
+        `Please fill in the following required fields: ${missingFields.join(", ")}`
+      );
       return;
     }
 
@@ -632,14 +634,14 @@ export function CreateCredential({
             customLogoText,
           },
         };
-        
+
         // DEBUG: Log the credential being saved to localStorage
         console.log("💾 Saving credential to localStorage:", {
           id: newCredential.id,
           hash: newCredential.hash,
-          hasHash: !!newCredential.hash
+          hasHash: !!newCredential.hash,
         });
-        
+
         credentials.unshift(newCredential); // Add to beginning of array
         localStorage.setItem(
           `credentials_${walletAddress}`,
@@ -746,11 +748,15 @@ Backend offline - mock data`;
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
           <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-            <Plus className="w-5 h-5 text-primary" />
+            <Plus className="w-5 h-5 text-[#F0E7CC]" />
           </div>
           <div>
-            <h1 className="text-xl sm:text-2xl font-semibold text-foreground">Create Credential</h1>
-            <p className="text-xs sm:text-sm text-muted-foreground">Design and issue new digital credentials</p>
+            <h1 className="text-xl sm:text-2xl font-semibold text-foreground">
+              Create Credential
+            </h1>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              Design and issue new digital credentials
+            </p>
           </div>
         </div>
 
@@ -766,7 +772,7 @@ Backend offline - mock data`;
         <Card>
           <CardContent className="pt-6">
             <div className="text-center space-y-4">
-              <Key className="w-12 h-12 text-muted-foreground mx-auto" />
+              <Key className="w-12 h-12 text-[#F0E7CC] mx-auto" />
               <div>
                 <h3 className="text-lg font-semibold">Generate API Key</h3>
                 <p className="text-sm text-muted-foreground">
@@ -794,11 +800,15 @@ Backend offline - mock data`;
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
           <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-            <Plus className="w-5 h-5 text-primary" />
+            <Plus className="w-5 h-5 text-[#F0E7CC]" />
           </div>
           <div>
-            <h1 className="text-xl sm:text-2xl font-semibold text-foreground">Create Credential</h1>
-            <p className="text-xs sm:text-sm text-muted-foreground">Design and issue new digital credentials</p>
+            <h1 className="text-xl sm:text-2xl font-semibold text-foreground">
+              Create Credential
+            </h1>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              Design and issue new digital credentials
+            </p>
           </div>
         </div>
 
@@ -807,7 +817,9 @@ Backend offline - mock data`;
             <div className="flex items-center justify-center py-12">
               <div className="text-center space-y-4">
                 <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
-                <p className="text-sm text-muted-foreground">Loading user profile...</p>
+                <p className="text-sm text-muted-foreground">
+                  Loading user profile...
+                </p>
               </div>
             </div>
           </CardContent>
@@ -823,11 +835,15 @@ Backend offline - mock data`;
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
           <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-            <FileText className="w-5 h-5 text-primary" />
+            <FileText className="w-5 h-5 text-[#F0E7CC]" />
           </div>
           <div>
-            <h1 className="text-xl sm:text-2xl font-semibold text-foreground">My Credentials</h1>
-            <p className="text-xs sm:text-sm text-muted-foreground">View and manage your issued credentials</p>
+            <h1 className="text-xl sm:text-2xl font-semibold text-foreground">
+              My Credentials
+            </h1>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              View and manage your issued credentials
+            </p>
           </div>
         </div>
 
@@ -835,7 +851,8 @@ Backend offline - mock data`;
         {userCredentials.length > 0 && (
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
             <Badge variant="secondary" className="text-xs sm:text-sm w-fit">
-              {userCredentials.length} credential{userCredentials.length !== 1 ? "s" : ""}
+              {userCredentials.length} credential
+              {userCredentials.length !== 1 ? "s" : ""}
             </Badge>
           </div>
         )}
@@ -883,13 +900,13 @@ Backend offline - mock data`;
                                     )}
                                   </span>
                                 </div>
-                                <CreditCard className="w-6 h-6" />
+                                <CreditCard className="w-6 h-6 text-[#F0E7CC]" />
                               </div>
 
                               {/* Middle Content */}
                               <div className="space-y-3">
                                 <div>
-                                  <p className="text-xs text-blue-200 uppercase tracking-wide">
+                                  <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                                     Holder
                                   </p>
                                   <p className="text-lg font-semibold truncate">
@@ -899,7 +916,7 @@ Backend offline - mock data`;
 
                                 <div className="grid grid-cols-2 gap-4">
                                   <div>
-                                    <p className="text-xs text-blue-200 uppercase tracking-wide">
+                                    <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                                       Category
                                     </p>
                                     <p className="text-sm font-medium truncate">
@@ -907,7 +924,7 @@ Backend offline - mock data`;
                                     </p>
                                   </div>
                                   <div>
-                                    <p className="text-xs text-blue-200 uppercase tracking-wide">
+                                    <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                                       Expires
                                     </p>
                                     <p className="text-sm font-medium">
@@ -924,7 +941,7 @@ Backend offline - mock data`;
                               {/* Footer */}
                               <div className="flex items-center justify-between">
                                 <div>
-                                  <p className="text-xs text-blue-200 uppercase tracking-wide">
+                                  <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                                     Issued By
                                   </p>
                                   <p className="text-sm font-medium">
@@ -933,7 +950,7 @@ Backend offline - mock data`;
                                 </div>
                                 <div className="flex flex-col items-end">
                                   <div className="flex items-center space-x-1">
-                                    <CheckCircle className="w-4 h-4" />
+                                    <CheckCircle className="w-4 h-4 text-[#F0E7CC]" />
                                     <span className="text-xs">Verified</span>
                                   </div>
                                 </div>
@@ -974,7 +991,7 @@ Backend offline - mock data`;
 
                               <div className="flex items-center justify-between pt-4 border-t border-gray-600">
                                 <div className="flex items-center space-x-2">
-                                  <Sparkles className="w-4 h-4" />
+                                  <Sparkles className="w-4 h-4 text-[#F0E7CC]" />
                                   <span className="text-xs">
                                     Stellar Verified
                                   </span>
@@ -1002,7 +1019,7 @@ Backend offline - mock data`;
           </div>
         ) : (
           <div className="text-center py-12">
-            <CreditCard className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+            <CreditCard className="w-16 h-16 mx-auto text-[#F0E7CC] mb-4" />
             <h3 className="text-xl font-semibold text-foreground mb-2">
               No Credentials Yet
             </h3>
@@ -1012,7 +1029,7 @@ Backend offline - mock data`;
             </p>
             <Button
               onClick={() => (window.location.href = "/credentials")}
-              className="bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all"
+              className="bg-gradient-to-r from-[#F0E7CC] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all"
             >
               Create Your First Credential
             </Button>
@@ -1047,7 +1064,7 @@ Backend offline - mock data`;
                 </p>
                 <Button
                   onClick={() => setShowQrModal(false)}
-                  className="w-full"
+                  className="w-full bg-black text-white hover:bg-gray-800 rounded-2xl h-10 px-4 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated"
                 >
                   Close
                 </Button>
@@ -1122,13 +1139,13 @@ Backend offline - mock data`;
                                   )}
                                 </span>
                               </div>
-                              <CreditCard className="w-6 h-6" />
+                              <CreditCard className="w-6 h-6 text-[#F0E7CC]" />
                             </div>
 
                             {/* Middle Content */}
                             <div className="space-y-3">
                               <div>
-                                <p className="text-xs text-blue-200 uppercase tracking-wide">
+                                <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                                   Holder
                                 </p>
                                 <p className="text-lg font-semibold truncate">
@@ -1139,7 +1156,7 @@ Backend offline - mock data`;
 
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                  <p className="text-xs text-blue-200 uppercase tracking-wide">
+                                  <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                                     Category
                                   </p>
                                   <p className="text-sm font-medium truncate">
@@ -1147,7 +1164,7 @@ Backend offline - mock data`;
                                   </p>
                                 </div>
                                 <div>
-                                  <p className="text-xs text-blue-200 uppercase tracking-wide">
+                                  <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                                     Expires
                                   </p>
                                   <p className="text-sm font-medium">
@@ -1164,7 +1181,7 @@ Backend offline - mock data`;
                             {/* Footer */}
                             <div className="flex items-center justify-between">
                               <div>
-                                <p className="text-xs text-blue-200 uppercase tracking-wide">
+                                <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                                   Issued By
                                 </p>
                                 <p className="text-sm font-medium">
@@ -1287,6 +1304,7 @@ Backend offline - mock data`;
                       variant="outline"
                       size="sm"
                       onClick={() => setShowDetailModal(false)}
+                      className="bg-black text-white hover:bg-gray-800 rounded-2xl h-8 px-3 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated"
                     >
                       Close
                     </Button>
@@ -1516,9 +1534,9 @@ Backend offline - mock data`;
               className="flex items-center space-x-2"
             >
               {isFlipped ? (
-                <EyeOff className="w-4 h-4" />
+                <EyeOff className="w-4 h-4 text-[#F0E7CC]" />
               ) : (
-                <Eye className="w-4 h-4" />
+                <Eye className="w-4 h-4 text-[#F0E7CC]" />
               )}
               <span>{isFlipped ? "Front" : "Back"}</span>
             </Button>
@@ -1573,13 +1591,13 @@ Backend offline - mock data`;
                           {getLogoText(selectedLogo)}
                         </span>
                       </div>
-                      <CreditCard className="w-6 h-6" />
+                      <CreditCard className="w-6 h-6 text-[#F0E7CC]" />
                     </div>
 
                     {/* Middle Content */}
                     <div className="space-y-3">
                       <div>
-                        <p className="text-xs text-blue-200 uppercase tracking-wide">
+                        <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                           Holder
                         </p>
                         <p className="text-lg font-semibold truncate">
@@ -1589,7 +1607,7 @@ Backend offline - mock data`;
 
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <p className="text-xs text-blue-200 uppercase tracking-wide">
+                          <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                             Category
                           </p>
                           <p className="text-sm font-medium truncate">
@@ -1597,7 +1615,7 @@ Backend offline - mock data`;
                           </p>
                         </div>
                         <div>
-                          <p className="text-xs text-blue-200 uppercase tracking-wide">
+                          <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                             Expires
                           </p>
                           <p className="text-sm font-medium">
@@ -1614,7 +1632,7 @@ Backend offline - mock data`;
                     {/* Footer */}
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-xs text-blue-200 uppercase tracking-wide">
+                        <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                           Issued By
                         </p>
                         <p className="text-sm font-medium">
@@ -1628,7 +1646,7 @@ Backend offline - mock data`;
                         </div>
                         {createdContract && (
                           <div className="flex items-center space-x-1 mt-1">
-                            <Shield className="w-3 h-3" />
+                            <Shield className="w-3 h-3 text-[#F0E7CC]" />
                             <span className="text-xs">Blockchain</span>
                           </div>
                         )}
@@ -1697,7 +1715,7 @@ Backend offline - mock data`;
           {/* Customization Options */}
           <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-6">
             <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
-              <Sparkles className="w-5 h-5 mr-2 text-[#1B6BFF]" />
+              <Sparkles className="w-5 h-5 mr-2 text-[#F0E7CC]" />
               Customize Credential
             </h3>
 
@@ -1751,7 +1769,7 @@ Backend offline - mock data`;
                     title="Custom Palette"
                   >
                     <svg
-                      className="w-6 h-6 text-muted-foreground"
+                      className="w-6 h-6 text-[#F0E7CC]"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -1819,7 +1837,7 @@ Backend offline - mock data`;
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       onClick={() => setSelectedLogo("acta")}
-                      className={`p-3 ${selectedLogo === "acta" ? "bg-blue-500/20 border-blue-400/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-blue-500/30 transition-colors flex items-center justify-center`}
+                      className={`p-3 ${selectedLogo === "acta" ? "bg-[#F0E7CC]/20 border-[#F0E7CC]/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-[#F0E7CC]/30 transition-colors flex items-center justify-center`}
                     >
                       <Image
                         src="/white.png"
@@ -1832,9 +1850,9 @@ Backend offline - mock data`;
                     </button>
                     <button
                       onClick={() => setSelectedLogo("shield")}
-                      className={`p-3 ${selectedLogo === "shield" ? "bg-blue-500/20 border-blue-400/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-blue-500/30 transition-colors flex items-center justify-center`}
+                      className={`p-3 ${selectedLogo === "shield" ? "bg-[#F0E7CC]/20 border-[#F0E7CC]/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-[#F0E7CC]/30 transition-colors flex items-center justify-center`}
                     >
-                      <Shield className="w-6 h-6 mr-2 text-[#1B6BFF]" />
+                      <Shield className="w-6 h-6 mr-2 text-[#F0E7CC]" />
                       <span className="text-sm font-medium">Shield</span>
                     </button>
                   </div>
@@ -1842,17 +1860,17 @@ Backend offline - mock data`;
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       onClick={() => setSelectedLogo("custom-text")}
-                      className={`p-3 ${selectedLogo === "custom-text" ? "bg-green-500/20 border-green-400/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-green-500/30 transition-colors flex items-center justify-center`}
+                      className={`p-3 ${selectedLogo === "custom-text" ? "bg-[#F0E7CC]/20 border-[#F0E7CC]/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-[#F0E7CC]/30 transition-colors flex items-center justify-center`}
                     >
                       <span className="text-lg font-bold mr-2">ABC</span>
                       <span className="text-sm font-medium">Text</span>
                     </button>
                     <button
                       onClick={() => setSelectedLogo("custom-image")}
-                      className={`p-3 ${selectedLogo === "custom-image" ? "bg-purple-500/20 border-purple-400/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-purple-500/30 transition-colors flex items-center justify-center`}
+                      className={`p-3 ${selectedLogo === "custom-image" ? "bg-[#F0E7CC]/20 border-[#F0E7CC]/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-[#F0E7CC]/30 transition-colors flex items-center justify-center`}
                     >
                       <svg
-                        className="w-6 h-6 mr-2 text-purple-600"
+                        className="w-6 h-6 mr-2 text-[#F0E7CC]"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -1937,7 +1955,7 @@ Backend offline - mock data`;
                         />
                         <label
                           htmlFor="logo-upload"
-                          className="cursor-pointer inline-block mt-2 px-3 py-1 bg-blue-500/20 text-blue-400 text-sm rounded hover:bg-blue-500/30 transition-colors backdrop-blur-sm border border-blue-400/30"
+                          className="cursor-pointer inline-block mt-2 px-3 py-1 bg-[#F0E7CC]/20 text-[#F0E7CC] text-sm rounded hover:bg-[#F0E7CC]/30 transition-colors backdrop-blur-sm border border-[#F0E7CC]/30"
                         >
                           {customLogoUrl ? "Change image" : "Select file"}
                         </label>
@@ -1958,23 +1976,26 @@ Backend offline - mock data`;
                 <div className="grid grid-cols-3 gap-3">
                   <button
                     onClick={() => setSelectedTemplate("classic")}
-                    className={`p-3 ${selectedTemplate === "classic" ? "bg-blue-500/20 border-blue-400/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-blue-500/30 transition-colors text-center`}
+                    className={`p-3 ${selectedTemplate === "classic" ? "bg-[#F0E7CC]/20 border-[#F0E7CC]/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-[#F0E7CC]/30 transition-colors text-center`}
                   >
-                    <CreditCard className="w-6 h-6 mx-auto mb-1 text-[#1B6BFF]" />
+                    <CreditCard className="w-6 h-6 mx-auto mb-1 text-[#F0E7CC]" />
                     <span className="text-xs font-medium">Classic</span>
                   </button>
                   <button
                     onClick={() => setSelectedTemplate("modern")}
-                    className={`p-3 ${selectedTemplate === "modern" ? "bg-purple-500/20 border-purple-400/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-purple-500/30 transition-colors text-center`}
+                    className={`p-3 ${selectedTemplate === "modern" ? "bg-[#F0E7CC]/20 border-[#F0E7CC]/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-[#F0E7CC]/30 transition-colors text-center`}
                   >
-                    <Sparkles className="w-6 h-6 mx-auto mb-1 text-purple-600" />
+                    <Sparkles
+                      className="w-6 h-6 mx-auto mb-1 text-[#F0E7CC]
+                    "
+                    />
                     <span className="text-xs font-medium">Modern</span>
                   </button>
                   <button
                     onClick={() => setSelectedTemplate("corporate")}
-                    className={`p-3 ${selectedTemplate === "corporate" ? "bg-indigo-500/20 border-indigo-400/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-indigo-500/30 transition-colors text-center`}
+                    className={`p-3 ${selectedTemplate === "corporate" ? "bg-[#F0E7CC]/20 border-[#F0E7CC]/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-[#F0E7CC]/30 transition-colors text-center`}
                   >
-                    <Building className="w-6 h-6 mx-auto mb-1 text-indigo-600" />
+                    <Building className="w-6 h-6 mx-auto mb-1 text-[#F0E7CC]" />
                     <span className="text-xs font-medium">Corporativa</span>
                   </button>
                 </div>
@@ -1993,7 +2014,7 @@ Backend offline - mock data`;
             {/* Credential Information */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-foreground flex items-center">
-                <User className="w-5 h-5 mr-2 text-[#1B6BFF]" />
+                <User className="w-5 h-5 mr-2 text-[#F0E7CC]" />
                 Basic Information
               </h3>
 
@@ -2006,7 +2027,7 @@ Backend offline - mock data`;
                     type="text"
                     value={credentialData.holder}
                     onChange={e => handleInputChange("holder", e.target.value)}
-                    className="w-full px-3 py-2 bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B6BFF] focus:border-[#1B6BFF] text-foreground placeholder-muted-foreground"
+                    className="w-full px-3 py-2 bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F0E7CC] focus:border-[#F0E7CC] text-foreground placeholder-muted-foreground"
                     placeholder="Enter holder name"
                     required
                   />
@@ -2022,7 +2043,7 @@ Backend offline - mock data`;
                     onChange={e =>
                       handleInputChange("issuedBy", e.target.value)
                     }
-                    className="w-full px-3 py-2 bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B6BFF] focus:border-[#1B6BFF] text-foreground placeholder-muted-foreground"
+                    className="w-full px-3 py-2 bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F0E7CC] focus:border-[#F0E7CC] text-foreground placeholder-muted-foreground"
                     placeholder="Organization name"
                   />
                 </div>
@@ -2036,7 +2057,7 @@ Backend offline - mock data`;
                     onChange={e =>
                       handleInputChange("category", e.target.value)
                     }
-                    className="w-full px-3 py-2 bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B6BFF] focus:border-[#1B6BFF] text-foreground appearance-none cursor-pointer [&>option]:bg-gray-800 [&>option]:text-white [&>option:checked]:bg-blue-600"
+                    className="w-full px-3 py-2 bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F0E7CC] focus:border-[#F0E7CC] text-foreground appearance-none cursor-pointer [&>option]:bg-gray-800 [&>option]:text-white [&>option:checked]:bg-blue-600"
                     style={{
                       backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23a1a1aa' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                       backgroundPosition: "right 0.5rem center",
@@ -2090,7 +2111,7 @@ Backend offline - mock data`;
                     type="date"
                     value={credentialData.expires}
                     onChange={e => handleInputChange("expires", e.target.value)}
-                    className="w-full px-3 py-2 bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B6BFF] focus:border-[#1B6BFF] text-foreground"
+                    className="w-full px-3 py-2 bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F0E7CC] focus:border-[#F0E7CC] text-foreground"
                     required
                   />
                 </div>
@@ -2106,7 +2127,7 @@ Backend offline - mock data`;
                     handleInputChange("description", e.target.value)
                   }
                   rows={3}
-                  className="w-full px-3 py-2 bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B6BFF] focus:border-[#1B6BFF] text-foreground placeholder-muted-foreground"
+                  className="w-full px-3 py-2 bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F0E7CC] focus:border-[#F0E7CC] text-foreground placeholder-muted-foreground"
                   placeholder="Brief description of the credential"
                 />
               </div>
@@ -2126,7 +2147,7 @@ Backend offline - mock data`;
                     description: "",
                   });
                 }}
-                className="bg-black text-white hover:bg-gray-800 rounded-2xl h-10 px-4 font-semibold shadow-lg transition-all"
+                className="bg-black text-white hover:bg-gray-800 rounded-2xl h-10 px-4 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated"
               >
                 Reset
               </Button>
@@ -2136,7 +2157,7 @@ Backend offline - mock data`;
                 disabled={
                   isCreating || isAuthenticating || !userProfile?.has_api_key
                 }
-                className="bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-10 px-4 font-semibold shadow-lg transition-all"
+                className="bg-black text-white hover:bg-gray-800 rounded-2xl h-10 px-4 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated"
               >
                 {isAuthenticating ? (
                   <>
@@ -2186,7 +2207,10 @@ Backend offline - mock data`;
               <p className="text-sm text-muted-foreground mb-4">
                 Scan this QR code to view the transaction on Stellar Expert
               </p>
-              <Button onClick={() => setShowQrModal(false)} className="w-full">
+              <Button
+                onClick={() => setShowQrModal(false)}
+                className="w-full bg-black text-white hover:bg-gray-800 rounded-2xl h-10 px-4 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated"
+              >
                 Close
               </Button>
             </div>
@@ -2260,13 +2284,13 @@ Backend offline - mock data`;
                                 )}
                               </span>
                             </div>
-                            <CreditCard className="w-6 h-6" />
+                            <CreditCard className="w-6 h-6 text-[#F0E7CC]" />
                           </div>
 
                           {/* Middle Content */}
                           <div className="space-y-3">
                             <div>
-                              <p className="text-xs text-blue-200 uppercase tracking-wide">
+                              <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                                 Holder
                               </p>
                               <p className="text-lg font-semibold truncate">
@@ -2276,7 +2300,7 @@ Backend offline - mock data`;
 
                             <div className="grid grid-cols-2 gap-4">
                               <div>
-                                <p className="text-xs text-blue-200 uppercase tracking-wide">
+                                <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                                   Category
                                 </p>
                                 <p className="text-sm font-medium truncate">
@@ -2284,7 +2308,7 @@ Backend offline - mock data`;
                                 </p>
                               </div>
                               <div>
-                                <p className="text-xs text-blue-200 uppercase tracking-wide">
+                                <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                                   Expires
                                 </p>
                                 <p className="text-sm font-medium">
@@ -2301,7 +2325,7 @@ Backend offline - mock data`;
                           {/* Footer */}
                           <div className="flex items-center justify-between">
                             <div>
-                              <p className="text-xs text-blue-200 uppercase tracking-wide">
+                              <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                                 Issued By
                               </p>
                               <p className="text-sm font-medium">
@@ -2418,6 +2442,7 @@ Backend offline - mock data`;
                     variant="outline"
                     size="sm"
                     onClick={() => setShowDetailModal(false)}
+                    className="bg-black text-white hover:bg-gray-800 rounded-2xl h-8 px-3 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated"
                   >
                     Close
                   </Button>

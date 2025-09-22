@@ -162,7 +162,7 @@ export function MyCredentials() {
     return (
       <div className="space-y-8">
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-8 h-8 border-4 border-[#F0E7CC] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-muted-foreground">Loading user profile...</p>
         </div>
       </div>
@@ -182,11 +182,11 @@ export function MyCredentials() {
       </div>
 
       {/* Status Alert */}
-      <Alert className="bg-blue-500/10 border-blue-500/20 rounded-2xl">
+      <Alert className="bg-[#F0E7CC]/10 border-[#F0E7CC]/20 rounded-2xl">
         <Info className="h-4 w-4" />
-        <AlertTitle className="text-blue-400">Credential Management</AlertTitle>
-        <AlertDescription className="text-blue-300/80">
-          Here you can view all credentials that have been issued to your wallet address. Click on any credential to see detailed information.
+        <AlertTitle className="text-[#F0E7CC]">Credential Management</AlertTitle>
+        <AlertDescription className="text-[#F0E7CC]/80">
+          Your credentials are stored securely on the Stellar blockchain. Each credential is cryptographically signed and verifiable.
         </AlertDescription>
       </Alert>
 
@@ -231,7 +231,7 @@ export function MyCredentials() {
                       {/* Middle Content */}
                       <div className="space-y-3">
                         <div>
-                          <p className="text-xs text-blue-200 uppercase tracking-wide">
+                          <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                             Holder
                           </p>
                           <p className="text-lg font-semibold truncate">
@@ -241,7 +241,7 @@ export function MyCredentials() {
 
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <p className="text-xs text-blue-200 uppercase tracking-wide">
+                            <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                               Category
                             </p>
                             <p className="text-sm font-medium truncate">
@@ -249,7 +249,7 @@ export function MyCredentials() {
                             </p>
                           </div>
                           <div>
-                            <p className="text-xs text-blue-200 uppercase tracking-wide">
+                            <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                               Expires
                             </p>
                             <p className="text-sm font-medium">
@@ -264,7 +264,7 @@ export function MyCredentials() {
                       {/* Footer */}
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-xs text-blue-200 uppercase tracking-wide">
+                          <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                             Issued By
                           </p>
                           <p className="text-sm font-medium">
@@ -288,7 +288,7 @@ export function MyCredentials() {
       ) : (
         <Card className="bg-background/80 backdrop-blur-xl border-white/10">
           <CardContent className="text-center py-12">
-            <CreditCard className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+            <CreditCard className="w-16 h-16 mx-auto text-[#F0E7CC] mb-4" />
             <h3 className="text-xl font-semibold text-foreground mb-2">
               No Credentials Yet
             </h3>

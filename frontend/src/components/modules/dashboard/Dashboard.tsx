@@ -50,13 +50,13 @@ export function Dashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">Dashboard</h1>
+          <h1 className="text-2xl font-semibold golden-gradient-text">Dashboard</h1>
           <p className="text-sm text-muted-foreground">
             Overview of your ACTA dApp status
           </p>
         </div>
-        <Badge variant="outline" className="w-fit">
-          <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+        <Badge variant="outline" className="w-fit border-[#F0E7CC]/30 text-[#F0E7CC]">
+          <div className="w-2 h-2 bg-[#F0E7CC] rounded-full mr-2"></div>
           Live
         </Badge>
       </div>
@@ -86,8 +86,8 @@ export function Dashboard() {
         {/* Wallet Information */}
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center">
-              <Wallet className="w-4 h-4 mr-2" />
+            <CardTitle className="text-base flex items-center golden-gradient-text">
+              <Wallet className="w-4 h-4 mr-2" style={{ color: '#F0E7CC' }} />
               Wallet Information
             </CardTitle>
           </CardHeader>
@@ -117,7 +117,7 @@ export function Dashboard() {
                     Status
                   </label>
                   <div className="flex items-center mt-1">
-                    <CheckCircle className="w-4 h-4 text-green-600 mr-2" />
+                    <CheckCircle className="w-4 h-4 mr-2" style={{ color: '#F0E7CC' }} />
                     <span className="text-sm">Connected</span>
                   </div>
                 </div>
@@ -128,7 +128,7 @@ export function Dashboard() {
                   <div className="flex items-center mt-1">
                     {userProfile?.has_api_key ? (
                       <>
-                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />
+                        <CheckCircle className="w-4 h-4 mr-2" style={{ color: '#F0E7CC' }} />
                         <span className="text-sm">Generated</span>
                       </>
                     ) : (
@@ -152,8 +152,8 @@ export function Dashboard() {
         {/* Recent Activity */}
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center">
-              <Activity className="w-4 h-4 mr-2" />
+            <CardTitle className="text-base flex items-center golden-gradient-text">
+              <Activity className="w-4 h-4 mr-2" style={{ color: '#F0E7CC' }} />
               Recent Activity
             </CardTitle>
           </CardHeader>
@@ -175,8 +175,8 @@ export function Dashboard() {
         {/* Quick Stats */}
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center">
-              <TrendingUp className="w-4 h-4 mr-2" />
+            <CardTitle className="text-base flex items-center golden-gradient-text">
+              <TrendingUp className="w-4 h-4 mr-2" style={{ color: '#F0E7CC' }} />
               Quick Stats
             </CardTitle>
           </CardHeader>
@@ -201,8 +201,8 @@ export function Dashboard() {
         {/* Account Overview */}
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center">
-              <User className="w-4 h-4 mr-2" />
+            <CardTitle className="text-base flex items-center golden-gradient-text">
+              <User className="w-4 h-4 mr-2" style={{ color: '#F0E7CC' }} />
               Account Overview
             </CardTitle>
           </CardHeader>

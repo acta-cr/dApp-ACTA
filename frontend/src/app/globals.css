@@ -76,6 +76,11 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  
+  /* Golden theme colors from ACTA-web */
+  --golden-primary: #F0E7CC;
+  --golden-secondary: #E9F8D8;
+  --golden-tertiary: #FFFFFF;
 }
 
 .dark {
@@ -136,5 +141,50 @@
 
 .rotate-y-180 {
   transform: rotateY(180deg);
+}
+
+/* Golden gradient text */
+.golden-gradient-text {
+  background: linear-gradient(180deg, var(--golden-primary) 0%, var(--golden-secondary) 55%, var(--golden-tertiary) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Golden border animation */
+@keyframes golden-shine {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.golden-border-animated {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.golden-border-animated::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(240, 231, 204, 0.4),
+    rgba(233, 248, 216, 0.4),
+    transparent
+  );
+  animation: golden-shine 3s infinite;
+  z-index: 1;
+}
+
+.golden-border-animated > * {
+  position: relative;
+  z-index: 2;
 }
 

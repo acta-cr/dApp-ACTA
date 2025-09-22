@@ -116,7 +116,7 @@ function AppSidebar() {
                       className="h-8 px-2"
                     >
                       <Link href={item.href}>
-                        <Icon className="w-4 h-4" />
+                        <Icon className="w-4 h-4" style={{ color: '#F0E7CC' }} />
                         <span className="text-sm">{item.label}</span>
                       </Link>
                     </SidebarMenuButton>
@@ -154,7 +154,7 @@ function AppSidebar() {
                         className="h-8 px-2"
                       >
                         <Link href={item.href}>
-                          <Icon className="w-4 h-4" />
+                          <Icon className="w-4 h-4" style={{ color: '#F0E7CC' }} />
                           <span className="text-sm">{item.label}</span>
                         </Link>
                       </SidebarMenuButton>
@@ -169,8 +169,8 @@ function AppSidebar() {
 
       <SidebarFooter className="border-t p-3">
         <div className="flex items-center space-x-2 mb-2">
-          <div className="w-7 h-7 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
-            <span className="text-white text-xs font-medium">U</span>
+          <div className="w-7 h-7 border-2 border-[#F0E7CC] shadow-[0_0_10px_rgba(240,231,204,0.3)] bg-black rounded-full flex items-center justify-center">
+            <span className="text-[#F0E7CC] text-xs font-medium">U</span>
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium">User</p>

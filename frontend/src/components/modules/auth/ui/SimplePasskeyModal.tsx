@@ -1,11 +1,23 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Fingerprint, Plus, KeyRound } from 'lucide-react';
-import { useSimplePasskey } from '@/hooks/use-simple-passkey';
+import React, { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Fingerprint, Plus, KeyRound, Loader2 } from "lucide-react";
+import { ShineBorder } from "@/components/magicui/shine-border";
+import { useSimplePasskey } from "@/hooks/use-simple-passkey";
 
 interface SimplePasskeyModalProps {
   isOpen: boolean;
@@ -16,49 +28,89 @@ interface SimplePasskeyModalProps {
 export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
   isOpen,
   onClose,
-  onSuccess
+  onSuccess,
 }) => {
   const { createWallet, authenticate, isLoading, error } = useSimplePasskey();
-  const [modalError, setModalError] = useState<string>('');
+  const [modalError, setModalError] = useState<string>("");
+  const [webAuthnSupported, setWebAuthnSupported] = useState<boolean>(true);
+
+  // Check WebAuthn support on component mount
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const supported = !!(
+        navigator.credentials &&
+        typeof navigator.credentials.create === "function" &&
+        typeof navigator.credentials.get === "function"
+      );
+      setWebAuthnSupported(supported);
+
+      if (!supported) {
+        setModalError(
+          "WebAuthn/Passkeys are not supported in this browser. Please use Chrome, Safari, or Edge."
+        );
+      }
+    }
+  }, []);
 
   const handleCreateWallet = async () => {
     try {
-      setModalError('');
+      setModalError("");
+
+      if (!webAuthnSupported) {
+        throw new Error("WebAuthn is not supported in this browser");
+      }
+
+      console.log("🔄 Starting wallet creation...");
       const result = await createWallet();
 
       // Store auth info
-      localStorage.setItem('authToken', result.token);
+      localStorage.setItem("authToken", result.token);
 
       // Call success callback
       onSuccess(result.walletAddress, result.token);
       onClose();
     } catch (error) {
-      setModalError(error instanceof Error ? error.message : 'Failed to create wallet');
+      console.error("❌ Wallet creation error:", error);
+      const errorMsg =
+        error instanceof Error ? error.message : "Failed to create wallet";
+      setModalError(errorMsg);
     }
   };
 
   const handleAuthenticate = async () => {
     try {
-      setModalError('');
+      setModalError("");
+
+      if (!webAuthnSupported) {
+        throw new Error("WebAuthn is not supported in this browser");
+      }
+
+      console.log("🔄 Starting authentication...");
       const result = await authenticate();
 
       // Store auth info
-      localStorage.setItem('authToken', result.token);
+      localStorage.setItem("authToken", result.token);
 
       // Call success callback
       onSuccess(result.walletAddress, result.token);
       onClose();
     } catch (error) {
-      setModalError(error instanceof Error ? error.message : 'Failed to authenticate');
+      console.error("❌ Authentication error:", error);
+      const errorMsg =
+        error instanceof Error ? error.message : "Failed to authenticate";
+      setModalError(errorMsg);
     }
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md bg-[rgba(255,255,255,0.03)] border border-white/10 backdrop-blur-xl" aria-describedby="passkey-modal-description">
+      <DialogContent
+        className="sm:max-w-md bg-background/95 border border-border backdrop-blur-xl"
+        aria-describedby="passkey-modal-description"
+      >
         <DialogHeader>
-          <DialogTitle className="text-white flex items-center gap-2">
-            <KeyRound className="w-5 h-5" />
+          <DialogTitle className="text-foreground flex items-center gap-2">
+            <KeyRound className="w-5 h-5 text-[#F0E7CC]" />
             Passkey Wallet
           </DialogTitle>
         </DialogHeader>
@@ -68,80 +120,100 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
 
         <div className="space-y-4">
           {/* Create New Wallet */}
-          <Card className="bg-[rgba(255,255,255,0.02)] border border-white/5">
+          <Card className="bg-black/70 border border-border/50">
             <CardHeader className="space-y-1">
-              <CardTitle className="text-lg text-white flex items-center gap-2">
-                <Plus className="w-5 h-5" />
+              <CardTitle className="text-lg text-foreground flex items-center gap-2">
+                <Plus className="w-5 h-5 text-[#F0E7CC]" />
                 Create New Wallet
               </CardTitle>
-              <CardDescription className="text-white/60">
-                Create a new Stellar wallet secured by your biometric authentication
+              <CardDescription className="text-muted-foreground">
+                Create a new Stellar wallet secured by your biometric
+                authentication
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button
-                onClick={handleCreateWallet}
-                disabled={isLoading}
-                className="w-full bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all"
+              <ShineBorder
+                borderWidth={2}
+                duration={12}
+                color={["#F0E7CC", "#E9F8D8", "#FFFFFF"]}
+                className="w-full"
               >
-                {isLoading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                    Creating Wallet...
-                  </>
-                ) : (
-                  <>
-                    <Plus className="w-4 h-4 mr-2" />
-                    Create Wallet with Passkey
-                  </>
-                )}
-              </Button>
+                <Button
+                  onClick={handleCreateWallet}
+                  disabled={isLoading || !webAuthnSupported}
+                  className="w-full h-12 bg-black text-white hover:bg-gray-800 rounded-2xl px-4 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin text-white" />
+                      <span className="!text-white">Creating...</span>
+                    </>
+                  ) : (
+                    <div className="flex items-center">
+                      <Plus className="mr-2 h-4 w-4 text-white" />
+                      <span className="!text-white">
+                        Create Wallet with Passkey
+                      </span>
+                    </div>
+                  )}
+                </Button>
+              </ShineBorder>
             </CardContent>
           </Card>
 
           {/* Login with Existing Passkey */}
-          <Card className="bg-[rgba(255,255,255,0.02)] border border-white/5">
+          <Card className="bg-black/70 border border-border/50">
             <CardHeader className="space-y-1">
-              <CardTitle className="text-lg text-white flex items-center gap-2">
-                <Fingerprint className="w-5 h-5" />
+              <CardTitle className="text-lg text-foreground flex items-center gap-2">
+                <Fingerprint className="w-5 h-5 text-[#F0E7CC]" />
                 Access Existing Wallet
               </CardTitle>
-              <CardDescription className="text-white/60">
+              <CardDescription className="text-muted-foreground">
                 Use your existing passkey to access your Stellar wallet
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button
-                onClick={handleAuthenticate}
-                disabled={isLoading}
-                className="w-full bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all"
+              <ShineBorder
+                borderWidth={2}
+                duration={12}
+                color={["#F0E7CC", "#E9F8D8", "#FFFFFF"]}
+                className="w-full"
               >
-                {isLoading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                    Authenticating...
-                  </>
-                ) : (
-                  <>
-                    <Fingerprint className="w-4 h-4 mr-2" />
-                    Access with Passkey
-                  </>
-                )}
-              </Button>
+                <Button
+                  onClick={handleAuthenticate}
+                  disabled={isLoading || !webAuthnSupported}
+                  className="w-full h-12 bg-black hover:bg-gray-800 rounded-2xl px-4 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated !text-white"
+                >
+                  {isLoading ? (
+                    <div className="flex items-center">
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin text-white" />
+                      <span className="!text-white">Authenticating...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center">
+                      <KeyRound className="mr-2 h-4 w-4 text-white" />
+                      <span className="!text-white">
+                        Access Existing Wallet
+                      </span>
+                    </div>
+                  )}
+                </Button>
+              </ShineBorder>
             </CardContent>
           </Card>
 
           {/* Error Display */}
           {(modalError || error) && (
-            <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+            <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
               {modalError || error}
             </div>
           )}
 
           {/* Info */}
           <div className="text-center">
-            <p className="text-xs text-white/70 leading-relaxed">
-              Your passkey creates and secures a real Stellar blockchain wallet automatically
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Your passkey creates and secures a real Stellar blockchain wallet
+              automatically
             </p>
           </div>
         </div>

@@ -116,7 +116,7 @@ export function Profile() {
               <CardDescription className="mb-6">
                 Connect your Stellar wallet to view your profile information and manage your account.
               </CardDescription>
-              <Button className="bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all">
+              <Button variant="golden" className="rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all">
                 Connect Wallet
               </Button>
             </div>
@@ -138,21 +138,21 @@ export function Profile() {
       <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
         <CardContent className="p-4 sm:p-6">
           <div className="flex flex-col sm:flex-row items-start space-y-4 sm:space-y-0 sm:space-x-6">
-            <Avatar className="h-20 w-20">
-              <AvatarFallback className="bg-gradient-to-br from-[#1B6BFF] to-[#8F43FF] text-white text-xl font-bold">
+            <Avatar className="h-20 w-20 border-2 border-[#F0E7CC] shadow-[0_0_10px_rgba(240,231,204,0.3)]">
+              <AvatarFallback className="bg-black text-[#F0E7CC] text-xl font-bold">
                 {walletAddress?.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
 
             <div className="flex-1 space-y-4">
               <div>
-                <h2 className="text-2xl font-bold text-foreground">{walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-6)}` : 'Stellar Wallet'}</h2>
+                <h2 className="text-2xl font-bold golden-gradient-text">{walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-6)}` : 'Stellar Wallet'}</h2>
                 <p className="text-muted-foreground">Connected to ACTA dApp</p>
               </div>
 
               <div className="flex flex-wrap gap-2">
-                <Badge className="bg-green-400/20 text-green-400 border-green-400/30 backdrop-blur-sm rounded-2xl">
-                  <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                <Badge className="bg-[#F0E7CC]/20 text-[#F0E7CC] border-[#F0E7CC]/30 backdrop-blur-sm rounded-2xl">
+                  <div className="w-2 h-2 bg-[#F0E7CC] rounded-full mr-2"></div>
                   Connected
                 </Badge>
                 <Badge variant="outline" className="border-white/20 text-muted-foreground backdrop-blur-sm rounded-2xl">Testnet</Badge>
@@ -181,8 +181,8 @@ export function Profile() {
 
               <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
                 <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Wallet className="w-5 h-5 mr-2" />
+                  <CardTitle className="flex items-center golden-gradient-text">
+                    <Wallet className="w-5 h-5 mr-2" style={{ color: '#F0E7CC' }} />
                     Wallet Details
                   </CardTitle>
                 </CardHeader>
@@ -301,13 +301,13 @@ export function Profile() {
                     </label>
                     <div className="space-y-2">
                       <Button
-                        variant="outline"
-                        className="w-full justify-start border-blue-400/30 text-blue-400 hover:bg-blue-400/10 backdrop-blur-sm rounded-lg"
-                        onClick={() => window.open(`https://stellar.expert/explorer/testnet/account/${walletAddress}`, '_blank')}
-                      >
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        View on Stellar Expert (Testnet)
-                      </Button>
+                      variant="outline" 
+                      className="w-full justify-start border-[#F0E7CC]/30 text-[#F0E7CC] hover:bg-[#F0E7CC]/10 backdrop-blur-sm rounded-lg"
+                      onClick={() => window.open(`https://stellar.expert/explorer/testnet/account/${walletAddress}`, '_blank')}
+                    >
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      View on Testnet
+                    </Button>
                       <p className="text-xs text-muted-foreground/70">
                         Check your balance, transaction history, and account details
                       </p>
@@ -333,11 +333,11 @@ export function Profile() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <Alert className="bg-blue-500/10 border-blue-500/20 rounded-2xl">
+              <Alert className="bg-[#F0E7CC]/10 border-[#F0E7CC]/20 rounded-2xl">
                 <Info className="h-4 w-4" />
-                <AlertTitle className="text-blue-400">Settings Available</AlertTitle>
-                <AlertDescription className="text-blue-300/80">
-                  Additional settings will be available in future updates. For now, use the Quick Actions to manage your wallet.
+                <AlertTitle className="text-[#F0E7CC]">Settings Available</AlertTitle>
+                <AlertDescription className="text-[#F0E7CC]/80">
+                  Additional wallet settings and preferences will be available in future updates.
                 </AlertDescription>
               </Alert>
 

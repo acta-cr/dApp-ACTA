@@ -110,7 +110,7 @@ export function SearchCredential() {
       {/* Header */}
       <div className="flex items-center space-x-3">
         <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-          <Search className="w-5 h-5 text-primary" />
+          <Search className="w-5 h-5 text-[#F0E7CC]" />
         </div>
         <div>
           <h1 className="text-2xl font-semibold text-foreground">Search Credential</h1>
@@ -209,7 +209,7 @@ export function SearchCredential() {
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-3">
                       <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                        <CreditCard className="w-5 h-5 text-primary" />
+                        <CreditCard className="w-5 h-5 text-[#F0E7CC]" />
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold">{credentialInfo.fullData.name}</h3>
