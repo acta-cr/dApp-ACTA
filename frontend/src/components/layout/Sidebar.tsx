@@ -44,12 +44,12 @@ const platformItems = [
     icon: LayoutDashboard,
   },
   {
-    href: "/profile",
+    href: "/dashboard/profile",
     label: "Profile",
     icon: User,
   },
   {
-    href: "/api-key",
+    href: "/dashboard/api-key",
     label: "API Key",
     icon: Key,
   },
@@ -57,17 +57,17 @@ const platformItems = [
 
 const credentialItems = [
   {
-    href: "/credentials",
+    href: "/dashboard/credentials",
     label: "Create",
     icon: Plus,
   },
   {
-    href: "/my-credentials",
+    href: "/dashboard/my-credentials",
     label: "Access",
     icon: FileText,
   },
   {
-    href: "/search-credential",
+    href: "/dashboard/search-credential",
     label: "Search",
     icon: Search,
   },
