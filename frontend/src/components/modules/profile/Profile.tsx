@@ -18,7 +18,7 @@ import {
   Shield,
   Eye,
   EyeOff,
-  Key
+  Key,
 } from 'lucide-react';
 import { Keypair } from '@stellar/stellar-sdk';
 

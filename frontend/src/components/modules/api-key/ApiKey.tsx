@@ -100,78 +100,30 @@ export function ApiKey() {
     }
   };
 
-  const hasApiKey = userProfile?.has_api_key || !!generatedKey;
-  const apiKeyToShow = generatedKey || userProfile?.api_key;
-
-  const generateEnvContent = () => {
-    if (!apiKeyToShow) return "";
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    return `# ACTA API Configuration
-ACTA_API_KEY=${apiKeyToShow}
-ACTA_API_URL=${apiUrl}
-`;
-  };
-
-  const downloadEnvFile = () => {
-    const content = generateEnvContent();
-    if (!content) {
-      toast.error("No API key available to download");
-      return;
-    }
-    const blob = new Blob([content], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = ".env.acta";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    toast.success(".env file downloaded");
-  };
+  const displayKey = generatedKey || userProfile?.api_key;
+  const hasApiKey = Boolean(displayKey);
 
   if (!isConnected) {
     return (
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">
-            API Key Management
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Generate and manage your ACTA API keys
-          </p>
+        {/* Header */}
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+            <Key className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-semibold text-foreground">API Key</h1>
+            <p className="text-sm text-muted-foreground">Manage your API access keys</p>
+          </div>
         </div>
 
-        <Alert className="bg-orange-500/10 border-orange-500/20 rounded-2xl">
-          <AlertTriangle className="h-4 w-4" />
-          <AlertTitle className="text-orange-400">
-            Wallet Connection Required
-          </AlertTitle>
-          <AlertDescription className="text-orange-300/80">
-            You need to connect your Stellar wallet to generate and manage API
-            keys for ACTA services.
+        <Alert>
+          <Shield className="h-4 w-4" />
+          <AlertTitle>Wallet Connection Required</AlertTitle>
+          <AlertDescription>
+            Please connect your wallet to manage your API keys.
           </AlertDescription>
         </Alert>
-
-        <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
-          <CardContent className="p-8 text-center">
-            <div className="max-w-md mx-auto">
-              <div className="w-16 h-16 bg-white/5 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 border border-white/10">
-                <Key className="w-8 h-8 text-muted-foreground" />
-              </div>
-              <CardTitle className="text-xl mb-2">
-                Wallet Connection Required
-              </CardTitle>
-              <CardDescription className="mb-6">
-                You need to connect your Stellar wallet to generate and manage
-                API keys for ACTA services.
-              </CardDescription>
-              <Button className="bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all">
-                Connect Wallet
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     );
   }
@@ -179,230 +131,191 @@ ACTA_API_URL=${apiUrl}
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">
-            API Key Management
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Generate and manage your ACTA API keys
-          </p>
+      <div className="flex items-center space-x-3">
+        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+          <Key className="w-5 h-5 text-primary" />
         </div>
-        <Badge
-          variant="outline"
-          className="text-[#1B6BFF] border-[#1B6BFF]/30 bg-[#1B6BFF]/10 backdrop-blur-sm rounded-2xl"
-        >
-          <Shield className="w-3 h-3 mr-1" />
-          Secure
-        </Badge>
+        <div>
+          <h1 className="text-2xl font-semibold text-foreground">API Key</h1>
+          <p className="text-sm text-muted-foreground">Manage your API access keys</p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-        {/* Main API Key Card */}
-        <div className="lg:col-span-2 space-y-6">
-          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="flex items-center">
-                <Key className="w-5 h-5 mr-2" />
-                Your API Key
+      {/* API Key Status */}
+      <Card>
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-base flex items-center">
+                <Shield className="w-4 h-4 mr-2" />
+                API Key Status
               </CardTitle>
-              {hasApiKey && (
-                <Badge className="bg-green-400/20 text-green-400 border-green-400/30 backdrop-blur-sm rounded-2xl">
+              <CardDescription>
+                {hasApiKey 
+                  ? "Your API key is active and ready to use"
+                  : "No API key generated yet"
+                }
+              </CardDescription>
+            </div>
+            <Badge variant={hasApiKey ? "secondary" : "outline"}>
+              {hasApiKey ? (
+                <>
                   <CheckCircle className="w-3 h-3 mr-1" />
                   Active
-                </Badge>
-              )}
-            </CardHeader>
-            <CardContent>
-              {!hasApiKey ? (
-                <div className="text-center py-8">
-                  <div className="w-16 h-16 bg-[#1B6BFF]/10 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 border border-[#1B6BFF]/20">
-                    <Key className="w-8 h-8 text-[#1B6BFF]" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2">
-                    No API Key Generated
-                  </h3>
-                  <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-                    Generate a secure API key to access ACTA services. The key
-                    will be authenticated with your wallet signature.
-                  </p>
-                  <Button
-                    onClick={handleGenerateApiKey}
-                    disabled={isGenerating}
-                    className="bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all"
-                  >
-                    {isGenerating ? (
-                      <>
-                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                        Generating...
-                      </>
-                    ) : (
-                      <>
-                        <Key className="w-4 h-4 mr-2" />
-                        Generate API Key
-                      </>
-                    )}
-                  </Button>
-                </div>
+                </>
               ) : (
-                <div className="space-y-6">
-                  {/* API Key Display */}
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground mb-2 block">
-                      API Key
-                    </label>
-                    <div className="flex items-center space-x-3 p-4 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10">
-                      <code className="flex-1 text-sm font-mono text-foreground min-w-0 break-all">
-                        {showKey ? apiKeyToShow : "•".repeat(32)}
-                      </code>
-                      <div className="flex items-center space-x-2 flex-shrink-0">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setShowKey(!showKey)}
-                        >
-                          {showKey ? (
-                            <EyeOff className="w-4 h-4" />
-                          ) : (
-                            <Eye className="w-4 h-4" />
-                          )}
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => copyToClipboard(apiKeyToShow || "")}
-                        >
-                          {copied ? (
-                            <Check className="w-4 h-4" />
-                          ) : (
-                            <Copy className="w-4 h-4" />
-                          )}
-                        </Button>
-                      </div>
-                    </div>
-                    <p className="text-xs text-muted-foreground/70 mt-1">
-                      Keep your API key secure and never share it publicly
-                    </p>
-                  </div>
-
-                  {/* Key Information */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground mb-1 block">
-                        Created At
-                      </label>
-                      <p className="text-sm text-foreground bg-white/5 backdrop-blur-sm p-3 rounded-lg border border-white/10">
-                        {userProfile?.created_at
-                          ? new Date(userProfile.created_at).toLocaleString()
-                          : "Just created"}
-                      </p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground mb-1 block">
-                        Status
-                      </label>
-                      <div className="bg-white/5 backdrop-blur-sm p-3 rounded-lg border border-white/10">
-                        <Badge className="bg-green-400/20 text-green-400 border-green-400/30 backdrop-blur-sm rounded-2xl">
-                          <CheckCircle className="w-3 h-3 mr-1" />
-                          Active & Valid
-                        </Badge>
-                      </div>
-                    </div>
-                  </div>
-
-                  <Separator />
-
-                  {/* Actions */}
-                  <div className="flex flex-col sm:flex-row flex-wrap gap-3">
-                    <Button
-                      onClick={handleRegenerateApiKey}
-                      disabled={isRegenerating}
-                      variant="outline"
-                      className="border-[#1B6BFF]/30 text-[#1B6BFF] hover:bg-[#1B6BFF]/10 backdrop-blur-sm rounded-2xl"
-                    >
-                      {isRegenerating ? (
-                        <>
-                          <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                          Regenerating...
-                        </>
-                      ) : (
-                        <>
-                          <RotateCcw className="w-4 h-4 mr-2" />
-                          Regenerate Key
-                        </>
-                      )}
-                    </Button>
-
-                    <Button
-                      onClick={handleDeleteApiKey}
-                      disabled={isDeleting}
-                      variant="outline"
-                      className="border-red-400/30 text-red-400 hover:bg-red-400/10 backdrop-blur-sm rounded-2xl"
-                    >
-                      {isDeleting ? (
-                        <>
-                          <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                          Deleting...
-                        </>
-                      ) : (
-                        <>
-                          <Trash2 className="w-4 h-4 mr-2" />
-                          Clear Key
-                        </>
-                      )}
-                    </Button>
-
-                    <Button
-                      onClick={downloadEnvFile}
-                      variant="outline"
-                      className="border-white/20 text-foreground hover:bg-white/5 backdrop-blur-sm rounded-2xl"
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      Download .env
-                    </Button>
-                  </div>
-                </div>
+                <>
+                  <AlertTriangle className="w-3 h-3 mr-1" />
+                  Inactive
+                </>
               )}
+            </Badge>
+          </div>
+        </CardHeader>
 
-              {generatedKey && (
-                <div className="mt-4">
-                  <Alert className="bg-green-400/10 border-green-400/20 rounded-lg">
-                    <CheckCircle className="h-4 w-4" />
-                    <AlertTitle className="text-green-400">Success</AlertTitle>
-                    <AlertDescription className="text-green-400/80">
-                      Your API key has been generated successfully. Make sure to
-                      copy it before navigating away.
-                    </AlertDescription>
-                  </Alert>
+        {hasApiKey && (
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">API Key</label>
+              <div className="flex items-center space-x-2">
+                <div className="flex-1 p-3 bg-muted rounded-lg font-mono text-sm">
+                  {showKey ? displayKey : "•".repeat(32)}
                 </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowKey(!showKey)}
+                >
+                  {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => copyToClipboard(displayKey!)}
+                >
+                  {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                </Button>
+              </div>
+            </div>
 
-        {/* Sidebar */}
-        <div className="space-y-6">
-          {/* Help */}
-          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
-            <CardHeader>
-              <CardTitle>Need Help?</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <CardDescription>
-                Check out our documentation for detailed API usage examples and
-                integration guides.
-              </CardDescription>
+            <Separator />
 
+            <div className="flex space-x-3">
               <Button
                 variant="outline"
-                className="w-full justify-start border-white/20 text-foreground hover:bg-white/5 backdrop-blur-sm rounded-2xl"
+                onClick={handleRegenerateApiKey}
+                disabled={isRegenerating}
+                size="sm"
               >
-                <Info className="w-4 h-4 mr-2" />
-                View Documentation
+                {isRegenerating ? (
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <RotateCcw className="w-4 h-4 mr-2" />
+                )}
+                Regenerate
               </Button>
-            </CardContent>
-          </Card>
-        </div>
+              <Button
+                variant="destructive"
+                onClick={handleDeleteApiKey}
+                disabled={isDeleting}
+                size="sm"
+              >
+                {isDeleting ? (
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Trash2 className="w-4 h-4 mr-2" />
+                )}
+                Delete
+              </Button>
+            </div>
+          </CardContent>
+        )}
+
+        {!hasApiKey && (
+          <CardContent>
+            <Button
+              onClick={handleGenerateApiKey}
+              disabled={isGenerating}
+              className="w-full"
+            >
+              {isGenerating ? (
+                <>
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <Key className="w-4 h-4 mr-2" />
+                  Generate API Key
+                </>
+              )}
+            </Button>
+          </CardContent>
+        )}
+      </Card>
+
+      {/* Security Notice */}
+      <Alert>
+        <Shield className="h-4 w-4" />
+        <AlertTitle>Security Notice</AlertTitle>
+        <AlertDescription>
+          Keep your API key secure and never share it publicly. If you suspect it has been compromised, regenerate it immediately.
+        </AlertDescription>
+      </Alert>
+
+      {/* Usage Information */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center">
+              <Info className="w-4 h-4 mr-2" />
+              Usage Guidelines
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium">Authentication</h4>
+              <p className="text-xs text-muted-foreground">
+                Include your API key in the Authorization header as a Bearer token.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium">Rate Limits</h4>
+              <p className="text-xs text-muted-foreground">
+                Standard plan includes 1000 requests per hour.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium">Endpoints</h4>
+              <p className="text-xs text-muted-foreground">
+                Access all credential management endpoints with your API key.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center">
+              <Download className="w-4 h-4 mr-2" />
+              Documentation
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <CardDescription>
+              Check out our documentation for detailed API usage examples and
+              integration guides.
+            </CardDescription>
+
+            <Button
+              variant="outline"
+              className="w-full justify-start"
+            >
+              <Info className="w-4 h-4 mr-2" />
+              View Documentation
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

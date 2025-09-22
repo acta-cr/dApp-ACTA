@@ -4,6 +4,9 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { CardContent } from "@/components/ui/card";
 import {
   CreditCard,
   Sparkles,
@@ -17,6 +20,9 @@ import {
   AlertCircle,
   Key,
   Copy,
+  FileText,
+  Loader2,
+  Plus,
 } from "lucide-react";
 import { toast } from "sonner";
 import QRCode from "qrcode";
@@ -736,41 +742,47 @@ Backend offline - mock data`;
   // Show API Key manager if user doesn't have an API key
   if (!isLoadingUser && userProfile && !userProfile.has_api_key) {
     return (
-      <div className="space-y-8">
+      <div className="space-y-6">
         {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">
-            Create Credential
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Design and issue new digital credentials
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
+          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+            <Plus className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-xl sm:text-2xl font-semibold text-foreground">Create Credential</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground">Design and issue new digital credentials</p>
+          </div>
         </div>
 
         {/* API Key Required Notice */}
-        <div className="max-w-2xl mx-auto">
-          <Card className="bg-orange-400/10 backdrop-blur-sm border border-orange-400/20 rounded-2xl shadow-2xl p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <AlertCircle className="w-6 h-6 text-orange-400" />
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>API Key Required</AlertTitle>
+          <AlertDescription>
+            You need to generate an API key before you can create credentials.
+          </AlertDescription>
+        </Alert>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="text-center space-y-4">
+              <Key className="w-12 h-12 text-muted-foreground mx-auto" />
               <div>
-                <h3 className="text-lg font-semibold text-orange-400">
-                  API Key Required
-                </h3>
-                <p className="text-orange-400/80">
-                  You need to generate an API key before you can create
-                  credentials.
+                <h3 className="text-lg font-semibold">Generate API Key</h3>
+                <p className="text-sm text-muted-foreground">
+                  Create an API key to start issuing credentials
                 </p>
               </div>
+              <Button
+                onClick={() => (window.location.href = "/dashboard/api-key")}
+                className="w-full"
+              >
+                <Key className="w-4 h-4 mr-2" />
+                Go to API Key Management
+              </Button>
             </div>
-            <Button
-              onClick={() => (window.location.href = "/api-key-management")}
-              className="w-full mt-4 bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all"
-            >
-              <Key className="w-4 h-4 mr-2" />
-              Go to API Key Management
-            </Button>
-          </Card>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -778,23 +790,28 @@ Backend offline - mock data`;
   // Show loading state
   if (isLoadingUser) {
     return (
-      <div className="space-y-8">
+      <div className="space-y-6">
         {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">
-            Create Credential
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Design and issue new digital credentials
-          </p>
-        </div>
-
-        <div className="flex items-center justify-center py-12">
-          <div className="text-center">
-            <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Loading user profile...</p>
+        <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
+          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+            <Plus className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-xl sm:text-2xl font-semibold text-foreground">Create Credential</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground">Design and issue new digital credentials</p>
           </div>
         </div>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-center py-12">
+              <div className="text-center space-y-4">
+                <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
+                <p className="text-sm text-muted-foreground">Loading user profile...</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -802,16 +819,26 @@ Backend offline - mock data`;
   // Show only My Credentials section if requested
   if (showOnlyMyCredentials) {
     return (
-      <div className="space-y-8">
+      <div className="space-y-6">
         {/* Header */}
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
-            My Credentials
-          </h1>
-          <p className="text-muted-foreground mt-1 text-sm sm:text-base">
-            View and manage your issued credentials
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
+          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+            <FileText className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-xl sm:text-2xl font-semibold text-foreground">My Credentials</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground">View and manage your issued credentials</p>
+          </div>
         </div>
+
+        {/* Credentials Count */}
+        {userCredentials.length > 0 && (
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+            <Badge variant="secondary" className="text-xs sm:text-sm w-fit">
+              {userCredentials.length} credential{userCredentials.length !== 1 ? "s" : ""}
+            </Badge>
+          </div>
+        )}
 
         {/* My Credentials Section */}
         {userCredentials.length > 0 ? (
