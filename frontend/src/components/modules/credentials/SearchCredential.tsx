@@ -64,14 +64,24 @@ export function SearchCredential() {
     setCredentialInfo(null);
 
     try {
-      const response = await fetch(`http://localhost:4000/v1/credentials/hash/${searchHash.trim()}`);
+      // Get API URL from environment or use default
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const response = await fetch(`${apiUrl}/v1/credentials/hash/${searchHash.trim()}`);
       
       if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error("Credential not found with the provided hash");
+        }
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
 
-      const data = await response.json();
-      setCredentialInfo(data);
+      const result = await response.json();
+      
+      if (!result.success || !result.data) {
+        throw new Error("Invalid response from server");
+      }
+
+      setCredentialInfo(result.data);
       toast.success("Credential found successfully");
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";

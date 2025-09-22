@@ -511,12 +511,21 @@ export function CreateCredential({
       return;
     }
 
-    if (
-      !credentialData.holder ||
-      !credentialData.category ||
-      !credentialData.expires
-    ) {
-      toast.error("Please fill in all required fields");
+    // Validate required fields
+    const missingFields = [];
+    if (!credentialData.holder) missingFields.push("Holder Name");
+    if (!credentialData.category) missingFields.push("Category");
+    if (!credentialData.expires) missingFields.push("Expires On");
+    
+    if (missingFields.length > 0) {
+      toast.error(`Please fill in the following required fields: ${missingFields.join(", ")}`);
+      return;
+    }
+
+    // Validate date format
+    const expirationDate = new Date(credentialData.expires);
+    if (isNaN(expirationDate.getTime())) {
+      toast.error("Please enter a valid expiration date");
       return;
     }
 
@@ -564,7 +573,13 @@ export function CreateCredential({
         contractAddress: contract.contractAddress,
         transactionHash: contract.transactionHash,
         verificationUrl: contract.verificationUrl,
+        hash: contract.hash, // DEBUG: Check if hash is present
       });
+
+      // DEBUG: Specifically log the hash field
+      console.log("🔑 Credential hash from API:", contract.hash);
+      console.log("🔑 Hash type:", typeof contract.hash);
+      console.log("🔑 Hash exists:", !!contract.hash);
 
       // Step 2: Generate QR code with Stellar Expert URL
       const isSimulated = result.message.includes("simulated");
@@ -611,6 +626,14 @@ export function CreateCredential({
             customLogoText,
           },
         };
+        
+        // DEBUG: Log the credential being saved to localStorage
+        console.log("💾 Saving credential to localStorage:", {
+          id: newCredential.id,
+          hash: newCredential.hash,
+          hasHash: !!newCredential.hash
+        });
+        
         credentials.unshift(newCredential); // Add to beginning of array
         localStorage.setItem(
           `credentials_${walletAddress}`,
@@ -2516,6 +2539,12 @@ Backend offline - mock data`;
                       {selectedCredential.hash ||
                         "Hash not available for this credential"}
                     </p>
+                    {/* DEBUG: Log when displaying hash in modal */}
+                    {console.log("🖼️ Displaying hash in modal:", {
+                      credentialId: selectedCredential.id,
+                      hash: selectedCredential.hash,
+                      hasHash: !!selectedCredential.hash
+                    })}
                     {!selectedCredential.hash && (
                       <p className="text-xs text-orange-400 mt-2 flex items-center">
                         <AlertCircle className="w-3 h-3 mr-1" />
