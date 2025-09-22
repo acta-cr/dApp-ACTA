@@ -8,7 +8,6 @@ import {
   Sparkles,
   User,
   Building,
-  Save,
   Eye,
   EyeOff,
   CheckCircle,
@@ -23,6 +22,7 @@ import QRCode from "qrcode";
 import { apiService, CredentialContract } from "@/services/api.service";
 import { useWallet } from "@/components/modules/auth/hooks/wallet.hook";
 import { useWalletContext } from "@/providers/wallet.provider";
+import { useSimplePasskey } from "@/hooks/use-simple-passkey";
 
 interface CredentialData {
   holder: string;
@@ -40,6 +40,7 @@ interface CreateCredentialProps {
 export function CreateCredential({ showOnlyMyCredentials = false }: CreateCredentialProps = {}) {
   const { walletAddress } = useWallet();
   const { userProfile, isLoadingUser } = useWalletContext();
+  const { authenticate, isLoading: isAuthenticating } = useSimplePasskey();
   const [credentialData, setCredentialData] = useState<CredentialData>({
     holder: "",
     issuedBy: "ACTA",
@@ -482,7 +483,22 @@ export function CreateCredential({ showOnlyMyCredentials = false }: CreateCreden
     setIsCreating(true);
 
     try {
-      // Step 1: Create credential via API (which will deploy to Stellar in the backend)
+      // Step 1: Authenticate with passkey before creating credential
+      toast.info("Authentication required", {
+        description: "Please authenticate with your passkey to sign the transaction",
+      });
+
+      const authResult = await authenticate();
+
+      if (!authResult.token) {
+        throw new Error("Authentication failed. Please try again.");
+      }
+
+      toast.success("Authentication successful", {
+        description: "Proceeding with credential creation",
+      });
+
+      // Step 2: Create credential via API (which will deploy to Stellar in the backend)
       toast.info("Creating credential...", {
         description: "Deploying to blockchain",
       });
@@ -1834,7 +1850,7 @@ Backend offline - mock data`;
                   </button>
                   <button
                     onClick={() => setSelectedTemplate("corporate")}
-                    className={`p-3 ${selectedTemplate === "corporate" ? "bg-indigo-50 border-indigo-200" : "bg-white/5 backdrop-blur-sm border-gray-300"} border-2 rounded-lg hover:bg-gray-100 transition-colors text-center`}
+                    className={`p-3 ${selectedTemplate === "corporate" ? "bg-indigo-500/20 border-indigo-400/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-indigo-500/30 transition-colors text-center`}
                   >
                     <Building className="w-6 h-6 mx-auto mb-1 text-indigo-600" />
                     <span className="text-xs font-medium">Corporativa</span>
@@ -1962,23 +1978,29 @@ Backend offline - mock data`;
                     description: "",
                   });
                 }}
+                className="bg-black text-white hover:bg-gray-800 rounded-2xl h-10 px-4 font-semibold shadow-lg transition-all"
               >
                 Reset
               </Button>
 
               <Button
                 onClick={handleCreateCredential}
-                disabled={isCreating || !userProfile?.has_api_key}
-                className="bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all"
+                disabled={isCreating || isAuthenticating || !userProfile?.has_api_key}
+                className="bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-10 px-4 font-semibold shadow-lg transition-all"
               >
-                {isCreating ? (
+                {isAuthenticating ? (
+                  <>
+                    <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Authenticating...
+                  </>
+                ) : isCreating ? (
                   <>
                     <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     Creating...
                   </>
                 ) : (
                   <>
-                    <Save className="w-4 h-4 mr-2" />
+                    <Shield className="w-4 h-4 mr-2" />
                     Create Credential
                   </>
                 )}
