@@ -350,7 +350,11 @@ export function Profile() {
                     Having issues with your wallet connection or need assistance?
                   </p>
 
-                  <Button variant="outline" className="w-full justify-start border-white/20 text-foreground hover:bg-white/5 backdrop-blur-sm rounded-2xl">
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start border-white/20 text-foreground hover:bg-white/5 backdrop-blur-sm rounded-2xl"
+                    onClick={() => window.open('https://acta.gitbook.io/docs', '_blank')}
+                  >
                     <Info className="w-4 h-4 mr-2" />
                     View Documentation
                   </Button>

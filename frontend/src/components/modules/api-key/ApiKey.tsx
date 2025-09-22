@@ -310,6 +310,7 @@ export function ApiKey() {
             <Button
               variant="outline"
               className="w-full justify-start"
+              onClick={() => window.open('https://acta.gitbook.io/docs', '_blank')}
             >
               <Info className="w-4 h-4 mr-2" />
               View Documentation
