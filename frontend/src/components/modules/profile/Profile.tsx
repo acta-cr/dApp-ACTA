@@ -116,7 +116,7 @@ export function Profile() {
               <CardDescription className="mb-6">
                 Connect your Stellar wallet to view your profile information and manage your account.
               </CardDescription>
-              <Button variant="golden" className="rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all">
+              <Button variant="default" className="bg-black text-white hover:bg-gray-800 rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated">
                 Connect Wallet
               </Button>
             </div>
