@@ -17,6 +17,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Button } from '@/components/ui/button';
 import {
@@ -183,7 +184,10 @@ export default function Sidebar({ children }: AppSidebarProps) {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="h-16 shrink-0 border-b border-white/10"></header>
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b border-white/10 px-4">
+          <SidebarTrigger className="-ml-1" />
+          <div className="flex-1" />
+        </header>
         <div className="flex flex-1 flex-col p-4">
           {children}
         </div>
