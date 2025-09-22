@@ -25,7 +25,7 @@ export default function DashboardLayout({
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-[#1B1F2E]" />
           <Particles
-            className="absolute inset-0 z-0"
+            className="absolute inset-0 z-[1]"
             quantity={60}
             staticity={40}
             ease={70}
@@ -37,7 +37,7 @@ export default function DashboardLayout({
         </div>
 
         {/* Connection section */}
-        <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
+        <div className="relative z-[5] min-h-screen flex items-center justify-center p-4">
           <div className="w-full max-w-md">
             <Card className="bg-[rgba(255,255,255,0.03)] border border-white/10 rounded-3xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_20px_40px_rgba(0,0,0,0.35)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_24px_60px_rgba(0,0,0,0.45)] hover:ring-1 hover:ring-white/10 after:pointer-events-none after:absolute after:inset-0 after:rounded-3xl after:border after:border-white/5">
               <CardHeader className="text-center pb-4">
@@ -91,7 +91,7 @@ export default function DashboardLayout({
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-[#1B1F2E]" />
         <Particles
-          className="absolute inset-0 z-0"
+          className="absolute inset-0 z-[1]"
           quantity={60}
           staticity={40}
           ease={70}
@@ -103,7 +103,7 @@ export default function DashboardLayout({
       </div>
 
       {/* Main container */}
-      <div className="relative z-10">
+      <div className="relative z-[5]">
         <Sidebar>
           {children}
         </Sidebar>

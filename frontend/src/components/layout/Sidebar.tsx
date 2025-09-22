@@ -79,7 +79,7 @@ function AppSidebar() {
   const [isCredentialsOpen, setIsCredentialsOpen] = useState(false);
 
   return (
-    <SidebarPrimitive className="border-r">
+    <SidebarPrimitive className="border-r backdrop-blur-sm">
       <SidebarHeader className="px-4 py-3">
         <div className="flex items-center space-x-2">
           <div className="w-7 h-7 flex items-center justify-center">
@@ -198,12 +198,12 @@ export default function Sidebar({ children }: AppSidebarProps) {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b border-white/10 px-4">
+      <SidebarInset className="bg-transparent">
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b border-white/10 px-4 bg-transparent">
           <SidebarTrigger className="-ml-1" />
           <div className="flex-1" />
         </header>
-        <div className="flex flex-1 flex-col p-4">{children}</div>
+        <div className="flex flex-1 flex-col p-4 bg-transparent">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );
