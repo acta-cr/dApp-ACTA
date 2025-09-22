@@ -63,7 +63,7 @@ export const useWallet = () => {
     try {
       // For passkey wallets, we simulate message signing using the auth token
       // In a real implementation, this would involve the backend API
-      const signature = `passkey_signature_${walletAddress}_${Date.now()}`;
+      const signature = `passkey_signature_${walletAddress}_${message}_${Date.now()}`;
 
       return {
         signedMessage: signature,

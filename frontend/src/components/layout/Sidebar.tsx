@@ -26,7 +26,6 @@ import {
   User,
   Key,
   LogOut,
-  CreditCard,
   Search,
   Plus,
   FileText,

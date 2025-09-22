@@ -2539,12 +2539,6 @@ Backend offline - mock data`;
                       {selectedCredential.hash ||
                         "Hash not available for this credential"}
                     </p>
-                    {/* DEBUG: Log when displaying hash in modal */}
-                    {console.log("🖼️ Displaying hash in modal:", {
-                      credentialId: selectedCredential.id,
-                      hash: selectedCredential.hash,
-                      hasHash: !!selectedCredential.hash
-                    })}
                     {!selectedCredential.hash && (
                       <p className="text-xs text-orange-400 mt-2 flex items-center">
                         <AlertCircle className="w-3 h-3 mr-1" />
