@@ -63,7 +63,7 @@ const credentialItems = [
   },
   {
     href: "/dashboard/my-credentials",
-    label: "Access",
+    label: "List",
     icon: FileText,
   },
   {
@@ -116,7 +116,10 @@ function AppSidebar() {
                       className="h-8 px-2"
                     >
                       <Link href={item.href}>
-                        <Icon className="w-4 h-4" style={{ color: '#F0E7CC' }} />
+                        <Icon
+                          className="w-4 h-4"
+                          style={{ color: "#F0E7CC" }}
+                        />
                         <span className="text-sm">{item.label}</span>
                       </Link>
                     </SidebarMenuButton>
@@ -154,7 +157,10 @@ function AppSidebar() {
                         className="h-8 px-2"
                       >
                         <Link href={item.href}>
-                          <Icon className="w-4 h-4" style={{ color: '#F0E7CC' }} />
+                          <Icon
+                            className="w-4 h-4"
+                            style={{ color: "#F0E7CC" }}
+                          />
                           <span className="text-sm">{item.label}</span>
                         </Link>
                       </SidebarMenuButton>
@@ -203,7 +209,9 @@ export default function Sidebar({ children }: AppSidebarProps) {
           <SidebarTrigger className="-ml-1" />
           <div className="flex-1" />
         </header>
-        <div className="flex flex-1 flex-col p-4 bg-transparent">{children}</div>
+        <div className="flex flex-1 flex-col p-4 bg-transparent">
+          {children}
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );
