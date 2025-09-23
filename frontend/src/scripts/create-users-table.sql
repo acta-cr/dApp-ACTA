@@ -20,15 +20,16 @@ CREATE INDEX IF NOT EXISTS idx_users_api_key_hash ON users(api_key_hash);
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 
 -- Create policies for RLS
--- Allow users to read/update their own data based on wallet address
-CREATE POLICY "Users can view own data" ON users
-    FOR SELECT USING (true); -- Allow read access for now, you can restrict this later
+-- Note: These policies are currently permissive for development
+-- In production, implement proper authentication-based restrictions
+CREATE POLICY "Allow public read access" ON users
+    FOR SELECT USING (true);
 
-CREATE POLICY "Users can insert own data" ON users
-    FOR INSERT WITH CHECK (true); -- Allow insert for now
+CREATE POLICY "Allow public insert" ON users
+    FOR INSERT WITH CHECK (true);
 
-CREATE POLICY "Users can update own data" ON users
-    FOR UPDATE USING (true); -- Allow update for now
+CREATE POLICY "Allow public update" ON users
+    FOR UPDATE USING (true);
 
 -- Create updated_at trigger
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -41,6 +42,3 @@ $$ language 'plpgsql';
 
 CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
--- Insert some example data (optional)
--- INSERT INTO users (wallet_address) VALUES ('GXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX') ON CONFLICT DO NOTHING;
