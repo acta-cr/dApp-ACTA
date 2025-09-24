@@ -978,8 +978,9 @@ Backend offline - mock data`;
             </p>
             <Button
               onClick={() => (window.location.href = "/credentials")}
-              className="bg-gradient-to-r from-[#F0E7CC] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all"
+              className="bg-black text-white hover:bg-gray-800 rounded-2xl h-10 px-4 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated"
             >
+              <Plus className="w-4 h-4 mr-2" />
               Create Your First Credential
             </Button>
           </div>
