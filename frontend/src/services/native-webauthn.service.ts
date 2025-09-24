@@ -201,6 +201,16 @@ export class NativeWebAuthnService {
       };
     } catch (error) {
       console.error("Error creating passkey:", error);
+      
+      // Check if it's a NotAllowedError and throw a more user-friendly error
+      if (error instanceof Error && (
+        error.name === 'NotAllowedError' || 
+        error.message.includes('not allowed') ||
+        error.message.includes('timed out')
+      )) {
+        throw new Error('NotAllowedError');
+      }
+      
       throw error;
     }
   }
@@ -256,6 +266,16 @@ export class NativeWebAuthnService {
       };
     } catch (error) {
       console.error("Error authenticating with passkey:", error);
+      
+      // Check if it's a NotAllowedError and throw a more user-friendly error
+      if (error instanceof Error && (
+        error.name === 'NotAllowedError' || 
+        error.message.includes('not allowed') ||
+        error.message.includes('timed out')
+      )) {
+        throw new Error('NotAllowedError');
+      }
+      
       throw error;
     }
   }

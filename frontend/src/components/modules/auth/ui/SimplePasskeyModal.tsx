@@ -18,6 +18,7 @@ import {
 import { Fingerprint, Plus, KeyRound, Loader2 } from "lucide-react";
 import { ShineBorder } from "@/components/magicui/shine-border";
 import { useSimplePasskey } from "@/hooks/use-simple-passkey";
+import { toast } from "sonner";
 
 interface SimplePasskeyModalProps {
   isOpen: boolean;
@@ -73,7 +74,23 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
       console.error("❌ Wallet creation error:", error);
       const errorMsg =
         error instanceof Error ? error.message : "Failed to create wallet";
-      setModalError(errorMsg);
+      
+      // Check if it's a NotAllowedError (user cancelled or timed out)
+      if (error instanceof Error && (
+        error.name === 'NotAllowedError' || 
+        error.message === 'NotAllowedError' ||
+        error.message.includes('not allowed') ||
+        error.message.includes('timed out')
+      )) {
+        toast.error("Error creating wallet with passkey", {
+          description: "Creation was cancelled or timed out. Please try again."
+        });
+        // Don't set modalError for NotAllowedError to avoid showing it in UI
+      } else {
+        toast.error("Error al crear wallet", {
+          description: errorMsg
+        });
+      }
     }
   };
 
@@ -98,7 +115,23 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
       console.error("❌ Authentication error:", error);
       const errorMsg =
         error instanceof Error ? error.message : "Failed to authenticate";
-      setModalError(errorMsg);
+      
+      // Check if it's a NotAllowedError (user cancelled or timed out)
+      if (error instanceof Error && (
+        error.name === 'NotAllowedError' || 
+        error.message === 'NotAllowedError' ||
+        error.message.includes('not allowed') ||
+        error.message.includes('timed out')
+      )) {
+        toast.error("Error al autenticarse con passkey", {
+          description: "La autenticación fue cancelada o expiró. Inténtalo de nuevo."
+        });
+        // Don't set modalError for NotAllowedError to avoid showing it in UI
+      } else {
+        toast.error("Error de autenticación", {
+          description: errorMsg
+        });
+      }
     }
   };
 
@@ -202,12 +235,7 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
             </CardContent>
           </Card>
 
-          {/* Error Display */}
-          {(modalError || error) && (
-            <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
-              {modalError || error}
-            </div>
-          )}
+
 
           {/* Info */}
           <div className="text-center">
