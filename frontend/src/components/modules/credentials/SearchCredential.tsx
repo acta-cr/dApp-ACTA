@@ -66,7 +66,7 @@ export function SearchCredential() {
     try {
       // Get API URL from environment or use default
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-      const response = await fetch(`${apiUrl}/v1/credentials/hash/${searchHash.trim()}`);
+      const response = await fetch(`${apiUrl}/credentials/hash/${searchHash.trim()}`);
       
       if (!response.ok) {
         if (response.status === 404) {
