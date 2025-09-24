@@ -977,7 +977,7 @@ Backend offline - mock data`;
               your first credential.
             </p>
             <Button
-              onClick={() => (window.location.href = "/credentials")}
+              onClick={() => (window.location.href = "/dashboard/credentials")}
               className="bg-black text-white hover:bg-gray-800 rounded-2xl h-10 px-4 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated"
             >
               <Plus className="w-4 h-4 mr-2" />
@@ -2493,7 +2493,6 @@ Backend offline - mock data`;
                             const cleanHash =
                               selectedCredential.transactionHash?.trim();
                             const stellarUrl = `https://stellar.expert/explorer/testnet/tx/${cleanHash}`;
-
 
                             // Check if this might be a mock hash
                             const isMockData =
