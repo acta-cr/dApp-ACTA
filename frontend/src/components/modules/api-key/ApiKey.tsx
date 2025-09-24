@@ -51,7 +51,6 @@ export function ApiKey() {
       setShowKey(true);
       toast.success("API Key generated successfully!");
     } catch (error) {
-      console.error("Error generating API key:", error);
       toast.error("Error generating API Key");
     } finally {
       setIsGenerating(false);
@@ -66,7 +65,6 @@ export function ApiKey() {
       setShowKey(true);
       toast.success("API Key regenerated successfully!");
     } catch (error) {
-      console.error("Error regenerating API key:", error);
       toast.error("Error regenerating API Key");
     } finally {
       setIsRegenerating(false);
@@ -81,7 +79,6 @@ export function ApiKey() {
       setShowKey(false);
       toast.success("API Key deleted successfully");
     } catch (error) {
-      console.error("Error deleting API key:", error);
       toast.error("Error deleting API Key");
     } finally {
       setIsDeleting(false);
@@ -95,7 +92,6 @@ export function ApiKey() {
       toast.success("API Key copied to clipboard");
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error("Failed to copy to clipboard:", err);
       toast.error("Error copying API Key");
     }
   };

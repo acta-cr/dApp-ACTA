@@ -44,7 +44,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       const profile = await userService.registerUser(address);
       setUserProfile(profile);
     } catch (error) {
-      console.error('Error loading user profile:', error);
+      // Error loading user profile
     } finally {
       setIsLoadingUser(false);
     }
@@ -90,7 +90,6 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       await refreshUserProfile();
       return apiKey;
     } catch (error) {
-      console.error('Error generating API key:', error);
       throw error;
     }
   };
@@ -109,7 +108,6 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       await refreshUserProfile();
       return apiKey;
     } catch (error) {
-      console.error('Error regenerating API key:', error);
       throw error;
     }
   };
@@ -127,7 +125,6 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       // Refresh user profile to get updated API key status
       await refreshUserProfile();
     } catch (error) {
-      console.error('Error deleting API key:', error);
       throw error;
     }
   };

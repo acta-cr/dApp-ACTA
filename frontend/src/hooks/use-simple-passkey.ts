@@ -100,7 +100,6 @@ const activateWalletOnTestnet = async (publicKey: string): Promise<boolean> => {
       return false
     }
   } catch (error) {
-    console.error('❌ Error funding wallet:', error)
     return false
   }
 }

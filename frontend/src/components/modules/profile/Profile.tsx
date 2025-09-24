@@ -65,7 +65,7 @@ export function Profile() {
             const wallet = await generateWalletFromPasskey(storedCredentialId, storedCredentialId);
             setWalletSecret(wallet.secret);
           } catch (error) {
-            console.error('Error generating wallet secret:', error);
+            // Error generating wallet secret
           }
         }
       }
@@ -80,7 +80,7 @@ export function Profile() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy text: ', err);
+      // Failed to copy text
     }
   };
 

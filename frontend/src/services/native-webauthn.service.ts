@@ -200,8 +200,6 @@ export class NativeWebAuthnService {
         credentialId: credential.id,
       };
     } catch (error) {
-      console.error("Error creating passkey:", error);
-      
       // Check if it's a NotAllowedError and throw a more user-friendly error
       if (error instanceof Error && (
         error.name === 'NotAllowedError' || 
@@ -265,8 +263,6 @@ export class NativeWebAuthnService {
         signature: rawResponse.response.signature,
       };
     } catch (error) {
-      console.error("Error authenticating with passkey:", error);
-      
       // Check if it's a NotAllowedError and throw a more user-friendly error
       if (error instanceof Error && (
         error.name === 'NotAllowedError' || 

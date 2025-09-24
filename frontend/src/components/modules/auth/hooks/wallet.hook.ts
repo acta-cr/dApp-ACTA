@@ -15,7 +15,6 @@ export const useWallet = () => {
       localStorage.setItem('authToken', token);
       await setWalletInfo(walletAddress, 'Passkey Wallet');
     } catch (error) {
-      console.error('Error handling passkey success:', error);
       throw error;
     }
   };
@@ -42,7 +41,7 @@ export const useWallet = () => {
     try {
       await disconnectWallet();
     } catch (error) {
-      console.error("Error disconnecting wallet:", error);
+      // Error disconnecting wallet
     }
   };
 
@@ -70,7 +69,6 @@ export const useWallet = () => {
         signerAddress: walletAddress,
       };
     } catch (error) {
-      console.error("Passkey signing error:", error);
       throw new Error('Failed to sign message with passkey wallet');
     }
   };

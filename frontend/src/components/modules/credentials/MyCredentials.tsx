@@ -40,7 +40,6 @@ export function MyCredentials() {
           const credentials = await apiService.getUserCredentials();
           setUserCredentials(credentials);
         } catch (error) {
-          console.error("Error loading user credentials:", error);
           toast.error("Error loading credentials");
         }
       }

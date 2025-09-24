@@ -148,7 +148,7 @@ export class APIService {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.error('API Error response:', errorData);
+        // API Error response available in errorData
         throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
       }
 
@@ -202,7 +202,6 @@ export class APIService {
       
       return transformedResponse;
     } catch (error) {
-      console.error('Error creating credential:', error);
       
       // Provide more specific error messages
       if (error instanceof TypeError && error.message === 'Failed to fetch') {
@@ -238,7 +237,6 @@ export class APIService {
         status: data.data?.status || 'Unknown'
       };
     } catch (error) {
-      console.error('Error getting credential info:', error);
       throw error;
     }
   }
@@ -275,7 +273,6 @@ export class APIService {
         message: isValid ? 'Credential verified successfully' : 'Credential not found or invalid'
       };
     } catch (error) {
-      console.error('Error verifying credential:', error);
       return {
         success: false,
         credential: null,
@@ -293,7 +290,6 @@ export class APIService {
       // For now, return empty array since this endpoint is not implemented in API v2
       return [];
     } catch (error) {
-      console.error('Error fetching user credentials:', error);
       return [];
     }
   }
@@ -316,7 +312,6 @@ export class APIService {
 
       return await response.json();
     } catch (error) {
-      console.error('Error checking API health:', error);
       return { status: 'error', message: 'API unreachable' };
     }
   }

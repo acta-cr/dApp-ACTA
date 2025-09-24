@@ -40,7 +40,6 @@ export class UserService {
 
       if (fetchError && fetchError.code !== "PGRST116") {
         // PGRST116 = not found
-        console.error("Error fetching user:", fetchError);
         throw new Error("Failed to fetch user data");
       }
 
@@ -68,7 +67,6 @@ export class UserService {
         .single();
 
       if (insertError) {
-        console.error("Error creating user:", insertError);
         throw new Error("Failed to create user");
       }
 
@@ -78,7 +76,6 @@ export class UserService {
         created_at: newUser.created_at,
       };
     } catch (error) {
-      console.error("Error in registerUser:", error);
       throw error;
     }
   }
@@ -115,14 +112,12 @@ export class UserService {
         .select();
 
       if (error) {
-        console.error("❌ Error saving API key:", error);
         throw new Error("Failed to generate API key");
       }
 
 
       return apiKey;
     } catch (error) {
-      console.error("❌ Error in generateApiKey:", error);
       throw error;
     }
   }
@@ -150,7 +145,6 @@ export class UserService {
           // Not found
           return null;
         }
-        console.error("Error fetching user profile:", error);
         throw new Error("Failed to fetch user profile");
       }
 
@@ -161,7 +155,6 @@ export class UserService {
         created_at: user.created_at,
       };
     } catch (error) {
-      console.error("Error in getUserProfile:", error);
       throw error;
     }
   }
@@ -174,7 +167,6 @@ export class UserService {
       const profile = await this.getUserProfile(walletAddress);
       return profile?.has_api_key ?? false;
     } catch (error) {
-      console.error("Error validating API key:", error);
       return false;
     }
   }
@@ -201,12 +193,10 @@ export class UserService {
         .select();
 
       if (error) {
-        console.error("❌ Error revoking API key:", error);
         throw new Error("Failed to revoke API key");
       }
 
     } catch (error) {
-      console.error("❌ Error in revokeApiKey:", error);
       throw error;
     }
   }

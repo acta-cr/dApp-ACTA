@@ -71,7 +71,6 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
       onSuccess(result.walletAddress, result.token);
       onClose();
     } catch (error) {
-      console.error("❌ Wallet creation error:", error);
       const errorMsg =
         error instanceof Error ? error.message : "Failed to create wallet";
       
@@ -112,7 +111,6 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
       onSuccess(result.walletAddress, result.token);
       onClose();
     } catch (error) {
-      console.error("❌ Authentication error:", error);
       const errorMsg =
         error instanceof Error ? error.message : "Failed to authenticate";
       

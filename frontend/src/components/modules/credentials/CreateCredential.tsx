@@ -165,7 +165,7 @@ export function CreateCredential({
             setUserCredentials(JSON.parse(stored));
           }
         } catch (error) {
-          console.error("Error loading user credentials:", error);
+          // Error loading user credentials
         }
       }
     };
@@ -669,8 +669,6 @@ Backend offline - mock data`;
         description: "",
       });
     } catch (error) {
-      console.error("Credential creation error:", error);
-
       let errorMessage = "Please check your connection and try again.";
       let errorTitle = "Failed to create credential";
 

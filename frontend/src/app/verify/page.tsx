@@ -51,7 +51,6 @@ function VerifyPageContent() {
         setError(result.message || 'Credential not found or invalid on the Stellar network.');
       }
     } catch (error) {
-      console.error('Verification error:', error);
       setError(error instanceof Error ? error.message : 'Failed to verify credential. Please try again.');
     } finally {
       setIsLoading(false);
