@@ -1414,6 +1414,39 @@ Backend offline - mock data`;
                       )}
                     </Card>
 
+                    {/* Credential Hash */}
+                    <Card className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="text-sm font-medium text-muted-foreground">
+                          Credential Hash
+                        </label>
+                        {selectedCredential.hash && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              navigator.clipboard.writeText(
+                                selectedCredential.hash!
+                              );
+                              toast.success("Credential hash copied!");
+                            }}
+                          >
+                            <Copy className="w-4 h-4" />
+                          </Button>
+                        )}
+                      </div>
+                      <p className="text-sm text-foreground font-mono bg-white/5 backdrop-blur-sm p-2 rounded break-all">
+                        {selectedCredential.hash ||
+                          "Hash not available for this credential"}
+                      </p>
+                      {!selectedCredential.hash && (
+                        <p className="text-xs text-orange-400 mt-2 flex items-center">
+                          <AlertCircle className="w-3 h-3 mr-1" />
+                          Create a new credential to see the hash
+                        </p>
+                      )}
+                    </Card>
+
                     {/* Actions */}
                     <div className="flex flex-col space-y-2">
                       <Button
