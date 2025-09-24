@@ -154,7 +154,6 @@ export class NativeWebAuthnService {
     input: WebAuthnCreatePasskeyInput
   ): Promise<WebAuthnCreatePasskeyResult> {
     try {
-      console.log("Creating passkey with options:", input.optionsJSON);
 
       // Verificar soporte de WebAuthn
       if (!navigator.credentials || !navigator.credentials.create) {
@@ -166,7 +165,6 @@ export class NativeWebAuthnService {
         input.optionsJSON
       );
 
-      console.log("Processed options:", credentialCreationOptions);
 
       // Crear credencial
       const credential = (await navigator.credentials.create(
@@ -196,7 +194,6 @@ export class NativeWebAuthnService {
         type: credential.type,
       };
 
-      console.log("Passkey created successfully:", rawResponse);
 
       return {
         rawResponse: rawResponse as unknown as PublicKeyCredential,
@@ -212,7 +209,6 @@ export class NativeWebAuthnService {
     input: WebAuthnAuthenticateWithPasskeyInput
   ): Promise<WebAuthnAuthenticateWithPasskeyResult> {
     try {
-      console.log("Authenticating with passkey:", input.optionsJSON);
 
       // Verificar soporte de WebAuthn
       if (!navigator.credentials || !navigator.credentials.get) {
@@ -224,7 +220,6 @@ export class NativeWebAuthnService {
         input.optionsJSON
       );
 
-      console.log("Processed auth options:", credentialRequestOptions);
 
       // Obtener credencial
       const credential = (await navigator.credentials.get(
@@ -252,7 +247,6 @@ export class NativeWebAuthnService {
         type: credential.type,
       };
 
-      console.log("Authentication successful:", rawResponse);
 
       return {
         rawResponse: rawResponse as unknown as PublicKeyCredential,

@@ -95,7 +95,6 @@ export class UserService {
     }
 
     try {
-      console.log("🔑 Generating API key for wallet:", walletAddress);
 
       // Hash the API key for storage (simple hash for demo)
       const apiKeyHash =
@@ -103,8 +102,6 @@ export class UserService {
           ? btoa(apiKey) // Browser environment
           : Buffer.from(apiKey).toString("base64"); // Node.js environment
 
-      console.log("Generated API key:", apiKey);
-      console.log("Generated hash:", apiKeyHash);
 
       // Update user with API key
       const { data, error } = await supabase
@@ -122,7 +119,6 @@ export class UserService {
         throw new Error("Failed to generate API key");
       }
 
-      console.log("✅ API key saved successfully:", data);
 
       return apiKey;
     } catch (error) {
@@ -193,7 +189,6 @@ export class UserService {
     }
 
     try {
-      console.log("🗑️ Revoking API key for wallet:", walletAddress);
 
       const { data, error } = await supabase
         .from("users")
@@ -210,7 +205,6 @@ export class UserService {
         throw new Error("Failed to revoke API key");
       }
 
-      console.log("✅ API key revoked successfully:", data);
     } catch (error) {
       console.error("❌ Error in revokeApiKey:", error);
       throw error;

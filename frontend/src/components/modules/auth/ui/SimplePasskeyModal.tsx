@@ -60,7 +60,7 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
         throw new Error("WebAuthn is not supported in this browser");
       }
 
-      console.log("🔄 Starting wallet creation...");
+      
       const result = await createWallet();
 
       // Store auth info
@@ -85,7 +85,7 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
         throw new Error("WebAuthn is not supported in this browser");
       }
 
-      console.log("🔄 Starting authentication...");
+      
       const result = await authenticate();
 
       // Store auth info

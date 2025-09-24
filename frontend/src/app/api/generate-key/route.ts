@@ -22,11 +22,6 @@ export async function POST(request: NextRequest) {
 
     // For now, we'll skip signature verification in development
     // In production, you should verify the Stellar signature
-    console.log('API Key generation request:', {
-      publicKey,
-      message,
-      signature: signature.substring(0, 20) + '...',
-    });
 
     // Generate a unique API key
     const keyPrefix = 'spk_test_'; // Use spk_test_ prefix as required
@@ -36,11 +31,6 @@ export async function POST(request: NextRequest) {
     // Hash the API key for storage (same as ACTA API does)
     const keyHash = createHash('sha256').update(apiKey).digest('hex');
 
-    console.log('Generated API key:', {
-      apiKey: apiKey.substring(0, 20) + '...',
-      keyHash: keyHash.substring(0, 20) + '...',
-      publicKey,
-    });
 
     // TODO: Store the API key in the database
     // For now, we'll just return the key

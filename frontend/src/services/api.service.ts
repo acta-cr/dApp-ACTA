@@ -52,7 +52,6 @@ export class APIService {
 
   constructor() {
     this.baseURL = this.getApiUrl();
-    console.log('API Service initialized with baseURL:', this.baseURL);
   }
 
   /**
@@ -118,8 +117,6 @@ export class APIService {
   async createCredential(
     credentialData: CreateCredentialRequest
   ): Promise<CreateCredentialResponse> {
-    console.log('Creating credential with data:', credentialData);
-    console.log('Using API URL:', `${this.baseURL}/credentials`);
     
     // Prepare data according to API v2 schema
     const apiPayload = {
@@ -138,7 +135,6 @@ export class APIService {
       }
     };
 
-    console.log('API v2 Payload prepared:', apiPayload);
     
     try {
       const response = await fetch(`${this.baseURL}/credentials`, {
@@ -149,8 +145,6 @@ export class APIService {
         body: JSON.stringify(apiPayload),
       });
 
-      console.log('API Response status:', response.status);
-      console.log('API Response headers:', Object.fromEntries(response.headers.entries()));
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -159,10 +153,6 @@ export class APIService {
       }
 
       const data = await response.json();
-      console.log('API v2 Success response:', data);
-      
-      // Log raw API response to understand data structure
-      console.log("🔍 Raw API v2 response:", JSON.stringify(data, null, 2));
       
       // Transform API v2 response to match our interface
       const contractId = data.data?.contractId || this.generateMockContractId();
@@ -179,22 +169,10 @@ export class APIService {
         // Check if this is not a simulation (ledgerSequence 12345 indicates simulation)
         ledgerSequence !== 12345;
       
-      console.log("🔍 Stellar contract data check:", {
-        contractId,
-        transactionHash,
-        transactionHashLength: transactionHash?.length,
-        transactionHashType: typeof transactionHash,
-        transactionHashValid: /^[a-f0-9]+$/i.test(transactionHash || ""),
-        ledgerSequence,
-        isRealStellarContract,
-        contractLength: contractId?.length,
-        rawApiResponse: data.data
-      });
 
       // Log the exact Stellar Expert URL that will be generated
       if (transactionHash) {
         const stellarUrl = `https://stellar.expert/explorer/testnet/tx/${transactionHash}`;
-        console.log("🔗 Stellar Expert URL:", stellarUrl);
       }
       
       // Transform response to match our credential interface
@@ -240,7 +218,6 @@ export class APIService {
    */
   async getCredentialInfo(contractId: string): Promise<{ hash: string; status: string }> {
     try {
-      console.log('Getting credential info for contract:', contractId);
       
       const response = await fetch(`${this.baseURL}/credentials/${contractId}`, {
         method: 'GET',
@@ -255,7 +232,6 @@ export class APIService {
       }
 
       const data = await response.json();
-      console.log('Credential info response:', data);
       
       return {
         hash: data.data?.hash || 'N/A',
@@ -315,7 +291,6 @@ export class APIService {
   async getUserCredentials(): Promise<CredentialContract[]> {
     try {
       // For now, return empty array since this endpoint is not implemented in API v2
-      console.log('getUserCredentials not implemented in API v2 yet');
       return [];
     } catch (error) {
       console.error('Error fetching user credentials:', error);

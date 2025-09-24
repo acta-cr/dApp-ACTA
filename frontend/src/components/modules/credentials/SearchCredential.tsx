@@ -74,15 +74,10 @@ export function SearchCredential() {
     try {
       // Get API URL from environment or use default
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-      console.log("🔍 API URL:", apiUrl);
-      console.log("🔍 Search Hash:", searchHash.trim());
 
       const fullUrl = `${apiUrl}/credentials/hash/${searchHash.trim()}`;
-      console.log("🔍 Full URL:", fullUrl);
 
       const response = await fetch(fullUrl);
-      console.log("🔍 Response status:", response.status);
-      console.log("🔍 Response ok:", response.ok);
 
       if (!response.ok) {
         if (response.status === 404) {
@@ -92,19 +87,14 @@ export function SearchCredential() {
       }
 
       const result = await response.json();
-      console.log("🔍 API Response:", result);
-      console.log("🔍 Result data:", result.data);
-      console.log("🔍 Full data:", result.data?.fullData);
 
       if (!result.success || !result.data) {
         throw new Error("Invalid response from server");
       }
 
       setCredentialInfo(result.data);
-      console.log("🔍 Setting credential info:", result.data);
       toast.success("Credential found successfully");
     } catch (err) {
-      console.error("🔍 Error:", err);
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
       toast.error(`Error searching for hash: ${errorMessage}`);

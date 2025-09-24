@@ -89,11 +89,9 @@ export function CreateCredential({
   useEffect(() => {
     const loadSettings = () => {
       const saved = localStorage.getItem("credentialCustomization");
-      console.log("Loading saved settings:", saved);
       if (saved) {
         try {
           const settings = JSON.parse(saved);
-          console.log("Parsed settings:", settings);
           setSelectedGradient(settings.selectedGradient || "blue-purple");
           setSelectedLogo(settings.selectedLogo || "acta");
           setSelectedTemplate(settings.selectedTemplate || "classic");
@@ -102,15 +100,10 @@ export function CreateCredential({
           );
           setCustomLogoUrl(settings.customLogoUrl || "");
           setCustomLogoText(settings.customLogoText || "");
-          console.log(
-            "Settings loaded, customLogoText set to:",
-            settings.customLogoText
-          );
         } catch (error) {
           console.warn("Error loading customization settings:", error);
         }
       } else {
-        console.log("No saved settings found");
       }
     };
     loadSettings();
@@ -127,13 +120,11 @@ export function CreateCredential({
         customLogoUrl,
         customLogoText,
       };
-      console.log("Saving settings:", settings);
       try {
         localStorage.setItem(
           "credentialCustomization",
           JSON.stringify(settings)
         );
-        console.log("Settings saved successfully");
       } catch (error) {
         console.warn("Error saving customization settings:", error);
       }
@@ -265,12 +256,6 @@ export function CreateCredential({
 
   // Get logo text based on selection
   const getLogoText = (logo: string) => {
-    console.log(
-      "getLogoText called with logo:",
-      logo,
-      "customLogoText:",
-      customLogoText
-    );
     // Always show custom text if it exists and is not empty, regardless of logo type
     if (customLogoText && customLogoText.trim() !== "") {
       return customLogoText;
@@ -491,16 +476,10 @@ export function CreateCredential({
     const testnetUrl = `https://stellar.expert/explorer/testnet/tx/${cleanHash}`;
     const mainnetUrl = `https://stellar.expert/explorer/public/tx/${cleanHash}`;
 
-    console.log("🔗 Available Stellar URLs:");
-    console.log("   Testnet:", testnetUrl);
-    console.log("   Mainnet:", mainnetUrl);
-
     if (isSimulated) {
-      console.log(
-        "⚠️  WARNING: This is a simulated transaction hash - will not be found on Stellar Expert"
-      );
+      // Simulated transaction - will not be found on Stellar Expert
     } else {
-      console.log("🔍 Using testnet URL by default");
+      // Using testnet URL by default
     }
 
     return testnetUrl;
@@ -575,19 +554,7 @@ export function CreateCredential({
 
       const contract = result.credential;
 
-      // Log the contract data to verify what we're receiving from the backend
-      console.log("🔍 Contract data received from backend:", {
-        id: contract.id,
-        contractAddress: contract.contractAddress,
-        transactionHash: contract.transactionHash,
-        verificationUrl: contract.verificationUrl,
-        hash: contract.hash, // DEBUG: Check if hash is present
-      });
-
-      // DEBUG: Specifically log the hash field
-      console.log("🔑 Credential hash from API:", contract.hash);
-      console.log("🔑 Hash type:", typeof contract.hash);
-      console.log("🔑 Hash exists:", !!contract.hash);
+      // Contract data received from backend
 
       // Step 2: Generate QR code with Stellar Expert URL
       const isSimulated = result.message.includes("simulated");
@@ -595,12 +562,6 @@ export function CreateCredential({
         contract.transactionHash,
         isSimulated
       );
-      console.log("🔗 QR Code URL:", stellarExpertUrl);
-      console.log(
-        "🔍 Transaction hash for QR:",
-        JSON.stringify(contract.transactionHash)
-      );
-      console.log("🎭 Is simulated transaction:", isSimulated);
       const qrDataUrl = await QRCode.toDataURL(stellarExpertUrl, {
         width: 200,
         margin: 2,
@@ -635,12 +596,7 @@ export function CreateCredential({
           },
         };
 
-        // DEBUG: Log the credential being saved to localStorage
-        console.log("💾 Saving credential to localStorage:", {
-          id: newCredential.id,
-          hash: newCredential.hash,
-          hasHash: !!newCredential.hash,
-        });
+        // Saving credential to localStorage
 
         credentials.unshift(newCredential); // Add to beginning of array
         localStorage.setItem(
@@ -682,11 +638,6 @@ Backend offline - mock data`;
                 const stellarUrl = createStellarExpertUrl(
                   contract.transactionHash,
                   isSimulated
-                );
-                console.log("🔗 Opening Stellar URL:", stellarUrl);
-                console.log(
-                  "🔍 Raw transaction hash:",
-                  JSON.stringify(contract.transactionHash)
                 );
 
                 if (isSimulated) {
@@ -1455,14 +1406,6 @@ Backend offline - mock data`;
                           const cleanHash =
                             selectedCredential.transactionHash?.trim();
                           const stellarUrl = `https://stellar.expert/explorer/testnet/tx/${cleanHash}`;
-                          console.log(
-                            "🔗 View on Stellar Explorer button:",
-                            stellarUrl
-                          );
-                          console.log(
-                            "🔍 Raw hash:",
-                            JSON.stringify(selectedCredential.transactionHash)
-                          );
                           window.open(stellarUrl, "_blank");
                         }}
                         className="w-full"
@@ -1926,10 +1869,6 @@ Backend offline - mock data`;
                         type="text"
                         value={customLogoText}
                         onChange={e => {
-                          console.log(
-                            "Changing custom text to:",
-                            e.target.value
-                          );
                           setCustomLogoText(e.target.value);
                         }}
                         placeholder="Enter your text..."
@@ -2556,18 +2495,6 @@ Backend offline - mock data`;
                               selectedCredential.transactionHash?.trim();
                             const stellarUrl = `https://stellar.expert/explorer/testnet/tx/${cleanHash}`;
 
-                            console.log(
-                              "🔗 Modal: Opening Stellar URL:",
-                              stellarUrl
-                            );
-                            console.log(
-                              "🔍 Modal: Raw transaction hash:",
-                              JSON.stringify(selectedCredential.transactionHash)
-                            );
-                            console.log(
-                              "🧹 Modal: Cleaned transaction hash:",
-                              JSON.stringify(cleanHash)
-                            );
 
                             // Check if this might be a mock hash
                             const isMockData =
@@ -2656,14 +2583,6 @@ Backend offline - mock data`;
                         const cleanHash =
                           selectedCredential.transactionHash?.trim();
                         const stellarUrl = `https://stellar.expert/explorer/testnet/tx/${cleanHash}`;
-                        console.log(
-                          "🔗 View on Stellar Explorer button (2nd modal):",
-                          stellarUrl
-                        );
-                        console.log(
-                          "🔍 Raw hash (2nd modal):",
-                          JSON.stringify(selectedCredential.transactionHash)
-                        );
                         window.open(stellarUrl, "_blank");
                       }}
                       className="w-full"

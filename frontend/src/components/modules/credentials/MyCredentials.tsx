@@ -204,7 +204,7 @@ export function MyCredentials() {
               <Card key={`my-creds-${credential.id}-${index}`} className="group cursor-pointer hover:scale-105 transition-transform bg-background/80 backdrop-blur-xl border-white/10">
                 <CardContent
                   className="p-0"
-                  onClick={() => console.log('Credential clicked:', credential)}
+                  onClick={() => {}}
                 >
                   <div
                     className={`relative w-full h-56 ${credential.customization?.selectedGradient === "custom" ? "" : "bg-gradient-to-br " + getCredentialGradientClasses(credential.customization)} rounded-xl shadow-xl overflow-hidden`}

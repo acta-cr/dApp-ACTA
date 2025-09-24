@@ -89,13 +89,11 @@ const createLocalPasskeyOptions = () => {
 // Helper function to activate wallet on Stellar testnet using friendbot
 const activateWalletOnTestnet = async (publicKey: string): Promise<boolean> => {
   try {
-    console.log('💰 Funding wallet on Stellar testnet...', publicKey)
 
     // Use Stellar's friendbot to fund the account
     const response = await fetch(`https://friendbot.stellar.org?addr=${publicKey}`)
 
     if (response.ok) {
-      console.log('✅ Wallet funded successfully!')
       return true
     } else {
       console.warn('⚠️ Friendbot funding failed:', response.status)
@@ -119,11 +117,9 @@ export const useSimplePasskey = () => {
 
       // Step 1: Create local WebAuthn options
       const optionsJSON = createLocalPasskeyOptions()
-      console.log('Creating passkey with local options:', optionsJSON)
 
       // Step 2: Create passkey using native WebAuthn
       const { rawResponse, credentialId } = await nativeWebauthnService.createPasskey({ optionsJSON })
-      console.log('Passkey created:', rawResponse)
 
       // Step 3: Generate Stellar wallet from passkey
       // Convert ArrayBuffer to base64url string
@@ -132,16 +128,10 @@ export const useSimplePasskey = () => {
       const wallet = await generateWalletFromPasskey(credentialId, rawIdString)
 
       // Log Stellar Expert link for verification
-      console.log('🌟 Stellar Wallet Created Successfully!')
-      console.log('📍 Address:', wallet.address)
-      console.log('🔗 Check on Stellar Expert (Testnet):', `https://stellar.expert/explorer/testnet/account/${wallet.address}`)
-      console.log('🔑 Secret Key (keep private):', wallet.secret)
 
       // Step 4: Activate wallet on testnet
       const activated = await activateWalletOnTestnet(wallet.address)
       if (activated) {
-        console.log('🎉 Wallet is now active on Stellar testnet!')
-        console.log('💰 Check your balance:', `https://stellar.expert/explorer/testnet/account/${wallet.address}`)
       }
 
       // Step 5: Store wallet info locally
@@ -199,11 +189,9 @@ export const useSimplePasskey = () => {
         userVerification: 'preferred' as UserVerificationRequirement
       }
 
-      console.log('Authenticating with local options:', optionsJSON)
 
       // Step 3: Authenticate with native passkey
       const { rawResponse } = await nativeWebauthnService.authenticateWithPasskey({ optionsJSON })
-      console.log('Authentication successful:', rawResponse)
 
       // Step 4: Regenerate wallet from stored credential info
       // Convert ArrayBuffer to base64url string
@@ -212,9 +200,6 @@ export const useSimplePasskey = () => {
       const wallet = await generateWalletFromPasskey(storedCredentialId, rawIdString)
 
       // Log wallet info for verification
-      console.log('🔓 Stellar Wallet Authenticated!')
-      console.log('📍 Address:', wallet.address)
-      console.log('🔗 Check on Stellar Expert (Testnet):', `https://stellar.expert/explorer/testnet/account/${wallet.address}`)
 
       // Verify the address matches what we stored
       if (wallet.address !== storedAddress) {
