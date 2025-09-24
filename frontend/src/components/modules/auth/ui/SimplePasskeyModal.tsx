@@ -87,7 +87,7 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
         });
         // Don't set modalError for NotAllowedError to avoid showing it in UI
       } else {
-        toast.error("Error al crear wallet", {
+        toast.error("Wallet creation error", {
           description: errorMsg
         });
       }
@@ -123,12 +123,12 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
         error.message.includes('not allowed') ||
         error.message.includes('timed out')
       )) {
-        toast.error("Error al autenticarse con passkey", {
-          description: "La autenticación fue cancelada o expiró. Inténtalo de nuevo."
+        toast.error("Error authenticating with passkey", {
+          description: "Authentication was cancelled or timed out. Please try again."
         });
         // Don't set modalError for NotAllowedError to avoid showing it in UI
       } else {
-        toast.error("Error de autenticación", {
+        toast.error("Authentication error", {
           description: errorMsg
         });
       }
