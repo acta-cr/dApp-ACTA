@@ -212,7 +212,7 @@ export class APIService {
           schema: credentialData.schema || "https://schema.org/Certificate",
           contractAddress: contractId,
           transactionHash: transactionHash,
-          hash: this.generateMockCredentialHash(),
+          hash: data.data?.hash || this.generateMockCredentialHash(),
           verificationUrl: `https://verify.acta.io/credentials/${contractId}`,
         },
         message: isRealStellarContract
