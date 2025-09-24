@@ -1,7 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,21 +41,23 @@ interface CredentialInfo {
   status: string;
   fullData: {
     name: string;
-    description: string;
+    description?: string;
     issuer: string;
     recipient: string;
     skills: string[];
-    dateIssued: string;
-    contractId: string;
-    status: string;
-    createdAt: string;
+    dateIssued?: string;
+    contractId?: string;
+    status?: string;
+    createdAt?: string;
   };
 }
 
 export function SearchCredential() {
   const [searchHash, setSearchHash] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const [credentialInfo, setCredentialInfo] = useState<CredentialInfo | null>(null);
+  const [credentialInfo, setCredentialInfo] = useState<CredentialInfo | null>(
+    null
+  );
   const [error, setError] = useState<string | null>(null);
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -65,9 +73,17 @@ export function SearchCredential() {
 
     try {
       // Get API URL from environment or use default
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-      const response = await fetch(`${apiUrl}/credentials/hash/${searchHash.trim()}`);
-      
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      console.log("🔍 API URL:", apiUrl);
+      console.log("🔍 Search Hash:", searchHash.trim());
+
+      const fullUrl = `${apiUrl}/credentials/hash/${searchHash.trim()}`;
+      console.log("🔍 Full URL:", fullUrl);
+
+      const response = await fetch(fullUrl);
+      console.log("🔍 Response status:", response.status);
+      console.log("🔍 Response ok:", response.ok);
+
       if (!response.ok) {
         if (response.status === 404) {
           throw new Error("Credential not found with the provided hash");
@@ -76,14 +92,19 @@ export function SearchCredential() {
       }
 
       const result = await response.json();
-      
+      console.log("🔍 API Response:", result);
+      console.log("🔍 Result data:", result.data);
+      console.log("🔍 Full data:", result.data?.fullData);
+
       if (!result.success || !result.data) {
         throw new Error("Invalid response from server");
       }
 
       setCredentialInfo(result.data);
+      console.log("🔍 Setting credential info:", result.data);
       toast.success("Credential found successfully");
     } catch (err) {
+      console.error("🔍 Error:", err);
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
       toast.error(`Error searching for hash: ${errorMessage}`);
@@ -98,10 +119,10 @@ export function SearchCredential() {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
@@ -113,8 +134,12 @@ export function SearchCredential() {
           <Search className="w-5 h-5 text-[#F0E7CC]" />
         </div>
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">Search Credential</h1>
-          <p className="text-sm text-muted-foreground">Search for a credential using its hash</p>
+          <h1 className="text-2xl font-semibold text-foreground">
+            Search Credential
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Search for a credential using its hash
+          </p>
         </div>
       </div>
 
@@ -126,7 +151,8 @@ export function SearchCredential() {
             Credential Search
           </CardTitle>
           <CardDescription>
-            Enter the unique hash identifier for the credential you want to search for.
+            Enter the unique hash identifier for the credential you want to
+            search for.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -137,10 +163,10 @@ export function SearchCredential() {
                 id="searchHash"
                 type="text"
                 value={searchHash}
-                onChange={(e) => setSearchHash(e.target.value)}
+                onChange={e => setSearchHash(e.target.value)}
                 placeholder="Enter the credential hash (e.g: 881983b6ec6efe3e6d860f3cbef387f4)"
                 className="flex-1"
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                onKeyPress={e => e.key === "Enter" && handleSearch()}
               />
               <Button
                 onClick={handleSearch}
@@ -169,9 +195,7 @@ export function SearchCredential() {
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error searching for credential</AlertTitle>
-          <AlertDescription>
-            {error}
-          </AlertDescription>
+          <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
 
@@ -196,8 +220,12 @@ export function SearchCredential() {
               onClick={() => setIsFlipped(!isFlipped)}
               size="sm"
             >
-              {isFlipped ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
-              {isFlipped ? 'Show Card View' : 'Show Table View'}
+              {isFlipped ? (
+                <EyeOff className="w-4 h-4 mr-2" />
+              ) : (
+                <Eye className="w-4 h-4 mr-2" />
+              )}
+              {isFlipped ? "Show Card View" : "Show Table View"}
             </Button>
           </div>
 
@@ -212,8 +240,12 @@ export function SearchCredential() {
                         <CreditCard className="w-5 h-5 text-[#F0E7CC]" />
                       </div>
                       <div>
-                        <h3 className="text-lg font-semibold">{credentialInfo.fullData.name}</h3>
-                        <p className="text-sm text-muted-foreground">{credentialInfo.fullData.issuer}</p>
+                        <h3 className="text-lg font-semibold">
+                          {credentialInfo?.fullData?.name || "N/A"}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                          {credentialInfo?.fullData?.issuer || "N/A"}
+                        </p>
                       </div>
                     </div>
                     <Badge variant="secondary">
@@ -226,28 +258,39 @@ export function SearchCredential() {
 
                   <div>
                     <h4 className="text-sm font-medium mb-2">Description</h4>
-                    <p className="text-sm text-muted-foreground">{credentialInfo.fullData.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {credentialInfo?.fullData?.description ||
+                        "No description available"}
+                    </p>
                   </div>
 
                   <div>
                     <h4 className="text-sm font-medium mb-2">Skills</h4>
                     <div className="flex flex-wrap gap-2">
-                      {credentialInfo.fullData.skills.map((skill, index) => (
-                        <Badge
-                          key={index}
-                          variant="outline"
-                        >
+                      {credentialInfo?.fullData?.skills?.map((skill, index) => (
+                        <Badge key={index} variant="outline">
                           {skill}
                         </Badge>
-                      ))}
+                      )) || (
+                        <span className="text-sm text-muted-foreground">
+                          No skills listed
+                        </span>
+                      )}
                     </div>
                   </div>
 
                   <Separator />
 
                   <div className="flex justify-between items-center text-xs text-muted-foreground">
-                    <span>Issued: {formatDate(credentialInfo.fullData.dateIssued)}</span>
-                    <span>Hash: {credentialInfo.hash.substring(0, 8)}...</span>
+                    <span>
+                      Issued:{" "}
+                      {credentialInfo?.fullData?.dateIssued
+                        ? formatDate(credentialInfo.fullData.dateIssued)
+                        : "Date not available"}
+                    </span>
+                    <span>
+                      Hash: {credentialInfo?.hash?.substring(0, 8) || "N/A"}...
+                    </span>
                   </div>
                 </div>
               </CardContent>
@@ -273,12 +316,16 @@ export function SearchCredential() {
                   <TableBody>
                     <TableRow>
                       <TableCell className="font-medium">Hash</TableCell>
-                      <TableCell className="font-mono text-sm">{credentialInfo.hash}</TableCell>
+                      <TableCell className="font-mono text-sm">
+                        {credentialInfo.hash}
+                      </TableCell>
                       <TableCell>
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => copyToClipboard(credentialInfo.hash, "Hash")}
+                          onClick={() =>
+                            copyToClipboard(credentialInfo.hash, "Hash")
+                          }
                         >
                           <Copy className="w-3 h-3" />
                         </Button>
@@ -286,12 +333,19 @@ export function SearchCredential() {
                     </TableRow>
                     <TableRow>
                       <TableCell className="font-medium">Contract ID</TableCell>
-                      <TableCell className="font-mono text-sm">{credentialInfo.contractId}</TableCell>
+                      <TableCell className="font-mono text-sm">
+                        {credentialInfo.contractId}
+                      </TableCell>
                       <TableCell>
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => copyToClipboard(credentialInfo.contractId, "Contract ID")}
+                          onClick={() =>
+                            copyToClipboard(
+                              credentialInfo.contractId,
+                              "Contract ID"
+                            )
+                          }
                         >
                           <Copy className="w-3 h-3" />
                         </Button>
@@ -299,22 +353,33 @@ export function SearchCredential() {
                     </TableRow>
                     <TableRow>
                       <TableCell className="font-medium">Name</TableCell>
-                      <TableCell>{credentialInfo.fullData.name}</TableCell>
+                      <TableCell>
+                        {credentialInfo?.fullData?.name || "N/A"}
+                      </TableCell>
                       <TableCell></TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell className="font-medium">Issuer</TableCell>
-                      <TableCell>{credentialInfo.fullData.issuer}</TableCell>
+                      <TableCell>
+                        {credentialInfo?.fullData?.issuer || "N/A"}
+                      </TableCell>
                       <TableCell></TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell className="font-medium">Recipient</TableCell>
-                      <TableCell className="font-mono text-sm">{credentialInfo.fullData.recipient}</TableCell>
+                      <TableCell className="font-mono text-sm">
+                        {credentialInfo?.fullData?.recipient || "N/A"}
+                      </TableCell>
                       <TableCell>
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => copyToClipboard(credentialInfo.fullData.recipient, "Recipient")}
+                          onClick={() =>
+                            copyToClipboard(
+                              credentialInfo?.fullData?.recipient || "",
+                              "Recipient"
+                            )
+                          }
                         >
                           <Copy className="w-3 h-3" />
                         </Button>
@@ -323,24 +388,40 @@ export function SearchCredential() {
                     <TableRow>
                       <TableCell className="font-medium">Status</TableCell>
                       <TableCell>
-                        <Badge variant="secondary">{credentialInfo.status}</Badge>
+                        <Badge variant="secondary">
+                          {credentialInfo?.status || "N/A"}
+                        </Badge>
                       </TableCell>
                       <TableCell></TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell className="font-medium">Date Issued</TableCell>
-                      <TableCell>{formatDate(credentialInfo.fullData.dateIssued)}</TableCell>
+                      <TableCell>
+                        {credentialInfo?.fullData?.dateIssued
+                          ? formatDate(credentialInfo.fullData.dateIssued)
+                          : "Date not available"}
+                      </TableCell>
                       <TableCell></TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell className="font-medium">Skills</TableCell>
                       <TableCell>
                         <div className="flex flex-wrap gap-1">
-                          {credentialInfo.fullData.skills.map((skill, index) => (
-                            <Badge key={index} variant="outline" className="text-xs">
-                              {skill}
-                            </Badge>
-                          ))}
+                          {credentialInfo?.fullData?.skills?.map(
+                            (skill, index) => (
+                              <Badge
+                                key={index}
+                                variant="outline"
+                                className="text-xs"
+                              >
+                                {skill}
+                              </Badge>
+                            )
+                          ) || (
+                            <span className="text-sm text-muted-foreground">
+                              No skills listed
+                            </span>
+                          )}
                         </div>
                       </TableCell>
                       <TableCell></TableCell>
