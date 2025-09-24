@@ -13,7 +13,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { KeyRound } from "lucide-react";
-import { ShineBorder } from "@/components/magicui/shine-border";
 import { Particles } from "@/components/magicui/particles";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -104,25 +103,14 @@ export default function HomePage() {
             </CardHeader>
 
             <CardContent className="space-y-6">
-              <ShineBorder
-                className="w-full"
-                color={["#F0E7CC", "#E9F8D8", "#FFFFFF"]}
-                duration={10}
+              <Button
+                onClick={handleConnect}
+                size="lg"
+                className="w-full h-12 bg-black text-white hover:bg-gray-800 rounded-2xl font-semibold"
               >
-                <Button
-                  onClick={handleConnect}
-                  size="lg"
-                  className="w-full h-12 bg-transparent hover:bg-black/20 rounded-2xl font-semibold transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/20 border-0"
-                >
-                  <KeyRound
-                    className="w-5 h-5 mr-2"
-                    style={{ color: "#F0E7CC" }}
-                  />
-                  <span className="golden-gradient-text">
-                    Authenticate with Passkey
-                  </span>
-                </Button>
-              </ShineBorder>
+                <KeyRound className="w-5 h-5 mr-2 text-white" />
+                <span className="text-white">Authenticate with Passkey</span>
+              </Button>
 
               <div className="text-center">
                 <p className="text-xs text-white/70 leading-relaxed">

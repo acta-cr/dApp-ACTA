@@ -15,8 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Fingerprint, Plus, KeyRound, Loader2 } from "lucide-react";
-import { ShineBorder } from "@/components/magicui/shine-border";
+import { Fingerprint, Plus, KeyRound, Loader2, LogIn } from "lucide-react";
 import { useSimplePasskey } from "@/hooks/use-simple-passkey";
 import { toast } from "sonner";
 
@@ -163,32 +162,25 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ShineBorder
-                borderWidth={2}
-                duration={12}
-                color={["#F0E7CC", "#E9F8D8", "#FFFFFF"]}
-                className="w-full"
+              <Button
+                onClick={handleCreateWallet}
+                disabled={isLoading || !webAuthnSupported}
+                className="w-full h-12 bg-black text-white hover:bg-gray-800 rounded-2xl px-4 font-semibold"
               >
-                <Button
-                  onClick={handleCreateWallet}
-                  disabled={isLoading || !webAuthnSupported}
-                  className="w-full h-12 bg-black text-white hover:bg-gray-800 rounded-2xl px-4 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated"
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin text-white" />
-                      <span className="!text-white">Creating...</span>
-                    </>
-                  ) : (
-                    <div className="flex items-center">
-                      <Plus className="mr-2 h-4 w-4 text-white" />
-                      <span className="!text-white">
-                        Create Wallet with Passkey
-                      </span>
-                    </div>
-                  )}
-                </Button>
-              </ShineBorder>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin text-white" />
+                    <span className="text-white">Creating...</span>
+                  </>
+                ) : (
+                  <div className="flex items-center">
+                    <Plus className="mr-2 h-4 w-4 text-white" />
+                    <span className="text-white">
+                      Create Wallet with Passkey
+                    </span>
+                  </div>
+                )}
+              </Button>
             </CardContent>
           </Card>
 
@@ -204,32 +196,23 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ShineBorder
-                borderWidth={2}
-                duration={12}
-                color={["#F0E7CC", "#E9F8D8", "#FFFFFF"]}
-                className="w-full"
+              <Button
+                onClick={handleAuthenticate}
+                disabled={isLoading || !webAuthnSupported}
+                className="w-full h-12 bg-white text-black hover:bg-gray-100 border border-gray-300 rounded-2xl px-4 font-semibold"
               >
-                <Button
-                  onClick={handleAuthenticate}
-                  disabled={isLoading || !webAuthnSupported}
-                  className="w-full h-12 bg-black hover:bg-gray-800 rounded-2xl px-4 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated !text-white"
-                >
-                  {isLoading ? (
-                    <div className="flex items-center">
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin text-white" />
-                      <span className="!text-white">Authenticating...</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center">
-                      <KeyRound className="mr-2 h-4 w-4 text-white" />
-                      <span className="!text-white">
-                        Access Existing Wallet
-                      </span>
-                    </div>
-                  )}
-                </Button>
-              </ShineBorder>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin text-black" />
+                    <span className="text-black">Accessing...</span>
+                  </>
+                ) : (
+                  <div className="flex items-center">
+                    <KeyRound className="mr-2 h-4 w-4 text-black" />
+                    <span className="text-black">Access Existing Wallet</span>
+                  </div>
+                )}
+              </Button>
             </CardContent>
           </Card>
 
