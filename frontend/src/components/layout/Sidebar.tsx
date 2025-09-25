@@ -41,7 +41,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   LayoutDashboard,
   User,
-  Key,
   LogOut,
   FileText,
   ChevronRight,
@@ -104,20 +103,6 @@ const navGroups: NavGroup[] = [
         title: "Dashboard",
         url: "/dashboard",
         icon: LayoutDashboard,
-        isActive: true,
-        isExpandable: false,
-      },
-      {
-        title: "Profile",
-        url: "/dashboard/profile",
-        icon: User,
-        isActive: true,
-        isExpandable: false,
-      },
-      {
-        title: "API Key",
-        url: "/dashboard/api-key",
-        icon: Key,
         isActive: true,
         isExpandable: false,
       },
@@ -363,6 +348,15 @@ function NavUser() {
                 </div>
               </div>
             </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <Link href="/dashboard/profile">
+                <DropdownMenuItem>
+                  <User />
+                  Profile
+                </DropdownMenuItem>
+              </Link>
+            </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem onClick={handleDisconnect}>

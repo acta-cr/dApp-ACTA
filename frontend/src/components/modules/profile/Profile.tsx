@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Separator } from '@/components/ui/separator';
 import {
   Wallet,
   Copy,
@@ -19,16 +20,32 @@ import {
   Eye,
   EyeOff,
   Key,
+  CheckCircle,
+  AlertTriangle,
+  RefreshCw,
+  RotateCcw,
+  Trash2,
 } from 'lucide-react';
 import { Keypair } from '@stellar/stellar-sdk';
+import { toast } from 'sonner';
+import { useWalletContext } from '@/providers/wallet.provider';
+import { userService } from '@/services/user.service';
 
 export function Profile() {
   const { isConnected, walletAddress } = useWallet();
+  const { userProfile } = useWalletContext();
   const [copied, setCopied] = useState(false);
   const [showSecretKey, setShowSecretKey] = useState(false);
   const [walletSecret, setWalletSecret] = useState<string | null>(null);
   const [credentialId, setCredentialId] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  
+  // API Key states
+  const [generatedKey, setGeneratedKey] = useState<string | null>(null);
+  const [showKey, setShowKey] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [isRegenerating, setIsRegenerating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Generate wallet secret from stored passkey data
   const generateWalletFromPasskey = async (credentialId: string, rawId: string): Promise<{ keypair: Keypair; address: string; secret: string }> => {
@@ -86,6 +103,66 @@ export function Profile() {
 
   const toggleSecretKeyVisibility = () => {
     setShowSecretKey(!showSecretKey);
+  };
+
+  // API Key handlers
+  const handleGenerateApiKey = async () => {
+    if (!walletAddress) {
+      toast.error("Wallet not connected");
+      return;
+    }
+
+    try {
+      setIsGenerating(true);
+      const newApiKey = await userService.generateApiKey(walletAddress);
+      setGeneratedKey(newApiKey);
+      setShowKey(true);
+      toast.success("API Key generated successfully!");
+    } catch {
+      toast.error("Error generating API Key");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleRegenerateApiKey = async () => {
+    if (!walletAddress) {
+      toast.error("Wallet not connected");
+      return;
+    }
+
+    try {
+      setIsRegenerating(true);
+      // First revoke the existing key, then generate a new one
+      await userService.revokeApiKey(walletAddress);
+      const newApiKey = await userService.generateApiKey(walletAddress);
+      setGeneratedKey(newApiKey);
+      setShowKey(true);
+      toast.success("API Key regenerated successfully!");
+    } catch {
+      toast.error("Error regenerating API Key");
+    } finally {
+      setIsRegenerating(false);
+    }
+  };
+
+  const handleDeleteApiKey = async () => {
+    if (!walletAddress) {
+      toast.error("Wallet not connected");
+      return;
+    }
+
+    try {
+      setIsDeleting(true);
+      await userService.revokeApiKey(walletAddress);
+      setGeneratedKey(null);
+      setShowKey(false);
+      toast.success("API Key deleted successfully");
+    } catch {
+      toast.error("Error deleting API Key");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
 
@@ -165,10 +242,14 @@ export function Profile() {
 
       {/* Tabs Section */}
       <Tabs defaultValue="details" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2 bg-background/60 backdrop-blur-xl border border-white/10 rounded-2xl">
+        <TabsList className="grid w-full grid-cols-3 bg-background/60 backdrop-blur-xl border border-white/10 rounded-2xl">
           <TabsTrigger value="details" className="data-[state=active]:bg-white/10 rounded-xl">
             <Wallet className="w-4 h-4 mr-2" />
             Wallet Details
+          </TabsTrigger>
+          <TabsTrigger value="api-key" className="data-[state=active]:bg-white/10 rounded-xl">
+            <Key className="w-4 h-4 mr-2" />
+            API Key
           </TabsTrigger>
           <TabsTrigger value="settings" className="data-[state=active]:bg-white/10 rounded-xl">
             <Settings className="w-4 h-4 mr-2" />
@@ -320,6 +401,178 @@ export function Profile() {
           </div>
         </TabsContent>
 
+        <TabsContent value="api-key" className="space-y-6">
+          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Key className="w-5 h-5 mr-2" />
+                API Key Management
+              </CardTitle>
+              <CardDescription>
+                Generate and manage your API key for accessing ACTA services
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* API Key Status */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <div className={`w-2 h-2 rounded-full ${userProfile?.has_api_key ? 'bg-green-500' : 'bg-red-500'}`} />
+                    <span className="text-sm font-medium">
+                      Status: {userProfile?.has_api_key ? 'Active' : 'No API Key'}
+                    </span>
+                  </div>
+                  {userProfile?.has_api_key && (
+                    <Badge variant="secondary" className="bg-green-500/20 text-green-400 border-green-500/30">
+                      <CheckCircle className="w-3 h-3 mr-1" />
+                      Generated
+                    </Badge>
+                  )}
+                </div>
+
+                {/* API Key Display */}
+                {generatedKey && (
+                  <div className="space-y-3">
+                    <label className="text-sm font-medium text-[#F0E7CC]">
+                      Your API Key
+                    </label>
+                    <div className="relative">
+                      <div className="flex items-center space-x-2 p-3 bg-background/60 border border-white/10 rounded-lg">
+                        <code className="flex-1 text-sm font-mono text-[#F0E7CC] break-all">
+                          {showKey ? generatedKey : '•'.repeat(32)}
+                        </code>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setShowKey(!showKey)}
+                          className="text-[#F0E7CC] hover:bg-[#F0E7CC]/10"
+                        >
+                          {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            navigator.clipboard.writeText(generatedKey);
+                            toast.success("API Key copied to clipboard!");
+                          }}
+                          className="text-[#F0E7CC] hover:bg-[#F0E7CC]/10"
+                        >
+                          <Copy className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                    <Alert className="bg-yellow-500/10 border-yellow-500/20 rounded-lg">
+                      <AlertTriangle className="h-4 w-4" />
+                      <AlertTitle className="text-yellow-400">Important</AlertTitle>
+                      <AlertDescription className="text-yellow-400/80">
+                        Store this API key securely. You won&apos;t be able to see it again after leaving this page.
+                      </AlertDescription>
+                    </Alert>
+                  </div>
+                )}
+
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3">
+                  {!userProfile?.has_api_key ? (
+                    <Button
+                      onClick={handleGenerateApiKey}
+                      disabled={isGenerating}
+                      className="flex-1 bg-[#F0E7CC] text-black hover:bg-[#F0E7CC]/90 rounded-lg"
+                    >
+                      {isGenerating ? (
+                        <>
+                          <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                          Generating...
+                        </>
+                      ) : (
+                        <>
+                          <Key className="w-4 h-4 mr-2" />
+                          Generate API Key
+                        </>
+                      )}
+                    </Button>
+                  ) : (
+                    <>
+                      <Button
+                        onClick={handleRegenerateApiKey}
+                        disabled={isRegenerating}
+                        variant="outline"
+                        className="flex-1 border-[#F0E7CC]/30 text-[#F0E7CC] hover:bg-[#F0E7CC]/10 rounded-lg"
+                      >
+                        {isRegenerating ? (
+                          <>
+                            <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                            Regenerating...
+                          </>
+                        ) : (
+                          <>
+                            <RotateCcw className="w-4 h-4 mr-2" />
+                            Regenerate
+                          </>
+                        )}
+                      </Button>
+                      <Button
+                        onClick={handleDeleteApiKey}
+                        disabled={isDeleting}
+                        variant="destructive"
+                        className="flex-1 rounded-lg"
+                      >
+                        {isDeleting ? (
+                          <>
+                            <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                            Deleting...
+                          </>
+                        ) : (
+                          <>
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Delete
+                          </>
+                        )}
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <Separator className="bg-white/10" />
+
+              {/* API Key Information */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-[#F0E7CC]">How to use your API Key</h3>
+                <div className="space-y-3">
+                  <div className="p-4 bg-background/60 border border-white/10 rounded-lg">
+                    <h4 className="font-medium text-[#F0E7CC] mb-2">Authentication Header</h4>
+                    <code className="text-sm text-muted-foreground block bg-background/40 p-2 rounded border">
+                      Authorization: Bearer YOUR_API_KEY
+                    </code>
+                  </div>
+                  <div className="p-4 bg-background/60 border border-white/10 rounded-lg">
+                    <h4 className="font-medium text-[#F0E7CC] mb-2">Example Request</h4>
+                    <code className="text-sm text-muted-foreground block bg-background/40 p-2 rounded border whitespace-pre-wrap">
+{`curl -H "Authorization: Bearer YOUR_API_KEY" \\
+     -H "Content-Type: application/json" \\
+     https://api.acta.com/v1/credentials`}
+                    </code>
+                  </div>
+                </div>
+              </div>
+
+              {/* Security Notice */}
+              <Alert className="bg-blue-500/10 border-blue-500/20 rounded-lg">
+                <Shield className="h-4 w-4" />
+                <AlertTitle className="text-blue-400">Security Best Practices</AlertTitle>
+                <AlertDescription className="text-blue-400/80">
+                  • Never share your API key publicly or commit it to version control
+                  <br />
+                  • Regenerate your key if you suspect it has been compromised
+                  <br />
+                  • Use environment variables to store your API key in applications
+                </AlertDescription>
+              </Alert>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="settings" className="space-y-6">
           <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
