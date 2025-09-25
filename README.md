@@ -16,6 +16,12 @@ Decentralized application for creating and managing verifiable credentials on St
 - Support for multiple credential types and claims
 - Blockchain-based authenticity guarantees
 
+**API Key Management**
+- Secure API key generation and management
+- Integration with Supabase for user data
+- Wallet-based authentication for API access
+- Database-backed user management system
+
 **Modern dApp Experience**
 - Responsive design with particle background effects
 - Real-time credential verification
@@ -90,6 +96,19 @@ NEXT_PUBLIC_API_URL=https://acta.up.railway.app/v1
 
 # For local development
 # NEXT_PUBLIC_API_URL=http://localhost:8000/v1
+
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+### Database Setup
+
+The application uses Supabase for user management. Run the SQL script to create the necessary tables:
+
+```sql
+-- Located in: src/scripts/create-users-table.sql
+-- Run this script in your Supabase SQL Editor
 ```
 
 ## Development
@@ -129,22 +148,28 @@ src/
 **Frontend Framework**
 - Next.js 15.5.0 with App Router
 - TypeScript for type safety
-- Tailwind CSS for styling
+- Tailwind CSS 4.0 for styling
 
 **Authentication & Blockchain**
 - WebAuthn for passkey authentication
-- Stellar SDK for blockchain interactions
+- Stellar SDK 14.2.0 for blockchain interactions
 - Custom wallet management via passkeys
+
+**Database & Backend**
+- Supabase for user management and API keys
+- PostgreSQL database with Row Level Security
+- RESTful API integration
 
 **UI/UX**
 - Radix UI components
 - Lucide React icons
-- Custom particle effects
+- Custom particle effects with Framer Motion
 - Glassmorphism design
 
 **Development Tools**
 - ESLint for code quality
 - Prettier for formatting
+- Husky for git hooks
 - Turbopack for fast builds
 
 ## Security Features
