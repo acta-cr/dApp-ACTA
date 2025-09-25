@@ -12,10 +12,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
 import { KeyRound } from "lucide-react";
 import { Particles } from "@/components/magicui/particles";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { ShimmerButton } from "@/components/ui/shimmer-button";
 
 export default function HomePage() {
   const {
@@ -103,14 +105,16 @@ export default function HomePage() {
             </CardHeader>
 
             <CardContent className="space-y-6">
-              <Button
-                onClick={handleConnect}
-                size="lg"
-                className="w-full h-12 bg-black text-white hover:bg-gray-800 rounded-2xl font-semibold"
-              >
-                <KeyRound className="w-5 h-5 mr-2 text-white" />
-                <span className="text-white">Authenticate with Passkey</span>
-              </Button>
+              <ShimmerButton className="shadow-2xl">
+                <Button
+                  onClick={handleConnect}
+                  size="lg"
+                  className="w-full h-12 rounded-2xl font-semibold bg-black text-white border-0 shadow-none hover:bg-black hover:text-white"
+                >
+                  <KeyRound className="w-5 h-5 mr-2" />
+                  <span>Authenticate with Passkey</span>
+                </Button>
+              </ShimmerButton>
 
               <div className="text-center">
                 <p className="text-xs text-white/70 leading-relaxed">

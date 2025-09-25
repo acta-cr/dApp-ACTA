@@ -15,9 +15,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
 import { Fingerprint, Plus, KeyRound, Loader2, LogIn } from "lucide-react";
 import { useSimplePasskey } from "@/hooks/use-simple-passkey";
 import { toast } from "sonner";
+import { ShimmerButton } from "@/components/ui/shimmer-button";
 
 interface SimplePasskeyModalProps {
   isOpen: boolean;
@@ -60,7 +62,6 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
         throw new Error("WebAuthn is not supported in this browser");
       }
 
-      
       const result = await createWallet();
 
       // Store auth info
@@ -72,21 +73,22 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
     } catch (error) {
       const errorMsg =
         error instanceof Error ? error.message : "Failed to create wallet";
-      
+
       // Check if it's a NotAllowedError (user cancelled or timed out)
-      if (error instanceof Error && (
-        error.name === 'NotAllowedError' || 
-        error.message === 'NotAllowedError' ||
-        error.message.includes('not allowed') ||
-        error.message.includes('timed out')
-      )) {
+      if (
+        error instanceof Error &&
+        (error.name === "NotAllowedError" ||
+          error.message === "NotAllowedError" ||
+          error.message.includes("not allowed") ||
+          error.message.includes("timed out"))
+      ) {
         toast.error("Error creating wallet with passkey", {
-          description: "Creation was cancelled or timed out. Please try again."
+          description: "Creation was cancelled or timed out. Please try again.",
         });
         // Don't set modalError for NotAllowedError to avoid showing it in UI
       } else {
         toast.error("Wallet creation error", {
-          description: errorMsg
+          description: errorMsg,
         });
       }
     }
@@ -100,7 +102,6 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
         throw new Error("WebAuthn is not supported in this browser");
       }
 
-      
       const result = await authenticate();
 
       // Store auth info
@@ -112,21 +113,23 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
     } catch (error) {
       const errorMsg =
         error instanceof Error ? error.message : "Failed to authenticate";
-      
+
       // Check if it's a NotAllowedError (user cancelled or timed out)
-      if (error instanceof Error && (
-        error.name === 'NotAllowedError' || 
-        error.message === 'NotAllowedError' ||
-        error.message.includes('not allowed') ||
-        error.message.includes('timed out')
-      )) {
+      if (
+        error instanceof Error &&
+        (error.name === "NotAllowedError" ||
+          error.message === "NotAllowedError" ||
+          error.message.includes("not allowed") ||
+          error.message.includes("timed out"))
+      ) {
         toast.error("Error authenticating with passkey", {
-          description: "Authentication was cancelled or timed out. Please try again."
+          description:
+            "Authentication was cancelled or timed out. Please try again.",
         });
         // Don't set modalError for NotAllowedError to avoid showing it in UI
       } else {
         toast.error("Authentication error", {
-          description: errorMsg
+          description: errorMsg,
         });
       }
     }
@@ -162,25 +165,25 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button
-                onClick={handleCreateWallet}
-                disabled={isLoading || !webAuthnSupported}
-                className="w-full h-12 bg-black text-white hover:bg-gray-800 rounded-2xl px-4 font-semibold"
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin text-white" />
-                    <span className="text-white">Creating...</span>
-                  </>
-                ) : (
-                  <div className="flex items-center">
-                    <Plus className="mr-2 h-4 w-4 text-white" />
-                    <span className="text-white">
-                      Create Wallet with Passkey
-                    </span>
-                  </div>
-                )}
-              </Button>
+              <ShimmerButton className="shadow-2xl">
+                <Button
+                  onClick={handleCreateWallet}
+                  disabled={isLoading || !webAuthnSupported}
+                  className="w-full h-12 rounded-2xl px-4 font-semibold bg-black text-white hover:bg-gray-800 border-gray-600"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      <span>Creating...</span>
+                    </>
+                  ) : (
+                    <div className="flex items-center">
+                      <Plus className="mr-2 h-4 w-4" />
+                      <span>Create Wallet with Passkey</span>
+                    </div>
+                  )}
+                </Button>
+              </ShimmerButton>
             </CardContent>
           </Card>
 
@@ -196,27 +199,28 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button
-                onClick={handleAuthenticate}
-                disabled={isLoading || !webAuthnSupported}
-                className="w-full h-12 bg-white text-black hover:bg-gray-100 border border-gray-300 rounded-2xl px-4 font-semibold"
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin text-black" />
-                    <span className="text-black">Accessing...</span>
-                  </>
-                ) : (
-                  <div className="flex items-center">
-                    <KeyRound className="mr-2 h-4 w-4 text-black" />
-                    <span className="text-black">Access Existing Wallet</span>
-                  </div>
-                )}
-              </Button>
+              <ShimmerButton className="shadow-2xl">
+                <Button
+                  onClick={handleAuthenticate}
+                  disabled={isLoading || !webAuthnSupported}
+                  variant="outline"
+                  className="w-full h-12 rounded-2xl px-4 font-semibold bg-black text-white hover:bg-gray-800 border-gray-600"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      <span>Accessing...</span>
+                    </>
+                  ) : (
+                    <div className="flex items-center">
+                      <KeyRound className="mr-2 h-4 w-4" />
+                      <span>Access Existing Wallet</span>
+                    </div>
+                  )}
+                </Button>
+              </ShimmerButton>
             </CardContent>
           </Card>
-
-
 
           {/* Info */}
           <div className="text-center">

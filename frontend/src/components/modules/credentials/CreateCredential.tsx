@@ -30,6 +30,7 @@ import { apiService, CredentialContract } from "@/services/api.service";
 import { useWallet } from "@/components/modules/auth/hooks/wallet.hook";
 import { useWalletContext } from "@/providers/wallet.provider";
 import { useSimplePasskey } from "@/hooks/use-simple-passkey";
+import { ShimmerButton } from "@/components/ui/shimmer-button";
 
 interface CredentialData {
   holder: string;
@@ -728,13 +729,15 @@ Backend offline - mock data`;
                   Create an API key to start issuing credentials
                 </p>
               </div>
-              <Button
-                onClick={() => (window.location.href = "/dashboard/api-key")}
-                className="w-full"
-              >
-                <Key className="w-4 h-4 mr-2" />
-                Go to API Key Management
-              </Button>
+              <ShimmerButton className="shadow-2xl">
+                <Button
+                  onClick={() => (window.location.href = "/dashboard/api-key")}
+                  className="w-full"
+                >
+                  <Key className="w-4 h-4 mr-2" />
+                  Go to API Key Management
+                </Button>
+              </ShimmerButton>
             </div>
           </CardContent>
         </Card>
@@ -976,13 +979,17 @@ Backend offline - mock data`;
               You haven&apos;t created any credentials yet. Start by creating
               your first credential.
             </p>
-            <Button
-              onClick={() => (window.location.href = "/dashboard/credentials")}
-              className="bg-black text-white hover:bg-gray-800 rounded-2xl h-10 px-4 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Create Your First Credential
-            </Button>
+            <ShimmerButton className="shadow-2xl">
+              <Button
+                onClick={() =>
+                  (window.location.href = "/dashboard/credentials")
+                }
+                className="bg-black text-white hover:bg-gray-800 rounded-2xl h-10 px-4 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Create Your First Credential
+              </Button>
+            </ShimmerButton>
           </div>
         )}
 
@@ -2106,47 +2113,51 @@ Backend offline - mock data`;
 
             {/* Actions */}
             <div className="flex justify-end space-x-4 pt-6 border-t">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setCredentialData({
-                    holder: "",
-                    issuedBy: "ACTA",
-                    issuedOn: new Date().toLocaleDateString(),
-                    expires: "",
-                    category: "",
-                    description: "",
-                  });
-                }}
-                className="bg-black text-white hover:bg-gray-800 rounded-2xl h-10 px-4 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated"
-              >
-                Reset
-              </Button>
+              <ShimmerButton className="shadow-2xl">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setCredentialData({
+                      holder: "",
+                      issuedBy: "ACTA",
+                      issuedOn: new Date().toLocaleDateString(),
+                      expires: "",
+                      category: "",
+                      description: "",
+                    });
+                  }}
+                  className="bg-black text-white hover:bg-gray-800 rounded-2xl h-10 px-4 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated"
+                >
+                  Reset
+                </Button>
+              </ShimmerButton>
 
-              <Button
-                onClick={handleCreateCredential}
-                disabled={
-                  isCreating || isAuthenticating || !userProfile?.has_api_key
-                }
-                className="bg-black text-white hover:bg-gray-800 rounded-2xl h-10 px-4 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated"
-              >
-                {isAuthenticating ? (
-                  <>
-                    <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Authenticating...
-                  </>
-                ) : isCreating ? (
-                  <>
-                    <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Creating...
-                  </>
-                ) : (
-                  <>
-                    <Shield className="w-4 h-4 mr-2" />
-                    Create Credential
-                  </>
-                )}
-              </Button>
+              <ShimmerButton className="shadow-2xl">
+                <Button
+                  onClick={handleCreateCredential}
+                  disabled={
+                    isCreating || isAuthenticating || !userProfile?.has_api_key
+                  }
+                  className="bg-black text-white hover:bg-gray-800 rounded-2xl h-10 px-4 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated"
+                >
+                  {isAuthenticating ? (
+                    <>
+                      <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Authenticating...
+                    </>
+                  ) : isCreating ? (
+                    <>
+                      <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Creating...
+                    </>
+                  ) : (
+                    <>
+                      <Shield className="w-4 h-4 mr-2" />
+                      Create Credential
+                    </>
+                  )}
+                </Button>
+              </ShimmerButton>
             </div>
           </Card>
         </div>
