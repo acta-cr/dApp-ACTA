@@ -29,7 +29,7 @@ const useHeader = () => {
     return crumbs.map((crumb, index) => {
       const href = "/" + crumbs.slice(0, index + 1).join("/");
 
-      let label = crumb
+      const label = crumb
         .replace(/-/g, " ")
         .replace(/\b\w/g, (char) => char.toUpperCase());
 

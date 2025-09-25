@@ -20,7 +20,6 @@ import {
   SidebarProvider,
   SidebarRail,
   SidebarSeparator,
-  SidebarTrigger,
   SidebarGroup,
   SidebarGroupLabel,
 } from "@/components/ui/sidebar";

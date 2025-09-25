@@ -37,7 +37,7 @@ export const Wallet = () => {
       setCopied(true);
       toast.success("Address copied to clipboard");
       setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
+    } catch {
       toast.error("Failed to copy address");
     }
   };
