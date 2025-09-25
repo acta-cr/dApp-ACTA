@@ -50,6 +50,7 @@ import {
   ChevronsUpDown,
   LucideIcon,
 } from "lucide-react";
+import Footer from "./Footer";
 
 interface AppSidebarProps {
   children?: React.ReactNode;
@@ -386,8 +387,11 @@ export default function Sidebar({ children }: AppSidebarProps) {
           <SidebarTrigger className="-ml-1" />
           <div className="flex-1" />
         </header>
-        <div className="flex flex-1 flex-col p-4 bg-transparent">
-          {children}
+        <div className="flex flex-1 flex-col bg-transparent">
+          <div className="flex-1 p-4">
+            {children}
+          </div>
+          <Footer />
         </div>
       </SidebarInset>
     </SidebarProvider>
