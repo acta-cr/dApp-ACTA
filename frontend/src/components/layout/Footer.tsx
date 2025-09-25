@@ -124,39 +124,51 @@ const Footer: React.FC = () => {
               href="https://www.linkedin.com/company/acta-org"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:opacity-80"
+              className="hover:opacity-80 transition-opacity duration-200"
             >
               <Image
                 src="/assets/social-networks/linkedin.svg"
                 alt="LinkedIn"
                 width={40}
                 height={40}
+                style={{
+                  filter: 'brightness(0) saturate(100%) invert(100%)',
+                }}
+                className="hover:scale-110 transition-transform duration-200"
               />
             </Link>
             <Link
               href="https://x.com/ActaXyz"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:opacity-80"
+              className="hover:opacity-80 transition-opacity duration-200"
             >
               <Image
                 src="/assets/social-networks/x.svg"
                 alt="X"
                 width={40}
                 height={40}
+                style={{
+                  filter: 'brightness(0) saturate(100%) invert(100%)',
+                }}
+                className="hover:scale-110 transition-transform duration-200"
               />
             </Link>
             <Link
               href="https://t.me/+ACTATeam"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:opacity-80"
+              className="hover:opacity-80 transition-opacity duration-200"
             >
               <Image
                 src="/assets/social-networks/telegram.svg"
                 alt="Telegram"
                 width={37}
                 height={37}
+                style={{
+                  filter: 'brightness(0) saturate(100%) invert(100%)',
+                }}
+                className="hover:scale-110 transition-transform duration-200"
               />
             </Link>
           </div>
