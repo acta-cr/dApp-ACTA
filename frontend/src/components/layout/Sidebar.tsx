@@ -122,12 +122,12 @@ const navGroups: NavGroup[] = [
             url: "/dashboard/credentials",
           },
           {
-            title: "List",
-            url: "/dashboard/my-credentials",
-          },
-          {
             title: "Search",
             url: "/dashboard/search-credential",
+          },
+          {
+            title: "My Credentials",
+            url: "/dashboard/my-credentials",
           },
         ],
       },
