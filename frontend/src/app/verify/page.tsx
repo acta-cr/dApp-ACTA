@@ -78,7 +78,7 @@ function VerifyPageContent() {
           />
         </div>
 
-        <div className="relative z-[5] flex items-center justify-center p-4 min-h-screen">
+        <div className="relative z-[5] flex items-center justify-center py-4 px-6 md:px-8 lg:px-12 min-h-screen">
           <Card className="p-8 max-w-md w-full text-center">
             <div className="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-4">
               <Loader2 className="w-8 h-8 text-primary animate-spin" />
@@ -110,7 +110,7 @@ function VerifyPageContent() {
           />
         </div>
 
-        <div className="relative z-[5] flex items-center justify-center p-4 min-h-screen">
+        <div className="relative z-[5] flex items-center justify-center py-4 px-6 md:px-8 lg:px-12 min-h-screen">
           <Card className="p-8 max-w-md w-full text-center">
             <div className="w-16 h-16 rounded-lg bg-destructive/10 flex items-center justify-center mx-auto mb-4">
               <XCircle className="w-8 h-8 text-destructive" />
@@ -151,7 +151,7 @@ function VerifyPageContent() {
         />
       </div>
 
-      <div className="relative z-[5] flex items-center justify-center p-4 min-h-screen">
+      <div className="relative z-[5] flex items-center justify-center py-4 px-6 md:px-8 lg:px-12 min-h-screen">
         <div className="w-full max-w-2xl space-y-6">
           {/* Header */}
           <div className="text-center space-y-2">
@@ -298,7 +298,7 @@ export default function VerifyPage() {
             color="#ffffff"
           />
         </div>
-        <div className="relative z-[5] flex items-center justify-center p-4 min-h-screen">
+        <div className="relative z-[5] flex items-center justify-center py-4 px-6 md:px-8 lg:px-12 min-h-screen">
           <Card className="p-8 max-w-md w-full text-center">
             <div className="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-4">
               <Loader2 className="w-8 h-8 text-primary animate-spin" />

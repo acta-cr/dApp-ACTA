@@ -39,7 +39,7 @@ export default function DashboardLayout({
             color="#ffffff"
           />
         </div>
-        <div className="relative z-[5] flex items-center justify-center p-4 min-h-screen">
+        <div className="relative z-[5] flex items-center justify-center py-4 px-6 md:px-8 lg:px-12 min-h-screen">
           <div className="text-center text-white">
             <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
             <p>Redirecting to login...</p>
