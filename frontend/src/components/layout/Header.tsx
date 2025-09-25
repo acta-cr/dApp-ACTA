@@ -16,12 +16,12 @@ const Header = ({ className }: { className?: string }) => {
   return (
     <header
       className={cn(
-        "flex flex-1 h-12 sm:h-16 shrink-0 items-center gap-2 transition-all duration-300 ease-in-out group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 mt-1 sm:mt-4 mb-1 sm:mb-4 px-3 sm:px-6",
+        "flex flex-1 h-12 sm:h-16 shrink-0 items-center gap-2 transition-all duration-300 ease-in-out group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 mt-1 sm:mt-4 mb-1 sm:mb-4 px-3 sm:px-6 py-4 sm:py-6 md:py-4",
         isScrolled && "sticky top-0 z-50",
         isScrolled
           ? "bg-background/60 backdrop-blur-md border-b border-border/50 shadow-sm"
           : "bg-background",
-        className,
+        className
       )}
     >
       <div className="flex flex-row w-full justify-between items-center gap-2 sm:gap-4">
@@ -31,7 +31,7 @@ const Header = ({ className }: { className?: string }) => {
               <SidebarTrigger
                 className={cn(
                   "h-7 w-7 sm:h-10 sm:w-10 z-0 flex-shrink-0",
-                  isMobile ? "relative" : "relative",
+                  isMobile ? "relative" : "relative"
                 )}
               />
 
