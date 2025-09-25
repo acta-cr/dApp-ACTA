@@ -1070,7 +1070,7 @@ Backend offline - mock data`;
                       {/* Front of Card */}
                       <div className="credential-front">
                         <div
-                          className={`relative w-full h-56 ${selectedCredential.customization?.selectedGradient === "custom" ? "" : "bg-gradient-to-br " + getCredentialGradientClasses(selectedCredential.customization)} rounded-xl shadow-xl overflow-hidden`}
+                          className={`relative w-full h-full ${selectedCredential.customization?.selectedGradient === "custom" ? "" : "bg-gradient-to-br " + getCredentialGradientClasses(selectedCredential.customization)} rounded-xl shadow-xl overflow-hidden`}
                           style={getCredentialGradientStyle(
                             selectedCredential.customization
                           )}
@@ -1159,7 +1159,7 @@ Backend offline - mock data`;
 
                       {/* Back of Card */}
                       <div className="credential-back">
-                        <div className="relative w-full h-56 bg-gradient-to-br from-gray-700 to-gray-900 rounded-xl shadow-xl overflow-hidden">
+                        <div className="relative w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 rounded-xl shadow-xl overflow-hidden">
                           {/* Magnetic Stripe */}
                           <div className="w-full h-12 bg-black mt-6"></div>
 
@@ -2240,7 +2240,7 @@ Backend offline - mock data`;
                     {/* Front of Card */}
                     <div className="credential-front">
                       <div
-                        className={`relative w-full h-56 ${selectedCredential.customization?.selectedGradient === "custom" ? "" : "bg-gradient-to-br " + getCredentialGradientClasses(selectedCredential.customization)} rounded-xl shadow-xl overflow-hidden`}
+                        className={`relative w-full h-full ${selectedCredential.customization?.selectedGradient === "custom" ? "" : "bg-gradient-to-br " + getCredentialGradientClasses(selectedCredential.customization)} rounded-xl shadow-xl overflow-hidden`}
                         style={getCredentialGradientStyle(
                           selectedCredential.customization
                         )}
@@ -2328,7 +2328,7 @@ Backend offline - mock data`;
 
                     {/* Back of Card */}
                     <div className="credential-back">
-                      <div className="relative w-full h-56 bg-gradient-to-br from-gray-700 to-gray-900 rounded-xl shadow-xl overflow-hidden">
+                      <div className="relative w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 rounded-xl shadow-xl overflow-hidden">
                         {/* Magnetic Stripe */}
                         <div className="w-full h-12 bg-black mt-6"></div>
 
