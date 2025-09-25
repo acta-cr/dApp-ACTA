@@ -51,6 +51,7 @@ import {
   LucideIcon,
 } from "lucide-react";
 import Footer from "./Footer";
+import Header from "./Header";
 
 interface AppSidebarProps {
   children?: React.ReactNode;
@@ -383,10 +384,7 @@ export default function Sidebar({ children }: AppSidebarProps) {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset className="bg-transparent">
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b border-white/10 px-4 bg-transparent">
-          <SidebarTrigger className="-ml-1" />
-          <div className="flex-1" />
-        </header>
+        <Header />
         <div className="flex flex-1 flex-col bg-transparent">
           <div className="flex-1 p-4">
             {children}
