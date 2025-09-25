@@ -17,48 +17,44 @@ const Footer: React.FC = () => {
         {/* Contact Information */}
         <div className="flex flex-col gap-1">
           <h4 className="font-semibold text-base mb-2" style={{ color: '#F0E7CC' }}>Contact</h4>
-          <p className="text-sm">
+          <p className="text-sm text-white">
             Email:{" "}
             <Link
               href="mailto:acta.xyz@gmail.com"
-              className="hover:underline"
-              style={{ color: '#F0E7CC' }}
+              className="hover:underline text-white"
             >
               acta.xyz@gmail.com
             </Link>
           </p>
-          <p className="text-sm">
+          <p className="text-sm text-white">
             Website:{" "}
             <Link
               href="https://acta-web.vercel.app"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:underline"
-              style={{ color: '#F0E7CC' }}
+              className="hover:underline text-white"
             >
               acta-web.vercel.app
             </Link>
           </p>
-          <p className="text-sm">
+          <p className="text-sm text-white">
             Documentation:{" "}
             <Link
               href="https://acta.gitbook.io/docs"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:underline"
-              style={{ color: '#F0E7CC' }}
+              className="hover:underline text-white"
             >
               acta.gitbook.io/docs
             </Link>
           </p>
-          <p className="text-sm">
+          <p className="text-sm text-white">
             GitHub:{" "}
             <Link
               href="https://github.com/ACTA-Team"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:underline"
-              style={{ color: '#F0E7CC' }}
+              className="hover:underline text-white"
             >
               github.com/ACTA-Team
             </Link>
@@ -68,14 +64,13 @@ const Footer: React.FC = () => {
         {/* Team Members */}
         <div>
           <h4 className="font-semibold text-base mb-1" style={{ color: '#F0E7CC' }}>Team Members</h4>
-          <ul className="text-sm">
+          <ul className="text-sm text-white">
             <li>
               <Link
                 href="https://www.linkedin.com/in/josue-brenes/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:underline"
-                style={{ color: '#F0E7CC' }}
+                className="hover:underline text-white"
               >
                 Josué Brenes
               </Link>
@@ -85,8 +80,7 @@ const Footer: React.FC = () => {
                 href="https://www.linkedin.com/in/menasebastian/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:underline"
-                style={{ color: '#F0E7CC' }}
+                className="hover:underline text-white"
               >
                 Sebas Mena
               </Link>
@@ -96,8 +90,7 @@ const Footer: React.FC = () => {
                 href="https://www.linkedin.com/in/daniel-coto-jimenez/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:underline"
-                style={{ color: '#F0E7CC' }}
+                className="hover:underline text-white"
               >
                 Daniel Coto
               </Link>
@@ -153,7 +146,7 @@ const Footer: React.FC = () => {
       </div>
 
       {/* Copyright */}
-      <p className="mt-8 text-center pt-6 border-t text-sm" style={{ borderColor: '#F0E7CC' }}>
+      <p className="mt-8 text-center pt-6 border-t text-sm text-white" style={{ borderColor: '#F0E7CC' }}>
         © {currentYear} ACTA Team. All rights reserved.
       </p>
     </footer>
