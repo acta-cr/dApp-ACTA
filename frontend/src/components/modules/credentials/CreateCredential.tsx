@@ -1644,7 +1644,7 @@ Backend offline - mock data`;
                   {/* Magnetic Stripe */}
                   <div className="w-full h-12 bg-black mt-5"></div>
 
-                  <div className="p-6 text-white space-y-3 border">
+                  <div className="p-6 text-white space-y-3">
                     <div>
                       <p className="text-xs text-gray-300 uppercase tracking-wide">
                         Issued On
