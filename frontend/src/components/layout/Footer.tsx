@@ -7,7 +7,10 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-auto flex flex-col bg-transparent text-gray-800 dark:text-gray-300 py-12 px-8 md:px-12 lg:px-16 border-t" style={{ borderColor: '#F0E7CC' }}>
+    <footer
+      className="mt-auto flex flex-col bg-transparent text-gray-800 dark:text-gray-300 py-12 px-8 md:px-12 lg:px-16 border-t"
+      style={{ borderColor: "#F0E7CC" }}
+    >
       <div className="container mx-auto flex flex-wrap justify-between items-start gap-8 max-w-7xl">
         {/* Logo Section */}
         <div className="flex items-center">
@@ -16,7 +19,12 @@ const Footer: React.FC = () => {
 
         {/* Contact Information */}
         <div className="flex flex-col gap-1">
-          <h4 className="font-semibold text-base mb-2" style={{ color: '#F0E7CC' }}>Contact</h4>
+          <h4
+            className="font-semibold text-base mb-2"
+            style={{ color: "#F0E7CC" }}
+          >
+            Contact
+          </h4>
           <p className="text-sm text-white">
             Email:{" "}
             <Link
@@ -63,7 +71,12 @@ const Footer: React.FC = () => {
 
         {/* Team Members */}
         <div>
-          <h4 className="font-semibold text-base mb-1" style={{ color: '#F0E7CC' }}>Team Members</h4>
+          <h4
+            className="font-semibold text-base mb-1"
+            style={{ color: "#F0E7CC" }}
+          >
+            Team Members
+          </h4>
           <ul className="text-sm text-white">
             <li>
               <Link
@@ -100,7 +113,12 @@ const Footer: React.FC = () => {
 
         {/* Social Networks */}
         <div>
-          <h4 className="font-semibold text-base mb-1 text-center" style={{ color: '#F0E7CC' }}>Social</h4>
+          <h4
+            className="font-semibold text-base mb-1 text-center"
+            style={{ color: "#F0E7CC" }}
+          >
+            Social
+          </h4>
           <div className="flex space-x-4">
             <Link
               href="https://www.linkedin.com/company/acta-org"
@@ -116,7 +134,7 @@ const Footer: React.FC = () => {
               />
             </Link>
             <Link
-              href="https://x.com/ACTA_Team"
+              href="https://x.com/ActaXyz"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:opacity-80"
@@ -146,7 +164,10 @@ const Footer: React.FC = () => {
       </div>
 
       {/* Copyright */}
-      <p className="mt-8 text-center pt-6 border-t text-sm text-white" style={{ borderColor: '#F0E7CC' }}>
+      <p
+        className="mt-8 text-center pt-6 border-t text-sm text-white"
+        style={{ borderColor: "#F0E7CC" }}
+      >
         © {currentYear} ACTA Team. All rights reserved.
       </p>
     </footer>
