@@ -16,7 +16,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { Fingerprint, Plus, KeyRound, Loader2, LogIn } from "lucide-react";
+import { Fingerprint, Plus, KeyRound, Loader2 } from "lucide-react";
 import { useSimplePasskey } from "@/hooks/use-simple-passkey";
 import { toast } from "sonner";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
@@ -32,7 +32,7 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
   onClose,
   onSuccess,
 }) => {
-  const { createWallet, authenticate, isLoading, error } = useSimplePasskey();
+  const { createWallet, authenticate, isLoading } = useSimplePasskey();
   const [modalError, setModalError] = useState<string>("");
   const [webAuthnSupported, setWebAuthnSupported] = useState<boolean>(true);
 

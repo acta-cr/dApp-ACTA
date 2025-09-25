@@ -99,7 +99,7 @@ const activateWalletOnTestnet = async (publicKey: string): Promise<boolean> => {
       console.warn('⚠️ Friendbot funding failed:', response.status)
       return false
     }
-  } catch (error) {
+  } catch {
     return false
   }
 }

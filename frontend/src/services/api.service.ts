@@ -172,7 +172,7 @@ export class APIService {
 
       // Log the exact Stellar Expert URL that will be generated
       if (transactionHash) {
-        const stellarUrl = `https://stellar.expert/explorer/testnet/tx/${transactionHash}`;
+        // const stellarUrl = `https://stellar.expert/explorer/testnet/tx/${transactionHash}`;
       }
       
       // Transform response to match our credential interface
@@ -272,7 +272,7 @@ export class APIService {
         } : null,
         message: isValid ? 'Credential verified successfully' : 'Credential not found or invalid'
       };
-    } catch (error) {
+    } catch {
       return {
         success: false,
         credential: null,
@@ -289,7 +289,7 @@ export class APIService {
     try {
       // For now, return empty array since this endpoint is not implemented in API v2
       return [];
-    } catch (error) {
+    } catch {
       return [];
     }
   }
@@ -311,7 +311,7 @@ export class APIService {
       }
 
       return await response.json();
-    } catch (error) {
+    } catch {
       return { status: 'error', message: 'API unreachable' };
     }
   }

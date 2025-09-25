@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createHash, randomBytes } from 'crypto';
+import { randomBytes } from 'crypto';
 
 interface GenerateKeyRequest {
   publicKey: string;
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     const apiKey = keyPrefix + keyData;
 
     // Hash the API key for storage (same as ACTA API does)
-    const keyHash = createHash('sha256').update(apiKey).digest('hex');
+    // const keyHash = createHash('sha256').update(apiKey).digest('hex');
 
 
     // TODO: Store the API key in the database
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
       message: 'API key generated successfully',
     });
 
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

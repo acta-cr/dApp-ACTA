@@ -165,7 +165,7 @@ export function CreateCredential({
           if (stored) {
             setUserCredentials(JSON.parse(stored));
           }
-        } catch (error) {
+        } catch {
           // Error loading user credentials
         }
       }
@@ -475,7 +475,7 @@ export function CreateCredential({
 
     // Try both networks - for now default to testnet but we could make this configurable
     const testnetUrl = `https://stellar.expert/explorer/testnet/tx/${cleanHash}`;
-    const mainnetUrl = `https://stellar.expert/explorer/public/tx/${cleanHash}`;
+    // const mainnetUrl = `https://stellar.expert/explorer/public/tx/${cleanHash}`;
 
     if (isSimulated) {
       // Simulated transaction - will not be found on Stellar Expert

@@ -50,7 +50,7 @@ export function ApiKey() {
       setGeneratedKey(newApiKey);
       setShowKey(true);
       toast.success("API Key generated successfully!");
-    } catch (error) {
+    } catch {
       toast.error("Error generating API Key");
     } finally {
       setIsGenerating(false);
@@ -64,7 +64,7 @@ export function ApiKey() {
       setGeneratedKey(newApiKey);
       setShowKey(true);
       toast.success("API Key regenerated successfully!");
-    } catch (error) {
+    } catch {
       toast.error("Error regenerating API Key");
     } finally {
       setIsRegenerating(false);
@@ -78,7 +78,7 @@ export function ApiKey() {
       setGeneratedKey(null);
       setShowKey(false);
       toast.success("API Key deleted successfully");
-    } catch (error) {
+    } catch {
       toast.error("Error deleting API Key");
     } finally {
       setIsDeleting(false);
@@ -91,7 +91,7 @@ export function ApiKey() {
       setCopied(true);
       toast.success("API Key copied to clipboard");
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
+    } catch {
       toast.error("Error copying API Key");
     }
   };

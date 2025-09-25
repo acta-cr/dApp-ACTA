@@ -64,7 +64,7 @@ export function Profile() {
             // For now, we'll use the credentialId as rawId since we don't store rawId separately
             const wallet = await generateWalletFromPasskey(storedCredentialId, storedCredentialId);
             setWalletSecret(wallet.secret);
-          } catch (error) {
+          } catch {
             // Error generating wallet secret
           }
         }
@@ -79,7 +79,7 @@ export function Profile() {
       await navigator.clipboard.writeText(text);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
+    } catch {
       // Failed to copy text
     }
   };

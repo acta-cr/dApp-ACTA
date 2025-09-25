@@ -40,7 +40,7 @@ export const useWallet = () => {
   const handleDisconnect = async () => {
     try {
       await disconnectWallet();
-    } catch (error) {
+    } catch {
       // Error disconnecting wallet
     }
   };
@@ -68,7 +68,7 @@ export const useWallet = () => {
         signedMessage: signature,
         signerAddress: walletAddress,
       };
-    } catch (error) {
+    } catch {
       throw new Error('Failed to sign message with passkey wallet');
     }
   };

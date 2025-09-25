@@ -43,7 +43,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       setIsLoadingUser(true);
       const profile = await userService.registerUser(address);
       setUserProfile(profile);
-    } catch (error) {
+    } catch {
       // Error loading user profile
     } finally {
       setIsLoadingUser(false);

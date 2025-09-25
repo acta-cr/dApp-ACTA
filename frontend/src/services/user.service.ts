@@ -101,7 +101,7 @@ export class UserService {
 
 
       // Update user with API key
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("users")
         .update({
           api_key: apiKey,
@@ -166,7 +166,7 @@ export class UserService {
     try {
       const profile = await this.getUserProfile(walletAddress);
       return profile?.has_api_key ?? false;
-    } catch (error) {
+    } catch {
       return false;
     }
   }
@@ -182,7 +182,7 @@ export class UserService {
 
     try {
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("users")
         .update({
           api_key: null,
