@@ -47,6 +47,7 @@ import {
   ChevronRight,
   BookOpen,
   ChevronsUpDown,
+  CircleHelp,
   LucideIcon,
 } from "lucide-react";
 import Footer from "./Footer";
@@ -172,6 +173,18 @@ const navGroups: NavGroup[] = [
             isExternal: true,
           },
         ],
+      },
+    ],
+  },
+  {
+    label: "Support",
+    items: [
+      {
+        title: "Help",
+        url: "/dashboard/help",
+        icon: CircleHelp,
+        isActive: true,
+        isExpandable: false,
       },
     ],
   },
