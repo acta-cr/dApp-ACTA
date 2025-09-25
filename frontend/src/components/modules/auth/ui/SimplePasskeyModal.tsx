@@ -33,7 +33,6 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
   onSuccess,
 }) => {
   const { createWallet, authenticate, isLoading } = useSimplePasskey();
-  const [modalError, setModalError] = useState<string>("");
   const [webAuthnSupported, setWebAuthnSupported] = useState<boolean>(true);
 
   // Check WebAuthn support on component mount
@@ -45,19 +44,11 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
         typeof navigator.credentials.get === "function"
       );
       setWebAuthnSupported(supported);
-
-      if (!supported) {
-        setModalError(
-          "WebAuthn/Passkeys are not supported in this browser. Please use Chrome, Safari, or Edge."
-        );
-      }
     }
   }, []);
 
   const handleCreateWallet = async () => {
     try {
-      setModalError("");
-
       if (!webAuthnSupported) {
         throw new Error("WebAuthn is not supported in this browser");
       }
@@ -96,8 +87,6 @@ export const SimplePasskeyModal: React.FC<SimplePasskeyModalProps> = ({
 
   const handleAuthenticate = async () => {
     try {
-      setModalError("");
-
       if (!webAuthnSupported) {
         throw new Error("WebAuthn is not supported in this browser");
       }

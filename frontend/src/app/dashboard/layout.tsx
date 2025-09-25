@@ -18,14 +18,14 @@ export default function DashboardLayout({
   // If not connected, redirect to login
   useEffect(() => {
     if (!isConnected) {
-      router.push('/');
+      router.push("/");
     }
   }, [isConnected, router]);
 
   // If not connected but not redirected yet, show loading
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <div className="min-h-screen p-4 bg-background text-foreground overflow-x-hidden">
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-[#1B1F2E]" />
           <Particles
@@ -68,9 +68,7 @@ export default function DashboardLayout({
 
       {/* Main container */}
       <div className="relative z-[5]">
-        <Sidebar>
-          {children}
-        </Sidebar>
+        <Sidebar>{children}</Sidebar>
       </div>
     </div>
   );

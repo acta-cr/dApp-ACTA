@@ -9,193 +9,370 @@ import {
   Sidebar as SidebarPrimitive,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarProvider,
+  SidebarRail,
+  SidebarSeparator,
   SidebarTrigger,
+  SidebarGroup,
+  SidebarGroupLabel,
 } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   LayoutDashboard,
   User,
   Key,
   LogOut,
-  Search,
-  Plus,
   FileText,
-  ChevronDown,
   ChevronRight,
+  BookOpen,
+  ChevronsUpDown,
+  LucideIcon,
 } from "lucide-react";
 
 interface AppSidebarProps {
   children?: React.ReactNode;
 }
 
-const platformItems = [
+// Team data for header
+const teams = [
   {
-    href: "/dashboard",
-    label: "Dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    href: "/dashboard/profile",
-    label: "Profile",
-    icon: User,
-  },
-  {
-    href: "/dashboard/api-key",
-    label: "API Key",
-    icon: Key,
+    name: "ACTA",
+    logo: "/logo.png",
+    plan: "dApp Platform",
   },
 ];
 
-const credentialItems = [
+// Type for teams
+type Team = {
+  name: string;
+  logo: string;
+  plan: string;
+};
+
+// Types for navigation items
+interface SubItem {
+  title: string;
+  url: string;
+  isExternal?: boolean;
+}
+
+interface NavItem {
+  title: string;
+  url: string;
+  icon?: LucideIcon;
+  isActive?: boolean;
+  isExpandable?: boolean;
+  isExternal?: boolean;
+  items?: SubItem[];
+}
+
+interface NavGroup {
+  label: string;
+  items: NavItem[];
+}
+
+// Navigation groups structure similar to Trustless-Work
+const navGroups: NavGroup[] = [
   {
-    href: "/dashboard/credentials",
-    label: "Create",
-    icon: Plus,
+    label: "Platform",
+    items: [
+      {
+        title: "Dashboard",
+        url: "/dashboard",
+        icon: LayoutDashboard,
+        isActive: true,
+        isExpandable: false,
+      },
+      {
+        title: "Profile",
+        url: "/dashboard/profile",
+        icon: User,
+        isActive: true,
+        isExpandable: false,
+      },
+      {
+        title: "API Key",
+        url: "/dashboard/api-key",
+        icon: Key,
+        isActive: true,
+        isExpandable: false,
+      },
+    ],
   },
   {
-    href: "/dashboard/my-credentials",
-    label: "List",
-    icon: FileText,
+    label: "Credentials",
+    items: [
+      {
+        title: "Credentials",
+        url: "#",
+        icon: FileText,
+        isExpandable: true,
+        items: [
+          {
+            title: "Create",
+            url: "/dashboard/credentials",
+          },
+          {
+            title: "List",
+            url: "/dashboard/my-credentials",
+          },
+          {
+            title: "Search",
+            url: "/dashboard/search-credential",
+          },
+        ],
+      },
+    ],
   },
   {
-    href: "/dashboard/search-credential",
-    label: "Search",
-    icon: Search,
+    label: "Resources",
+    items: [
+      {
+        title: "Resources",
+        url: "#",
+        icon: BookOpen,
+        isExpandable: true,
+        items: [
+          {
+            title: "Documentation",
+            url: "https://acta.gitbook.io/docs",
+            isExternal: true,
+          },
+          {
+            title: "Stellar Expert",
+            url: "https://stellar.expert/explorer/testnet",
+            isExternal: true,
+          },
+          {
+            title: "Website",
+            url: "https://acta-web.vercel.app",
+            isExternal: true,
+          },
+        ],
+      },
+    ],
   },
 ];
 
-function AppSidebar() {
-  const { handleDisconnect, walletAddress } = useWallet();
-  const pathname = usePathname();
-  const [isCredentialsOpen, setIsCredentialsOpen] = useState(false);
+// Team Switcher Component
+function TeamSwitcher({ teams }: { teams: Team[] }) {
+  const [activeTeam] = useState(teams[0]);
 
   return (
-    <SidebarPrimitive className="border-r backdrop-blur-sm">
-      <SidebarHeader className="px-4 py-3">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 flex items-center justify-center">
-            <Image
-              src="/logo.png"
-              alt="ACTA Logo"
-              width={20}
-              height={20}
-              className="w-10 h-full"
-            />
-          </div>
-          <div>
-            <h1 className="text-base font-semibold">ACTA</h1>
-          </div>
-        </div>
-      </SidebarHeader>
+    <SidebarMenu className="mt-2">
+      <SidebarMenuItem>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Link href="/dashboard">
+              <SidebarMenuButton
+                size="lg"
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              >
+                <Image
+                  width={40}
+                  height={40}
+                  src={activeTeam.logo}
+                  alt={activeTeam.name}
+                />
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">
+                    {activeTeam.name}
+                  </span>
+                  <span className="truncate text-xs">{activeTeam.plan}</span>
+                </div>
+              </SidebarMenuButton>
+            </Link>
+          </DropdownMenuTrigger>
+        </DropdownMenu>
+      </SidebarMenuItem>
+    </SidebarMenu>
+  );
+}
 
-      <SidebarContent className="px-3 py-2">
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-xs font-medium text-muted-foreground mb-1 px-1">
-            Platform
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu className="space-y-0">
-              {platformItems.map(item => {
-                const Icon = item.icon;
-                const isActive = pathname === item.href;
+// Navigation Main Component
+function NavMain({ groups }: { groups: NavGroup[] }) {
+  const pathname = usePathname();
 
-                return (
-                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={isActive}
-                      className="h-8 px-2"
-                    >
-                      <Link href={item.href}>
-                        <Icon
-                          className="w-4 h-4"
-                          style={{ color: "#F0E7CC" }}
-                        />
-                        <span className="text-sm">{item.label}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+  const isItemActive = (itemUrl: string) => {
+    if (itemUrl === "#") return false;
+    if (itemUrl.startsWith("http")) return false;
+    if (itemUrl === "/dashboard") {
+      return pathname === "/dashboard";
+    }
+    return pathname === itemUrl || pathname.startsWith(itemUrl);
+  };
 
-        <SidebarGroup className="mt-4">
-          <SidebarGroupLabel
-            className="text-xs font-medium text-muted-foreground mb-1 px-1 flex items-center justify-between cursor-pointer hover:text-foreground"
-            onClick={() => setIsCredentialsOpen(!isCredentialsOpen)}
-          >
-            <span>Credentials</span>
-            {isCredentialsOpen ? (
-              <ChevronDown className="w-3 h-3" />
-            ) : (
-              <ChevronRight className="w-3 h-3" />
-            )}
-          </SidebarGroupLabel>
-          {isCredentialsOpen && (
-            <SidebarGroupContent>
-              <SidebarMenu className="space-y-0">
-                {credentialItems.map(item => {
-                  const Icon = item.icon;
-                  const isActive = pathname === item.href;
+  const isSubItemActive = (subItemUrl: string) => {
+    if (subItemUrl.startsWith("http")) return false;
+    return pathname === subItemUrl;
+  };
 
-                  return (
-                    <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton
-                        asChild
-                        isActive={isActive}
-                        className="h-8 px-2"
-                      >
-                        <Link href={item.href}>
-                          <Icon
-                            className="w-4 h-4"
-                            style={{ color: "#F0E7CC" }}
-                          />
-                          <span className="text-sm">{item.label}</span>
-                        </Link>
+  return (
+    <>
+      {groups.map(group => (
+        <SidebarGroup key={group.label}>
+          <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+          <SidebarMenu>
+            {group.items.map(item => (
+              <SidebarMenuItem key={item.title}>
+                {item.isExpandable ? (
+                  <Collapsible defaultOpen={group.label === "Resources" || group.label === "Credentials"}>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton>
+                        {item.icon && <item.icon />}
+                        <span>{item.title}</span>
+                        <ChevronRight className="ml-auto h-4 w-4 shrink-0 transition-transform duration-200" />
                       </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                })}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          )}
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {item.items?.map(subItem => (
+                          <SidebarMenuSubItem key={subItem.title}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={isSubItemActive(subItem.url)}
+                            >
+                              <Link
+                                href={subItem.url}
+                                target={
+                                  subItem.isExternal ? "_blank" : undefined
+                                }
+                                rel={
+                                  subItem.isExternal
+                                    ? "noopener noreferrer"
+                                    : undefined
+                                }
+                              >
+                                {subItem.title}
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </Collapsible>
+                ) : (
+                  <SidebarMenuButton asChild isActive={isItemActive(item.url)}>
+                    <Link
+                      href={item.url}
+                      target={item.isExternal ? "_blank" : undefined}
+                      rel={item.isExternal ? "noopener noreferrer" : undefined}
+                    >
+                      {item.icon && <item.icon />}
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                )}
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
         </SidebarGroup>
-      </SidebarContent>
+      ))}
+    </>
+  );
+}
 
-      <SidebarFooter className="border-t p-3">
-        <div className="flex items-center space-x-2 mb-2">
-          <div className="w-7 h-7 border-2 border-[#F0E7CC] shadow-[0_0_10px_rgba(240,231,204,0.3)] bg-black rounded-full flex items-center justify-center">
-            <span className="text-[#F0E7CC] text-xs font-medium">U</span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium">User</p>
-            <p className="text-xs text-muted-foreground truncate">
-              {walletAddress
-                ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
-                : "No wallet connected"}
-            </p>
-          </div>
-        </div>
-        <Button
-          variant="ghost"
-          onClick={handleDisconnect}
-          className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10 h-8 px-2"
-        >
-          <LogOut className="w-4 h-4 mr-2" />
-          <span className="text-sm">Disconnect</span>
-        </Button>
+// Navigation User Component
+function NavUser() {
+  const { handleDisconnect, walletAddress } = useWallet();
+
+  const user = {
+    name: "User",
+    address: walletAddress
+      ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
+      : "No wallet connected",
+    avatar: "",
+  };
+
+  return (
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <SidebarMenuButton
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
+              <Avatar className="h-8 w-8 rounded-lg">
+                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarFallback className="rounded-lg">U</AvatarFallback>
+              </Avatar>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold">{user.name}</span>
+                <span className="truncate text-xs">{user.address}</span>
+              </div>
+              <ChevronsUpDown className="ml-auto size-4" />
+            </SidebarMenuButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+            side="right"
+            align="end"
+            sideOffset={4}
+          >
+            <DropdownMenuLabel className="p-0 font-normal">
+              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarFallback className="rounded-lg">U</AvatarFallback>
+                </Avatar>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">{user.name}</span>
+                  <span className="truncate text-xs">{user.address}</span>
+                </div>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem onClick={handleDisconnect}>
+                <LogOut />
+                Disconnect
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </SidebarMenuItem>
+    </SidebarMenu>
+  );
+}
+
+// Main App Sidebar Component
+function AppSidebar() {
+  return (
+    <SidebarPrimitive collapsible="icon">
+      <SidebarHeader>
+        <TeamSwitcher teams={teams} />
+      </SidebarHeader>
+      <SidebarContent className="overflow-y-auto">
+        <NavMain groups={navGroups} />
+      </SidebarContent>
+      <SidebarFooter>
+        <SidebarSeparator />
+        <NavUser />
       </SidebarFooter>
+      <SidebarRail />
     </SidebarPrimitive>
   );
 }
