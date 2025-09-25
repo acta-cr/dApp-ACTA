@@ -62,7 +62,7 @@ const teams = [
   {
     name: "ACTA",
     logo: "/logo.png",
-    plan: "dApp Platform",
+    plan: "Infrastructure for digital trust.",
   },
 ];
 
@@ -252,7 +252,12 @@ function NavMain({ groups }: { groups: NavGroup[] }) {
             {group.items.map(item => (
               <SidebarMenuItem key={item.title}>
                 {item.isExpandable ? (
-                  <Collapsible defaultOpen={group.label === "Resources" || group.label === "Credentials"}>
+                  <Collapsible
+                    defaultOpen={
+                      group.label === "Resources" ||
+                      group.label === "Credentials"
+                    }
+                  >
                     <CollapsibleTrigger asChild>
                       <SidebarMenuButton>
                         {item.icon && <item.icon />}
@@ -398,9 +403,7 @@ export default function Sidebar({ children }: AppSidebarProps) {
       <SidebarInset className="bg-transparent">
         <Header />
         <div className="flex flex-1 flex-col bg-transparent">
-          <div className="flex-1 py-4 px-6 md:px-8 lg:px-12">
-            {children}
-          </div>
+          <div className="flex-1 py-4 px-6 md:px-8 lg:px-12">{children}</div>
           <Footer />
         </div>
       </SidebarInset>
