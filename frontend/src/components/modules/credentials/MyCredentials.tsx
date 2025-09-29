@@ -30,7 +30,9 @@ interface CredentialCustomization {
 export function MyCredentials() {
   const { walletAddress } = useWallet();
   const { isLoadingUser } = useWalletContext();
-  const [userCredentials, setUserCredentials] = useState<CredentialContract[]>([]);
+  const [userCredentials, setUserCredentials] = useState<CredentialContract[]>(
+    []
+  );
 
   // Load user credentials
   useEffect(() => {
@@ -49,7 +51,9 @@ export function MyCredentials() {
   }, [walletAddress]);
 
   // Helper functions for credential display
-  const getCredentialGradientClasses = (customization: CredentialCustomization | undefined) => {
+  const getCredentialGradientClasses = (
+    customization: CredentialCustomization | undefined
+  ) => {
     if (!customization) return "from-blue-500 to-purple-600";
 
     switch (customization.selectedGradient) {
@@ -66,8 +70,13 @@ export function MyCredentials() {
     }
   };
 
-  const getCredentialGradientStyle = (customization: CredentialCustomization | undefined) => {
-    if (customization?.selectedGradient === "custom" && customization?.customGradient) {
+  const getCredentialGradientStyle = (
+    customization: CredentialCustomization | undefined
+  ) => {
+    if (
+      customization?.selectedGradient === "custom" &&
+      customization?.customGradient
+    ) {
       return {
         background: `linear-gradient(135deg, ${customization.customGradient.start} 0%, ${customization.customGradient.end} 100%)`,
       };
@@ -75,35 +84,48 @@ export function MyCredentials() {
     return {};
   };
 
-  const getCredentialTemplate = (customization: CredentialCustomization | undefined) => {
+  const getCredentialTemplate = (
+    customization: CredentialCustomization | undefined
+  ) => {
     if (!customization) return null;
 
     switch (customization.selectedTemplate) {
       case "dots":
         return (
           <div className="absolute inset-0 opacity-20">
-            <div className="w-full h-full" style={{
-              backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
-              backgroundSize: "20px 20px"
-            }} />
+            <div
+              className="w-full h-full"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle, white 1px, transparent 1px)",
+                backgroundSize: "20px 20px",
+              }}
+            />
           </div>
         );
       case "lines":
         return (
           <div className="absolute inset-0 opacity-20">
-            <div className="w-full h-full" style={{
-              backgroundImage: "linear-gradient(45deg, transparent 40%, white 50%, transparent 60%)",
-              backgroundSize: "20px 20px"
-            }} />
+            <div
+              className="w-full h-full"
+              style={{
+                backgroundImage:
+                  "linear-gradient(45deg, transparent 40%, white 50%, transparent 60%)",
+                backgroundSize: "20px 20px",
+              }}
+            />
           </div>
         );
       case "geometric":
         return (
           <div className="absolute inset-0 opacity-20">
-            <div className="w-full h-full" style={{
-              backgroundImage: "polygon(50% 0%, 0% 100%, 100% 100%)",
-              clipPath: "polygon(0% 0%, 100% 0%, 50% 100%)"
-            }} />
+            <div
+              className="w-full h-full"
+              style={{
+                backgroundImage: "polygon(50% 0%, 0% 100%, 100% 100%)",
+                clipPath: "polygon(0% 0%, 100% 0%, 50% 100%)",
+              }}
+            />
           </div>
         );
       default:
@@ -111,7 +133,9 @@ export function MyCredentials() {
     }
   };
 
-  const getCredentialLogoComponent = (customization: CredentialCustomization | undefined) => {
+  const getCredentialLogoComponent = (
+    customization: CredentialCustomization | undefined
+  ) => {
     if (!customization) return <CreditCard className="w-6 h-6" />;
 
     switch (customization.selectedLogo) {
@@ -127,7 +151,15 @@ export function MyCredentials() {
         return <Building className="w-6 h-6" />;
       case "custom":
         if (customization.customLogoUrl) {
-          return <Image src={customization.customLogoUrl} alt="Logo" width={24} height={24} className="w-6 h-6 rounded" />;
+          return (
+            <Image
+              src={customization.customLogoUrl}
+              alt="Logo"
+              width={24}
+              height={24}
+              className="w-6 h-6 rounded"
+            />
+          );
         }
         return <CreditCard className="w-6 h-6" />;
       default:
@@ -135,7 +167,9 @@ export function MyCredentials() {
     }
   };
 
-  const getCredentialLogoText = (customization: CredentialCustomization | undefined) => {
+  const getCredentialLogoText = (
+    customization: CredentialCustomization | undefined
+  ) => {
     if (!customization) return "ACTA";
 
     switch (customization.selectedLogo) {
@@ -155,7 +189,6 @@ export function MyCredentials() {
         return "ACTA";
     }
   };
-
 
   if (isLoadingUser) {
     return (
@@ -183,9 +216,12 @@ export function MyCredentials() {
       {/* Status Alert */}
       <Alert className="bg-[#F0E7CC]/10 border-[#F0E7CC]/20 rounded-2xl">
         <Info className="h-4 w-4" />
-        <AlertTitle className="text-[#F0E7CC]">Credential Management</AlertTitle>
+        <AlertTitle className="text-[#F0E7CC]">
+          Credential Management
+        </AlertTitle>
         <AlertDescription className="text-[#F0E7CC]/80">
-          Your credentials are stored securely on the Stellar blockchain. Each credential is cryptographically signed and verifiable.
+          Your credentials are stored securely on the Stellar blockchain. Each
+          credential is cryptographically signed and verifiable.
         </AlertDescription>
       </Alert>
 
@@ -193,20 +229,24 @@ export function MyCredentials() {
       {userCredentials.length > 0 ? (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <Badge variant="outline" className="border-white/20 text-muted-foreground backdrop-blur-sm rounded-2xl">
-              {userCredentials.length} credential{userCredentials.length !== 1 ? "s" : ""}
+            <Badge
+              variant="outline"
+              className="border-white/20 text-muted-foreground backdrop-blur-sm rounded-2xl"
+            >
+              {userCredentials.length} credential
+              {userCredentials.length !== 1 ? "s" : ""}
             </Badge>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid border grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {userCredentials.map((credential, index) => (
-              <Card key={`my-creds-${credential.id}-${index}`} className="group cursor-pointer hover:scale-105 transition-transform bg-background/80 backdrop-blur-xl border-white/10">
-                <CardContent
-                  className="p-0"
-                  onClick={() => {}}
-                >
+              <Card
+                key={`my-creds-${credential.id}-${index}`}
+                className="group cursor-pointer hover:scale-105 transition-transform bg-background/80 backdrop-blur-xl border-white/10"
+              >
+                <CardContent className="p-0" onClick={() => {}}>
                   <div
-                    className={`relative w-full h-56 ${credential.customization?.selectedGradient === "custom" ? "" : "bg-gradient-to-br " + getCredentialGradientClasses(credential.customization)} rounded-xl shadow-xl overflow-hidden`}
+                    className={`relative w-full h-64 ${credential.customization?.selectedGradient === "custom" ? "" : "bg-gradient-to-br " + getCredentialGradientClasses(credential.customization)} rounded-xl shadow-xl overflow-hidden`}
                     style={getCredentialGradientStyle(credential.customization)}
                   >
                     {/* Background Pattern */}
@@ -253,7 +293,9 @@ export function MyCredentials() {
                             </p>
                             <p className="text-sm font-medium">
                               {credential.expiresAt
-                                ? new Date(credential.expiresAt).toLocaleDateString()
+                                ? new Date(
+                                    credential.expiresAt
+                                  ).toLocaleDateString()
                                 : "N/A"}
                             </p>
                           </div>
@@ -266,9 +308,7 @@ export function MyCredentials() {
                           <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
                             Issued By
                           </p>
-                          <p className="text-sm font-medium">
-                            {"ACTA"}
-                          </p>
+                          <p className="text-sm font-medium">{"ACTA"}</p>
                         </div>
                         <div className="flex flex-col items-end">
                           <div className="flex items-center space-x-1">
@@ -292,7 +332,8 @@ export function MyCredentials() {
               No Credentials Yet
             </h3>
             <p className="text-muted-foreground mb-6">
-              You haven&apos;t received any credentials yet. Credentials will appear here when they are issued to your wallet.
+              You haven&apos;t received any credentials yet. Credentials will
+              appear here when they are issued to your wallet.
             </p>
           </CardContent>
         </Card>
