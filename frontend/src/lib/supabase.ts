@@ -3,8 +3,6 @@ import { createClient } from '@supabase/supabase-js'
 // Define the UserProfile type that matches the usage in user.service.ts
 export interface UserProfile {
   wallet_address: string
-  has_api_key: boolean
-  api_key?: string
   created_at: string
 }
 
@@ -30,21 +28,18 @@ export interface Database {
         Row: {
           id: string
           wallet_address: string
-          api_key: string | null
           created_at: string
           updated_at: string
         }
         Insert: {
           id?: string
           wallet_address: string
-          api_key?: string | null
           created_at?: string
           updated_at?: string
         }
         Update: {
           id?: string
           wallet_address?: string
-          api_key?: string | null
           updated_at?: string
         }
       }

@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CardContent } from "@/components/ui/card";
 import {
   CreditCard,
@@ -18,7 +17,6 @@ import {
   Shield,
   ExternalLink,
   AlertCircle,
-  Key,
   Copy,
   FileText,
   Loader2,
@@ -143,22 +141,18 @@ export function CreateCredential({
     customLogoText,
   ]);
 
-  // Check if user has API key when user profile loads
+  // Check if user profile loads
   useEffect(() => {
-    if (userProfile && !userProfile.has_api_key) {
-      toast.error("API Key Required", {
-        description: "Generate an API key first.",
-      });
-    }
+    // User profile loaded successfully
   }, [userProfile]);
 
   // API health check disabled to prevent console errors
   // The app works fine in offline mode without health checks
 
-  // Load user credentials when wallet and API key are available
+  // Load user credentials when wallet is available
   useEffect(() => {
     const loadUserCredentials = async () => {
-      if (walletAddress && userProfile?.has_api_key && userProfile.api_key) {
+      if (walletAddress) {
         try {
           // For now, store credentials locally since we need to implement the API endpoint
           const stored = localStorage.getItem(`credentials_${walletAddress}`);
@@ -487,11 +481,6 @@ export function CreateCredential({
   };
 
   const handleCreateCredential = async () => {
-    if (!userProfile?.has_api_key || !userProfile.api_key) {
-      toast.error("API Key required to create credentials");
-      return;
-    }
-
     if (!walletAddress) {
       toast.error("Wallet connection required to create credentials");
       return;
@@ -690,60 +679,6 @@ Backend offline - mock data`;
       setIsCreating(false);
     }
   };
-
-  // Show API Key manager if user doesn't have an API key
-  if (!isLoadingUser && userProfile && !userProfile.has_api_key) {
-    return (
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
-          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-            <Plus className="w-5 h-5 text-[#F0E7CC]" />
-          </div>
-          <div>
-            <h1 className="text-xl sm:text-2xl font-semibold text-foreground">
-              Create Credential
-            </h1>
-            <p className="text-xs sm:text-sm text-muted-foreground">
-              Design and issue new digital credentials
-            </p>
-          </div>
-        </div>
-
-        {/* API Key Required Notice */}
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>API Key Required</AlertTitle>
-          <AlertDescription>
-            You need to generate an API key before you can create credentials.
-          </AlertDescription>
-        </Alert>
-
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-center space-y-4">
-              <Key className="w-12 h-12 text-[#F0E7CC] mx-auto" />
-              <div>
-                <h3 className="text-lg font-semibold">Generate API Key</h3>
-                <p className="text-sm text-muted-foreground">
-                  Create an API key to start issuing credentials
-                </p>
-              </div>
-              <ShimmerButton className="shadow-2xl">
-                <Button
-                  onClick={() => (window.location.href = "/dashboard/api-key")}
-                  className="w-full"
-                >
-                  <Key className="w-4 h-4 mr-2" />
-                  Go to API Key Management
-                </Button>
-              </ShimmerButton>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   // Show loading state
   if (isLoadingUser) {
@@ -2136,7 +2071,7 @@ Backend offline - mock data`;
                 <Button
                   onClick={handleCreateCredential}
                   disabled={
-                    isCreating || isAuthenticating || !userProfile?.has_api_key
+                    isCreating || isAuthenticating
                   }
                   className="bg-black text-white hover:bg-gray-800 rounded-2xl h-10 px-4 font-semibold shadow-lg transition-all border-2 border-[#F0E7CC]/40 hover:border-[#F0E7CC]/60 golden-border-animated"
                 >

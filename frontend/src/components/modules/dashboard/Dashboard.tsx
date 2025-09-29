@@ -2,14 +2,12 @@
 
 import React from "react";
 import { useWallet } from "@/components/modules/auth/hooks/wallet.hook";
-import { useWalletContext } from "@/providers/wallet.provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Wallet,
-  Key,
   Activity,
   TrendingUp,
   CheckCircle,
@@ -20,7 +18,6 @@ import {
 
 export function Dashboard() {
   const { isConnected, walletAddress } = useWallet();
-  const { userProfile } = useWalletContext();
 
   const formatAddress = (address: string) => {
     return `${address.slice(0, 8)}...${address.slice(-8)}`;
@@ -33,16 +30,6 @@ export function Dashboard() {
       icon: isConnected ? CheckCircle : AlertCircle,
       color: isConnected ? "text-green-600" : "text-muted-foreground",
     },
-    ...(userProfile?.has_api_key
-      ? [
-          {
-            action: "API Key Generated",
-            time: "Recently",
-            icon: CheckCircle,
-            color: "text-green-600",
-          },
-        ]
-      : []),
   ];
 
   return (
@@ -72,15 +59,7 @@ export function Dashboard() {
         </Alert>
       )}
 
-      {isConnected && !userProfile?.has_api_key && (
-        <Alert>
-          <Key className="h-4 w-4" />
-          <AlertTitle>API Key Recommended</AlertTitle>
-          <AlertDescription>
-            Generate an API key to access ACTA services and start creating credentials.
-          </AlertDescription>
-        </Alert>
-      )}
+
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Wallet Information */}
@@ -119,24 +98,6 @@ export function Dashboard() {
                   <div className="flex items-center mt-1">
                     <CheckCircle className="w-4 h-4 mr-2" style={{ color: '#F0E7CC' }} />
                     <span className="text-sm">Connected</span>
-                  </div>
-                </div>
-                <div>
-                  <label className="text-xs font-medium text-muted-foreground">
-                    API Key
-                  </label>
-                  <div className="flex items-center mt-1">
-                    {userProfile?.has_api_key ? (
-                      <>
-                        <CheckCircle className="w-4 h-4 mr-2" style={{ color: '#F0E7CC' }} />
-                        <span className="text-sm">Generated</span>
-                      </>
-                    ) : (
-                      <>
-                        <AlertCircle className="w-4 h-4 text-muted-foreground mr-2" />
-                        <span className="text-sm text-muted-foreground">Not generated</span>
-                      </>
-                    )}
                   </div>
                 </div>
               </div>
@@ -189,10 +150,8 @@ export function Dashboard() {
                 <div className="text-xs text-muted-foreground">Wallets Connected</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-semibold">
-                  {userProfile?.has_api_key ? "1" : "0"}
-                </div>
-                <div className="text-xs text-muted-foreground">API Keys</div>
+                <div className="text-2xl font-semibold">0</div>
+                <div className="text-xs text-muted-foreground">Credentials</div>
               </div>
             </div>
           </CardContent>

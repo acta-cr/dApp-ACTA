@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "ACTA dApp",
-  description: "Generate API keys for ACTA with your Stellar wallet",
+  description: "Create and manage digital credentials with your Stellar wallet",
 };
 
 export default function RootLayout({

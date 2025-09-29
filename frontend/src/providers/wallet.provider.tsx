@@ -10,9 +10,6 @@ type WalletContextType = {
   isLoadingUser: boolean;
   setWalletInfo: (address: string, name: string) => void;
   clearWalletInfo: () => void;
-  generateApiKey: () => Promise<string>;
-  regenerateApiKey: () => Promise<string>;
-  deleteApiKey: () => Promise<void>;
   refreshUserProfile: () => Promise<void>;
 };
 
@@ -77,59 +74,6 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   };
 
   /**
-   * Generate API key for current user
-   */
-  const generateApiKey = async (): Promise<string> => {
-    if (!walletAddress) {
-      throw new Error('No wallet connected');
-    }
-
-    try {
-      const apiKey = await userService.generateApiKey(walletAddress);
-      // Refresh user profile to get updated API key status
-      await refreshUserProfile();
-      return apiKey;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  /**
-   * Regenerate API key for current user
-   */
-  const regenerateApiKey = async (): Promise<string> => {
-    if (!walletAddress) {
-      throw new Error('No wallet connected');
-    }
-
-    try {
-      const apiKey = await userService.generateApiKey(walletAddress);
-      // Refresh user profile to get updated API key status
-      await refreshUserProfile();
-      return apiKey;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  /**
-   * Delete/revoke API key for current user
-   */
-  const deleteApiKey = async (): Promise<void> => {
-    if (!walletAddress) {
-      throw new Error('No wallet connected');
-    }
-
-    try {
-      await userService.revokeApiKey(walletAddress);
-      // Refresh user profile to get updated API key status
-      await refreshUserProfile();
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  /**
    * Refresh user profile from database
    */
   const refreshUserProfile = async (): Promise<void> => {
@@ -146,9 +90,6 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         isLoadingUser,
         setWalletInfo, 
         clearWalletInfo,
-        generateApiKey,
-        regenerateApiKey,
-        deleteApiKey,
         refreshUserProfile
       }}
     >

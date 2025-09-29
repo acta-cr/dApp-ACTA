@@ -17,10 +17,6 @@ export const helpItemKeys = [
     answerKey: "help.questions.searchCredential.answer",
   },
   {
-    questionKey: "help.questions.apiKey.question",
-    answerKey: "help.questions.apiKey.answer",
-  },
-  {
     questionKey: "help.questions.stellarNetwork.question",
     answerKey: "help.questions.stellarNetwork.answer",
   },
