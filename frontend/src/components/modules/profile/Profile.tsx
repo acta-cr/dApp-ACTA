@@ -137,19 +137,19 @@ export function Profile() {
         <CardContent className="p-4 sm:p-6">
           <div className="flex flex-col sm:flex-row items-start space-y-4 sm:space-y-0 sm:space-x-6">
             <Avatar className="h-20 w-20 border-2 border-[#F0E7CC] shadow-[0_0_10px_rgba(240,231,204,0.3)]">
-              <AvatarFallback className="bg-black text-[#F0E7CC] text-xl font-bold">
+              <AvatarFallback className="bg-black text-foreground text-xl font-bold">
                 {walletAddress?.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
 
             <div className="flex-1 space-y-4">
               <div>
-                <h2 className="text-2xl font-bold golden-gradient-text">{walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-6)}` : 'Stellar Wallet'}</h2>
+                <h2 className="text-2xl font-bold text-foreground">{walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-6)}` : 'Stellar Wallet'}</h2>
                 <p className="text-muted-foreground">Connected to ACTA dApp</p>
               </div>
 
               <div className="flex flex-wrap gap-2">
-                <Badge className="bg-[#F0E7CC]/20 text-[#F0E7CC] border-[#F0E7CC]/30 backdrop-blur-sm rounded-2xl">
+                <Badge className="bg-[#F0E7CC]/20 text-foreground border-[#F0E7CC]/30 backdrop-blur-sm rounded-2xl">
                   <div className="w-2 h-2 bg-[#F0E7CC] rounded-full mr-2"></div>
                   Connected
                 </Badge>
@@ -179,8 +179,8 @@ export function Profile() {
 
               <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
                 <CardHeader>
-                  <CardTitle className="flex items-center golden-gradient-text">
-                    <Wallet className="w-5 h-5 mr-2" style={{ color: '#F0E7CC' }} />
+                  <CardTitle className="flex items-center text-foreground">
+                    <Wallet className="w-5 h-5 mr-2 text-[#F0E7CC]" />
                     Wallet Details
                   </CardTitle>
                 </CardHeader>
@@ -300,7 +300,7 @@ export function Profile() {
                     <div className="space-y-2">
                       <Button
                       variant="outline" 
-                      className="w-full justify-start border-[#F0E7CC]/30 text-[#F0E7CC] hover:bg-[#F0E7CC]/10 backdrop-blur-sm rounded-lg"
+                      className="w-full justify-start border-[#F0E7CC]/30 text-foreground hover:bg-[#F0E7CC]/10 backdrop-blur-sm rounded-lg"
                       onClick={() => window.open(`https://stellar.expert/explorer/testnet/account/${walletAddress}`, '_blank')}
                     >
                       <ExternalLink className="w-4 h-4 mr-2" />
@@ -332,8 +332,8 @@ export function Profile() {
             <CardContent className="space-y-6">
               <Alert className="bg-[#F0E7CC]/10 border-[#F0E7CC]/20 rounded-2xl">
                 <Info className="h-4 w-4" />
-                <AlertTitle className="text-[#F0E7CC]">Settings Available</AlertTitle>
-                <AlertDescription className="text-[#F0E7CC]/80">
+                <AlertTitle className="text-foreground">Settings Available</AlertTitle>
+                <AlertDescription className="text-foreground/80">
                   Additional wallet settings and preferences will be available in future updates.
                 </AlertDescription>
               </Alert>
