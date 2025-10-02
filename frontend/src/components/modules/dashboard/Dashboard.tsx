@@ -37,12 +37,15 @@ export function Dashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 ">
         <div>
-          <h1 className="text-2xl font-semibold golden-gradient-text">Dashboard</h1>
+          <h1 className="text-2xl font-semibold text-foreground">Dashboard</h1>
           <p className="text-sm text-muted-foreground">
             Overview of your ACTA dApp status
           </p>
         </div>
-        <Badge variant="outline" className="w-fit border-[#F0E7CC]/30 text-[#F0E7CC]">
+        <Badge
+          variant="outline"
+          className="w-fit border-[#F0E7CC]/30 text-[#F0E7CC]"
+        >
           <div className="w-2 h-2 bg-[#F0E7CC] rounded-full mr-2"></div>
           Live
         </Badge>
@@ -54,19 +57,18 @@ export function Dashboard() {
           <Info className="h-4 w-4" />
           <AlertTitle>Wallet Not Connected</AlertTitle>
           <AlertDescription>
-            Connect your Stellar wallet to access all dashboard features and view your account information.
+            Connect your Stellar wallet to access all dashboard features and
+            view your account information.
           </AlertDescription>
         </Alert>
       )}
-
-
 
       <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-2 gap-6">
         {/* Wallet Information */}
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center golden-gradient-text">
-              <Wallet className="w-4 h-4 mr-2" style={{ color: '#F0E7CC' }} />
+            <CardTitle className="text-base flex items-center text-foreground">
+              <Wallet className="w-4 h-4 mr-2 text-[#F0E7CC]" />
               Wallet Information
             </CardTitle>
           </CardHeader>
@@ -84,7 +86,9 @@ export function Dashboard() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => navigator.clipboard.writeText(walletAddress!)}
+                      onClick={() =>
+                        navigator.clipboard.writeText(walletAddress!)
+                      }
                       className="h-8 px-2"
                     >
                       <Activity className="w-3 h-3" />
@@ -96,7 +100,7 @@ export function Dashboard() {
                     Status
                   </label>
                   <div className="flex items-center mt-1">
-                    <CheckCircle className="w-4 h-4 mr-2" style={{ color: '#F0E7CC' }} />
+                    <CheckCircle className="w-4 h-4 mr-2 text-[#F0E7CC]" />
                     <span className="text-sm">Connected</span>
                   </div>
                 </div>
@@ -104,7 +108,9 @@ export function Dashboard() {
             ) : (
               <div className="text-center py-6">
                 <AlertCircle className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                <p className="text-sm text-muted-foreground">No wallet connected</p>
+                <p className="text-sm text-muted-foreground">
+                  No wallet connected
+                </p>
               </div>
             )}
           </CardContent>
@@ -113,8 +119,8 @@ export function Dashboard() {
         {/* Recent Activity */}
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center golden-gradient-text">
-              <Activity className="w-4 h-4 mr-2" style={{ color: '#F0E7CC' }} />
+            <CardTitle className="text-base flex items-center text-foreground">
+              <Activity className="w-4 h-4 mr-2 text-[#F0E7CC]" />
               Recent Activity
             </CardTitle>
           </CardHeader>
@@ -125,7 +131,9 @@ export function Dashboard() {
                   <activity.icon className={`w-4 h-4 ${activity.color}`} />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium">{activity.action}</p>
-                    <p className="text-xs text-muted-foreground">{activity.time}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {activity.time}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -136,8 +144,8 @@ export function Dashboard() {
         {/* Quick Stats */}
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center golden-gradient-text">
-              <TrendingUp className="w-4 h-4 mr-2" style={{ color: '#F0E7CC' }} />
+            <CardTitle className="text-base flex items-center text-foreground">
+              <TrendingUp className="w-4 h-4 mr-2 text-[#F0E7CC]" />
               Quick Stats
             </CardTitle>
           </CardHeader>
@@ -147,7 +155,9 @@ export function Dashboard() {
                 <div className="text-2xl font-semibold">
                   {isConnected ? "1" : "0"}
                 </div>
-                <div className="text-xs text-muted-foreground">Wallets Connected</div>
+                <div className="text-xs text-muted-foreground">
+                  Wallets Connected
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-semibold">0</div>
@@ -160,25 +170,31 @@ export function Dashboard() {
         {/* Account Overview */}
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center golden-gradient-text">
-              <User className="w-4 h-4 mr-2" style={{ color: '#F0E7CC' }} />
+            <CardTitle className="text-base flex items-center text-foreground">
+              <User className="w-4 h-4 mr-2 text-[#F0E7CC]" />
               Account Overview
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Account Type</span>
+                <span className="text-sm text-muted-foreground">
+                  Account Type
+                </span>
                 <Badge variant="secondary" className="text-xs">
                   Standard
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Member Since</span>
+                <span className="text-sm text-muted-foreground">
+                  Member Since
+                </span>
                 <span className="text-sm">Today</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Last Activity</span>
+                <span className="text-sm text-muted-foreground">
+                  Last Activity
+                </span>
                 <span className="text-sm">{isConnected ? "Now" : "Never"}</span>
               </div>
             </div>

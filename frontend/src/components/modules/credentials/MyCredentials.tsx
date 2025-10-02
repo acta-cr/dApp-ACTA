@@ -216,10 +216,10 @@ export function MyCredentials() {
       {/* Status Alert */}
       <Alert className="bg-[#F0E7CC]/10 border-[#F0E7CC]/20 rounded-2xl">
         <Info className="h-4 w-4" />
-        <AlertTitle className="text-[#F0E7CC]">
+        <AlertTitle className="text-foreground">
           Credential Management
         </AlertTitle>
-        <AlertDescription className="text-[#F0E7CC]/80">
+        <AlertDescription className="text-foreground/80">
           Your credentials are stored securely on the Stellar blockchain. Each
           credential is cryptographically signed and verifiable.
         </AlertDescription>
@@ -270,7 +270,7 @@ export function MyCredentials() {
                       {/* Middle Content */}
                       <div className="space-y-3">
                         <div>
-                          <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
+                          <p className="text-xs text-foreground/70 uppercase tracking-wide">
                             Holder
                           </p>
                           <p className="text-lg font-semibold truncate">
@@ -280,7 +280,7 @@ export function MyCredentials() {
 
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
+                            <p className="text-xs text-foreground/70 uppercase tracking-wide">
                               Category
                             </p>
                             <p className="text-sm font-medium truncate">
@@ -288,7 +288,7 @@ export function MyCredentials() {
                             </p>
                           </div>
                           <div>
-                            <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
+                            <p className="text-xs text-foreground/70 uppercase tracking-wide">
                               Expires
                             </p>
                             <p className="text-sm font-medium">
@@ -305,7 +305,7 @@ export function MyCredentials() {
                       {/* Footer */}
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-xs text-[#F0E7CC]/70 uppercase tracking-wide">
+                          <p className="text-xs text-foreground/70 uppercase tracking-wide">
                             Issued By
                           </p>
                           <p className="text-sm font-medium">{"ACTA"}</p>

@@ -164,13 +164,26 @@
   transform: rotateY(180deg);
 }
 
-/* Golden gradient text */
-.golden-gradient-text {
-  background: linear-gradient(180deg, var(--golden-primary) 0%, var(--golden-secondary) 55%, var(--golden-tertiary) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+/* Icon colors - standardized to golden */
+.icon-golden {
+  @apply text-[#F0E7CC];
+}
+
+.icon-golden-hover {
+  @apply text-[#F0E7CC] hover:text-[#F0E7CC]/80;
+}
+
+.icon-golden-disabled {
+  @apply text-[#F0E7CC]/50;
+}
+
+/* Text colors - standardized to white/foreground */
+.text-standard {
+  @apply text-foreground;
+}
+
+.text-standard-muted {
+  @apply text-muted-foreground;
 }
 
 /* Golden border animation */
