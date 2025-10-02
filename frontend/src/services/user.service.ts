@@ -12,10 +12,27 @@ export class UserService {
     // Try to fetch profile from backend session
     try {
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
-      const resp = await fetch(`${backendUrl}/wallets/me`, {
+      const resp = await fetch(`${backendUrl}/wallets/me?ts=${Date.now()}`, {
         method: 'GET',
         credentials: 'include',
+        headers: { 'Cache-Control': 'no-cache' },
       });
+      if (!resp.ok && resp.status === 304) {
+        // Retry with new timestamp to bypass caches
+        const retry = await fetch(`${backendUrl}/wallets/me?ts=${Date.now() + 1}`, {
+          method: 'GET',
+          credentials: 'include',
+          headers: { 'Cache-Control': 'no-cache' },
+        });
+        if (retry.ok) {
+          const data = await retry.json();
+          const addr = data.walletAddress || walletAddress;
+          return {
+            wallet_address: addr,
+            created_at: new Date().toISOString(),
+          };
+        }
+      }
       if (resp.ok) {
         const data = await resp.json();
         const addr = data.walletAddress || walletAddress;
@@ -41,10 +58,26 @@ export class UserService {
     // Try to fetch profile from backend session
     try {
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
-      const resp = await fetch(`${backendUrl}/wallets/me`, {
+      const resp = await fetch(`${backendUrl}/wallets/me?ts=${Date.now()}`, {
         method: 'GET',
         credentials: 'include',
+        headers: { 'Cache-Control': 'no-cache' },
       });
+      if (!resp.ok && resp.status === 304) {
+        const retry = await fetch(`${backendUrl}/wallets/me?ts=${Date.now() + 1}`, {
+          method: 'GET',
+          credentials: 'include',
+          headers: { 'Cache-Control': 'no-cache' },
+        });
+        if (retry.ok) {
+          const data = await retry.json();
+          const addr = data.walletAddress || walletAddress;
+          return {
+            wallet_address: addr,
+            created_at: new Date().toISOString(),
+          };
+        }
+      }
       if (resp.ok) {
         const data = await resp.json();
         const addr = data.walletAddress || walletAddress;

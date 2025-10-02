@@ -99,12 +99,24 @@ const verifyAuthentication = async (response: AuthenticationResponseJSON) => {
   return await resp.json()
 }
 
-// Load wallet info from backend
+// Load wallet info from backend (avoid 304 by cache-busting)
 const getWalletMe = async () => {
-  const resp = await fetch(`${getBackendUrl()}/wallets/me`, {
+  // First try with cache-busting query param to prefer 200 responses
+  let resp = await fetch(`${getBackendUrl()}/wallets/me?ts=${Date.now()}`, {
     method: 'GET',
     credentials: 'include',
+    headers: { 'Cache-Control': 'no-cache' },
   })
+  // If some proxy returns 304, retry with a new timestamp
+  if (!resp.ok) {
+    if (resp.status === 304) {
+      resp = await fetch(`${getBackendUrl()}/wallets/me?ts=${Date.now() + 1}`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: { 'Cache-Control': 'no-cache' },
+      })
+    }
+  }
   if (!resp.ok) throw new Error('Failed to fetch wallet info')
   return await resp.json()
 }
