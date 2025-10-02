@@ -108,7 +108,7 @@ export class APIService {
 
   private getApiUrl(): string {
     // Use environment variable - fallback for build time
-    return process.env.NEXT_PUBLIC_API_URL || 'https://acta-api.vercel.app';
+    return process.env.NEXT_PUBLIC_API_URL || 'https://api.acta.build';
   }
 
   /**
@@ -142,6 +142,7 @@ export class APIService {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(apiPayload),
       });
 
@@ -223,6 +224,7 @@ export class APIService {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
       });
 
       if (!response.ok) {
@@ -304,6 +306,7 @@ export class APIService {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
       });
 
       if (!response.ok) {

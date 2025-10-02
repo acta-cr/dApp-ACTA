@@ -33,7 +33,6 @@
     "@simplewebauthn/browser": "^8.3.4",
     "@stellar/stellar-base": "^14.0.0",
     "@stellar/stellar-sdk": "^14.2.0",
-    "@supabase/supabase-js": "^2.57.4",
     "@types/qrcode": "^1.5.5",
     "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",

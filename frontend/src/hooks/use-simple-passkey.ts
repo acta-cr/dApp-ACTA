@@ -1,89 +1,112 @@
 import { useState } from 'react'
 import { nativeWebauthnService } from '@/services/native-webauthn.service'
-import { Keypair } from '@stellar/stellar-sdk'
 
 export interface CreateWalletResult {
   status: string
   token: string
   walletAddress: string
-  userId: string
   message: string
 }
 
 export interface AuthenticateResult {
   token: string
   walletAddress: string
-  userId: string
   message: string
 }
 
-// Helper function to generate Stellar wallet from passkey credential
-const generateWalletFromPasskey = async (credentialId: string, rawId: string): Promise<{ keypair: Keypair; address: string; secret: string }> => {
-  // Use credential ID and raw ID as entropy for deterministic key generation
-  const combinedData = new TextEncoder().encode(credentialId + rawId)
-  const hashBuffer = await window.crypto.subtle.digest('SHA-256', combinedData)
-  const entropy = new Uint8Array(hashBuffer)
-
-  // Generate Stellar keypair from entropy
-  const keypair = Keypair.fromRawEd25519Seed(Buffer.from(entropy))
-
-  return {
-    keypair,
-    address: keypair.publicKey(),
-    secret: keypair.secret()
-  }
-}
+// Backend base URL (ACTA-Backend)
+const getBackendUrl = () => process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000'
 
 // Helper function to get the correct RP ID based on environment
 const getRpId = () => {
   if (typeof window === 'undefined') return 'localhost'
-  
   const hostname = window.location.hostname
-  
-  // For localhost development
-  if (hostname === 'localhost' || hostname === '127.0.0.1') {
-    return 'localhost'
-  }
-  
-  // For production (Vercel or other domains)
+  if (hostname === 'localhost' || hostname === '127.0.0.1') return 'localhost'
   return hostname
 }
 
-// Helper function to create WebAuthn options locally
-const createLocalPasskeyOptions = () => {
-  const challenge = window.crypto.getRandomValues(new Uint8Array(32))
-  const userId = window.crypto.getRandomValues(new Uint8Array(16))
+// Fetch registration options from backend
+const getRegistrationOptions = async () => {
+  const resp = await fetch(`${getBackendUrl()}/auth/webauthn/register/options`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({}),
+  })
+  if (!resp.ok) throw new Error('Failed to get registration options')
+  const data = await resp.json()
+  return data.options
+}
 
-  // Convert to base64url strings
-  const challengeB64 = btoa(String.fromCharCode(...challenge)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
-  const userIdB64 = btoa(String.fromCharCode(...userId)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
-
-  return {
-    challenge: challengeB64,
-    rp: {
-      name: 'ACTA dApp',
-      id: getRpId()
-    },
-    user: {
-      id: userIdB64,
-      name: `user_${userIdB64.slice(0, 8)}`,
-      displayName: `User ${userIdB64.slice(0, 8)}`
-    },
-    pubKeyCredParams: [
-      { type: 'public-key' as const, alg: -7 }, // ES256
-      { type: 'public-key' as const, alg: -35 }, // ES384
-      { type: 'public-key' as const, alg: -36 } // ES512
-    ],
-    timeout: 60000,
-    attestation: 'none' as AttestationConveyancePreference,
-    authenticatorSelection: {
-      authenticatorAttachment: 'platform' as AuthenticatorAttachment,
-      userVerification: 'preferred' as UserVerificationRequirement,
-      residentKey: 'preferred' as ResidentKeyRequirement,
-      requireResidentKey: false
-    },
-    excludeCredentials: []
+// Types for WebAuthn JSON payloads sent to backend
+interface RegistrationResponseJSON {
+  id: string
+  rawId: string
+  response: {
+    clientDataJSON: string
+    attestationObject: string
+    transports?: AuthenticatorTransport[]
   }
+  type: 'public-key'
+}
+
+interface AuthenticationResponseJSON {
+  id: string
+  rawId: string
+  response: {
+    clientDataJSON: string
+    authenticatorData: string
+    signature: string
+    userHandle: string | null
+  }
+  type: 'public-key'
+}
+
+// Verify registration response on backend
+const verifyRegistration = async (response: RegistrationResponseJSON) => {
+  const resp = await fetch(`${getBackendUrl()}/auth/webauthn/register/verify`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ response }),
+  })
+  if (!resp.ok) throw new Error('Failed to verify registration')
+  return await resp.json()
+}
+
+// Fetch authentication options from backend
+const getAuthenticationOptions = async () => {
+  const resp = await fetch(`${getBackendUrl()}/auth/webauthn/login/options`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({}),
+  })
+  if (!resp.ok) throw new Error('Failed to get authentication options')
+  const data = await resp.json()
+  return data.options
+}
+
+// Verify authentication response on backend
+const verifyAuthentication = async (response: AuthenticationResponseJSON) => {
+  const resp = await fetch(`${getBackendUrl()}/auth/webauthn/login/verify`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ response }),
+  })
+  if (!resp.ok) throw new Error('Failed to verify authentication')
+  return await resp.json()
+}
+
+// Load wallet info from backend
+const getWalletMe = async () => {
+  const resp = await fetch(`${getBackendUrl()}/wallets/me`, {
+    method: 'GET',
+    credentials: 'include',
+  })
+  if (!resp.ok) throw new Error('Failed to fetch wallet info')
+  return await resp.json()
 }
 
 // Helper function to activate wallet on Stellar testnet using friendbot
@@ -108,45 +131,30 @@ export const useSimplePasskey = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Create new wallet with passkey - fully local
+  // Create new wallet with passkey - backend verified
   const createWallet = async (): Promise<CreateWalletResult> => {
     try {
       setIsLoading(true)
       setError(null)
 
-      // Step 1: Create local WebAuthn options
-      const optionsJSON = createLocalPasskeyOptions()
+      // Step 1: Get registration options from backend
+      const optionsJSON = await getRegistrationOptions()
 
       // Step 2: Create passkey using native WebAuthn
-      const { rawResponse, credentialId } = await nativeWebauthnService.createPasskey({ optionsJSON })
+      const { rawResponse } = await nativeWebauthnService.createPasskey({ optionsJSON })
 
-      // Step 3: Generate Stellar wallet from passkey
-      // Convert ArrayBuffer to base64url string
-      const rawIdString = btoa(String.fromCharCode(...new Uint8Array(rawResponse.rawId)))
-        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
-      const wallet = await generateWalletFromPasskey(credentialId, rawIdString)
+      // Step 3: Verify registration with backend (sets session cookie)
+      await verifyRegistration(rawResponse as unknown as RegistrationResponseJSON)
 
-      // Log Stellar Expert link for verification
-
-      // Step 4: Activate wallet on testnet
-      const activated = await activateWalletOnTestnet(wallet.address)
-      if (activated) {
-      }
-
-      // Step 5: Store wallet info locally
-      const userId = optionsJSON.user.id
-      const token = `local_passkey_${Date.now()}_${credentialId.slice(0, 8)}`
-
-      // Store the credential mapping for future authentication
-      localStorage.setItem('passkey_credential_id', credentialId)
-      localStorage.setItem('passkey_user_id', userId)
-      localStorage.setItem('stellar_address', wallet.address)
+      // Step 4: Fetch wallet info from backend
+      const me = await getWalletMe()
+      const walletAddress = me.publicKey || me.walletAddress
+      const token = 'session'
 
       return {
         status: 'success',
         token,
-        walletAddress: wallet.address,
-        userId,
+        walletAddress,
         message: 'Wallet created successfully with passkey authentication'
       }
 
@@ -159,58 +167,30 @@ export const useSimplePasskey = () => {
     }
   }
 
-  // Authenticate with existing passkey - fully local
+  // Authenticate with existing passkey - backend verified
   const authenticate = async (): Promise<AuthenticateResult> => {
     try {
       setIsLoading(true)
       setError(null)
 
-      // Step 1: Check if we have stored passkey info
-      const storedCredentialId = localStorage.getItem('passkey_credential_id')
-      const storedUserId = localStorage.getItem('passkey_user_id')
-      const storedAddress = localStorage.getItem('stellar_address')
-
-      if (!storedCredentialId || !storedUserId || !storedAddress) {
-        throw new Error('No passkeys found. Please create a new wallet first.')
-      }
-
-      // Step 2: Create local authentication options
-      const challengeBytes = window.crypto.getRandomValues(new Uint8Array(32))
-      const challenge = btoa(String.fromCharCode(...challengeBytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
-      const optionsJSON = {
-        challenge,
-        timeout: 60000,
-        rpId: getRpId(),
-        allowCredentials: [{
-          type: 'public-key' as const,
-          id: storedCredentialId
-        }],
-        userVerification: 'preferred' as UserVerificationRequirement
-      }
+      // Step 1: Get authentication options from backend
+      const optionsJSON = await getAuthenticationOptions()
 
 
       // Step 3: Authenticate with native passkey
       const { rawResponse } = await nativeWebauthnService.authenticateWithPasskey({ optionsJSON })
 
-      // Step 4: Regenerate wallet from stored credential info
-      // Convert ArrayBuffer to base64url string
-      const rawIdString = btoa(String.fromCharCode(...new Uint8Array(rawResponse.rawId)))
-        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
-      const wallet = await generateWalletFromPasskey(storedCredentialId, rawIdString)
+      // Step 4: Verify authentication on backend (sets session cookie)
+      await verifyAuthentication(rawResponse as unknown as AuthenticationResponseJSON)
 
-      // Log wallet info for verification
-
-      // Verify the address matches what we stored
-      if (wallet.address !== storedAddress) {
-        throw new Error('Wallet address mismatch. Authentication failed.')
-      }
-
-      const token = `local_passkey_${Date.now()}_${storedCredentialId.slice(0, 8)}`
+      // Step 5: Fetch wallet info from backend
+      const me = await getWalletMe()
+      const walletAddress = me.publicKey || me.walletAddress
+      const token = 'session'
 
       return {
         token,
-        walletAddress: wallet.address,
-        userId: storedUserId,
+        walletAddress,
         message: 'Authentication successful'
       }
 

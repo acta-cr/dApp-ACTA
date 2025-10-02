@@ -9,10 +9,8 @@ export const useWallet = () => {
   /**
    * Handle successful passkey authentication
    */
-  const handlePasskeySuccess = async (walletAddress: string, token: string) => {
+  const handlePasskeySuccess = async (walletAddress: string, _token: string) => {
     try {
-      // Store the auth token and set wallet info
-      localStorage.setItem('authToken', token);
       await setWalletInfo(walletAddress, 'Passkey Wallet');
     } catch (error) {
       throw error;
@@ -23,8 +21,15 @@ export const useWallet = () => {
    * Disconnect from the passkey wallet and clear the wallet info
    */
   const disconnectWallet = async () => {
-    localStorage.removeItem('authToken');
-    clearWalletInfo();
+    try {
+      // Clear backend session cookie
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+      await fetch(`${backendUrl}/auth/logout`, { method: 'POST', credentials: 'include' });
+    } catch {
+      // ignore
+    } finally {
+      clearWalletInfo();
+    }
   };
 
   /**
@@ -53,19 +58,19 @@ export const useWallet = () => {
     if (!walletAddress) {
       throw new Error('No wallet connected');
     }
-
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-      throw new Error('No authentication token found. Please log in again.');
-    }
-
     try {
-      // For passkey wallets, we simulate message signing using the auth token
-      // In a real implementation, this would involve the backend API
-      const signature = `passkey_signature_${walletAddress}_${message}_${Date.now()}`;
-
+      // Call backend to sign message with server-side wallet
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+      const resp = await fetch(`${backendUrl}/wallets/sign`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ message }),
+      });
+      if (!resp.ok) throw new Error('Failed to sign message');
+      const data = await resp.json();
       return {
-        signedMessage: signature,
+        signedMessage: data.signature,
         signerAddress: walletAddress,
       };
     } catch {

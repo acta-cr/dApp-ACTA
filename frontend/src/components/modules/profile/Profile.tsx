@@ -20,53 +20,31 @@ import {
   EyeOff,
   Key,
 } from 'lucide-react';
-import { Keypair } from '@stellar/stellar-sdk';
+// Backend driven profile; no local secret reconstruction
 
 export function Profile() {
   const { isConnected, walletAddress } = useWallet();
   const [copied, setCopied] = useState(false);
-  const [showSecretKey, setShowSecretKey] = useState(false);
-  const [walletSecret, setWalletSecret] = useState<string | null>(null);
-  const [credentialId, setCredentialId] = useState<string | null>(null);
-  const [userId, setUserId] = useState<string | null>(null);
+  const [credentialIds, setCredentialIds] = useState<string[]>([]);
 
-  // Generate wallet secret from stored passkey data
-  const generateWalletFromPasskey = async (credentialId: string, rawId: string): Promise<{ keypair: Keypair; address: string; secret: string }> => {
-    // Use credential ID and raw ID as entropy for deterministic key generation
-    const combinedData = new TextEncoder().encode(credentialId + rawId)
-    const hashBuffer = await window.crypto.subtle.digest('SHA-256', combinedData)
-    const entropy = new Uint8Array(hashBuffer)
 
-    // Generate Stellar keypair from entropy
-    const keypair = Keypair.fromRawEd25519Seed(Buffer.from(entropy))
-
-    return {
-      keypair,
-      address: keypair.publicKey(),
-      secret: keypair.secret()
-    }
-  }
-
-  // Load wallet information from localStorage
+  // Load passkey list from backend
   useEffect(() => {
     const loadWalletInfo = async () => {
       if (isConnected && walletAddress) {
-        const storedCredentialId = localStorage.getItem('passkey_credential_id');
-        const storedUserId = localStorage.getItem('passkey_user_id');
-        
-        if (storedCredentialId && storedUserId) {
-          setCredentialId(storedCredentialId);
-          setUserId(storedUserId);
-          
-          // Generate secret key for display (only when needed)
-          try {
-            // We need to reconstruct the rawId from the credential
-            // For now, we'll use the credentialId as rawId since we don't store rawId separately
-            const wallet = await generateWalletFromPasskey(storedCredentialId, storedCredentialId);
-            setWalletSecret(wallet.secret);
-          } catch {
-            // Error generating wallet secret
+        try {
+          const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+          const resp = await fetch(`${backendUrl}/credentials/passkeys`, { credentials: 'include' });
+          if (resp.ok) {
+            const data = await resp.json();
+            type PasskeyItem = { credential_id?: string };
+            const ids = ((data.items || []) as PasskeyItem[])
+              .map((p) => p.credential_id)
+              .filter((id): id is string => Boolean(id));
+            setCredentialIds(ids);
           }
+        } catch {
+          // ignore
         }
       }
     };
@@ -84,9 +62,7 @@ export function Profile() {
     }
   };
 
-  const toggleSecretKeyVisibility = () => {
-    setShowSecretKey(!showSecretKey);
-  };
+  // No secret key toggle; secrets remain on backend only
 
   if (!isConnected) {
     return (
@@ -209,84 +185,33 @@ export function Profile() {
                     </p>
                   </div>
 
-                  {/* Secret Key */}
-                  {walletSecret && (
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground flex items-center mb-2">
-                        <Key className="w-4 h-4 mr-1" />
-                        Secret Key
-                      </label>
-                      <div className="flex items-center space-x-3 p-4 bg-red-500/10 backdrop-blur-sm rounded-lg border border-red-500/20">
-                        <code className="flex-1 text-sm text-foreground font-mono break-all">
-                          {showSecretKey ? walletSecret : '•'.repeat(56)}
-                        </code>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={toggleSecretKeyVisibility}
-                          className="flex-shrink-0"
-                        >
-                          {showSecretKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                        </Button>
-                        {showSecretKey && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => copyToClipboard(walletSecret)}
-                            className="flex-shrink-0"
-                          >
-                            {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                          </Button>
-                        )}
-                      </div>
-                      <p className="text-xs text-red-400/70 mt-1">
-                        ⚠️ Keep this private! Never share your secret key with anyone.
-                      </p>
-                    </div>
-                  )}
+                  {/* Secret Key removed: managed securely on backend */}
 
                   {/* Passkey Information */}
-                  {(credentialId || userId) && (
+                  {credentialIds.length > 0 && (
                     <div>
                       <label className="text-sm font-medium text-muted-foreground flex items-center mb-2">
                         <Shield className="w-4 h-4 mr-1" />
                         Passkey Information
                       </label>
                       <div className="space-y-3">
-                        {credentialId && (
-                          <div className="flex justify-between items-center p-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10">
+                        {credentialIds.map((cid) => (
+                          <div key={cid} className="flex justify-between items-center p-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10">
                             <span className="text-sm text-muted-foreground">Credential ID</span>
                             <div className="flex items-center space-x-2">
                               <code className="text-xs text-foreground bg-white/5 backdrop-blur-sm px-2 py-1 rounded border border-white/10 max-w-xs truncate">
-                                {credentialId.slice(0, 8)}...{credentialId.slice(-8)}
+                                {cid.slice(0, 8)}...{cid.slice(-8)}
                               </code>
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => copyToClipboard(credentialId)}
+                                onClick={() => copyToClipboard(cid)}
                               >
                                 {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
                               </Button>
                             </div>
                           </div>
-                        )}
-                        {userId && (
-                          <div className="flex justify-between items-center p-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10">
-                            <span className="text-sm text-muted-foreground">User ID</span>
-                            <div className="flex items-center space-x-2">
-                              <code className="text-xs text-foreground bg-white/5 backdrop-blur-sm px-2 py-1 rounded border border-white/10 max-w-xs truncate">
-                                {userId.slice(0, 8)}...{userId.slice(-8)}
-                              </code>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => copyToClipboard(userId)}
-                              >
-                                {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                              </Button>
-                            </div>
-                          </div>
-                        )}
+                        ))}
                       </div>
                     </div>
                   )}
