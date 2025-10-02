@@ -144,7 +144,7 @@ const navGroups: NavGroup[] = [
         items: [
           {
             title: "Documentation",
-            url: "https://acta.gitbook.io/docs",
+            url: "https://docs.acta.build",
             isExternal: true,
           },
           {
@@ -154,7 +154,7 @@ const navGroups: NavGroup[] = [
           },
           {
             title: "Website",
-            url: "https://acta-web.vercel.app",
+            url: "https://acta.build",
             isExternal: true,
           },
         ],

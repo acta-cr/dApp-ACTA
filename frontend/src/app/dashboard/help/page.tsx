@@ -13,11 +13,13 @@ export default function HelpPage() {
         <div className="flex-1 flex flex-col gap-6">
           <Card className={cn("overflow-hidden")} id="faqs">
             <CardContent className="p-6">
-              <h1 className="text-4xl font-bold mb-2">Frequently Asked Questions</h1>
+              <h1 className="text-4xl font-bold mb-2">
+                Frequently Asked Questions
+              </h1>
               <h2 className="my-4 text-muted-foreground">
                 Find answers to the most common questions about ACTA.{" "}
                 <Link
-                  href="https://acta.gitbook.io/docs"
+                  href="https://docs.acta.build"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground text-sm underline hover:text-primary"
@@ -37,10 +39,11 @@ export default function HelpPage() {
                 <div>
                   <h3 className="font-semibold mb-2">Documentation</h3>
                   <p className="text-muted-foreground mb-2">
-                    Check our complete documentation for detailed guides and API references.
+                    Check our complete documentation for detailed guides and API
+                    references.
                   </p>
                   <Link
-                    href="https://acta.gitbook.io/docs"
+                    href="https://docs.acta.build"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary hover:underline"
@@ -48,14 +51,14 @@ export default function HelpPage() {
                     Go to documentation →
                   </Link>
                 </div>
-                
+
                 <div>
                   <h3 className="font-semibold mb-2">Website</h3>
                   <p className="text-muted-foreground mb-2">
                     Visit our official website to learn more about ACTA.
                   </p>
                   <Link
-                    href="https://acta-web.vercel.app"
+                    href="https://acta.build"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary hover:underline"

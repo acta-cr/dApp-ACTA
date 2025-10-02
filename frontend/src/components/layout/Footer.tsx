@@ -31,23 +31,23 @@ const Footer: React.FC = () => {
           <p className="text-sm text-white">
             Website:{" "}
             <Link
-              href="https://acta-web.vercel.app"
+              href="https://acta.build"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:underline text-white"
             >
-              acta-web.vercel.app
+              acta.build
             </Link>
           </p>
           <p className="text-sm text-white">
             Documentation:{" "}
             <Link
-              href="https://acta.gitbook.io/docs"
+              href="https://docs.acta.build"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:underline text-white"
             >
-              acta.gitbook.io/docs
+              docs.acta.build
             </Link>
           </p>
           <p className="text-sm text-white">
