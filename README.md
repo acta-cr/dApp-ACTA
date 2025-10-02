@@ -104,7 +104,7 @@ Environment variables in `.env`:
 NEXT_PUBLIC_API_URL=https://api.acta.build
 
 # For local development
-# NEXT_PUBLIC_API_URL=http://localhost:8000/v1
+# NEXT_PUBLIC_API_URL=http://localhost:8000
 
 # Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
