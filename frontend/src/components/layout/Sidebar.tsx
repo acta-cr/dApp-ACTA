@@ -397,7 +397,11 @@ export default function Sidebar({ children }: AppSidebarProps) {
       <SidebarInset className="bg-transparent">
         <Header />
         <div className="flex flex-1 flex-col bg-transparent">
-          <div className="flex-1 py-4 px-6 md:px-8 lg:px-12">{children}</div>
+          <div className="flex-1 py-4 px-6 md:px-8 lg:px-12">
+            <div className="max-w-7xl mx-auto">
+              {children}
+            </div>
+          </div>
           <Footer />
         </div>
       </SidebarInset>

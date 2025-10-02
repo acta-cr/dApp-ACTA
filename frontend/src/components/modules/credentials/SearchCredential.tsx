@@ -117,7 +117,7 @@ export function SearchCredential() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-5xl mx-auto">
       {/* Header */}
       <div className="flex items-center space-x-3">
         <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
