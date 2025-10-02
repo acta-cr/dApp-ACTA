@@ -35,7 +35,7 @@ export function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 ">
         <div>
           <h1 className="text-2xl font-semibold golden-gradient-text">Dashboard</h1>
           <p className="text-sm text-muted-foreground">
@@ -61,7 +61,7 @@ export function Dashboard() {
 
 
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-2 gap-6">
         {/* Wallet Information */}
         <Card>
           <CardHeader className="pb-3">

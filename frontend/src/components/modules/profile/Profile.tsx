@@ -90,7 +90,7 @@ export function Profile() {
 
   if (!isConnected) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-6 max-w-5xl mx-auto">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Profile</h1>
           <p className="text-muted-foreground mt-1">Your wallet information and connection details</p>
@@ -125,7 +125,7 @@ export function Profile() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-5xl mx-auto">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-foreground">Profile</h1>
