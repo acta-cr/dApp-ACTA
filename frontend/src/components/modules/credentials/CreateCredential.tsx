@@ -2030,24 +2030,25 @@ Backend offline - mock data`;
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-muted-foreground mb-2">
-                  Description
-                </label>
-                <textarea
-                  value={credentialData.description}
-                  onChange={e =>
-                    handleInputChange("description", e.target.value)
-                  }
-                  rows={3}
-                  className="w-full px-3 py-2 bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F0E7CC] focus:border-[#F0E7CC] text-foreground placeholder-muted-foreground"
-                  placeholder="Brief description of the credential"
-                />
-              </div>
+                <div className="flex-1 flex flex-col min-h-[150px]">
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
+                    Description
+                  </label>
+                  <div className="flex-1 flex flex-col">
+                    <textarea
+                      value={credentialData.description}
+                      onChange={e =>
+                        handleInputChange("description", e.target.value)
+                      }
+                      className="flex-1 w-full px-3 py-2 bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F0E7CC] focus:border-[#F0E7CC] text-foreground placeholder-muted-foreground resize-y min-h-[100px] max-h-[300px]"
+                      placeholder="Brief description of the credential"
+                    />
+                  </div>
+                </div>
             </div>
 
             {/* Actions */}
-            <div className="flex justify-end space-x-4 pt-6 border-t">
+            <div className="flex-shrink-0 flex justify-end space-x-4 pt-6 border-t mt-4">
               <ShimmerButton className="shadow-2xl">
                 <Button
                   variant="outline"
