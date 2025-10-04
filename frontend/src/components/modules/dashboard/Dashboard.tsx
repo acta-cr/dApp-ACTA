@@ -1,11 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useWallet } from "@/components/modules/auth/hooks/wallet.hook";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { KYCModal, KYCFormData } from "@/components/modules/kyc/KYCModal";
 import {
   Wallet,
   Activity,
@@ -14,10 +15,17 @@ import {
   AlertCircle,
   User,
   Info,
+  Shield,
 } from "lucide-react";
 
 export function Dashboard() {
   const { isConnected, walletAddress } = useWallet();
+  const [isKYCModalOpen, setIsKYCModalOpen] = useState(false);
+
+  const handleKYCSuccess = (data: KYCFormData) => {
+    console.log("KYC submitted:", data);
+    // Handle successful KYC submission
+  };
 
   const formatAddress = (address: string) => {
     return `${address.slice(0, 8)}...${address.slice(-8)}`;
@@ -200,7 +208,37 @@ export function Dashboard() {
             </div>
           </CardContent>
         </Card>
+
+        {/* KYC Verification Card */}
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center golden-gradient-text">
+              <Shield className="w-4 h-4 mr-2" style={{ color: '#F0E7CC' }} />
+              Identity Verification
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center space-y-3">
+              <p className="text-sm text-muted-foreground">
+                Complete your KYC verification to access all features
+              </p>
+              <Button 
+                onClick={() => setIsKYCModalOpen(true)}
+                className="w-full"
+              >
+                Start KYC Verification
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
+
+      {/* KYC Modal */}
+      <KYCModal
+        isOpen={isKYCModalOpen}
+        onClose={() => setIsKYCModalOpen(false)}
+        onSuccess={handleKYCSuccess}
+      />
     </div>
   );
 }
