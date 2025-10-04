@@ -33,14 +33,24 @@ interface KYCModalProps {
 export interface KYCFormData {
   firstName: string;
   lastName: string;
+  dateOfBirth: string;
+  nationality: string;
   email: string;
   phone: string;
-  dateOfBirth: string;
-  streetAddress: string;
+  address: string;
   city: string;
-  state: string;
   postalCode: string;
   country: string;
+  occupation: string;
+  employer: string;
+  annualIncome:
+    | "0-25000"
+    | "25000-50000"
+    | "50000-100000"
+    | "100000-250000"
+    | "250000+";
+  sourceOfFunds: string;
+  purposeOfAccount: string;
   documentType: "passport" | "drivers_license" | "national_id";
   documentNumber: string;
   documentFile: File | null;
@@ -50,10 +60,6 @@ export interface KYCFormData {
 const kycSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
   lastName: z.string().min(2, "Last name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  phone: z
-    .string()
-    .min(10, "Please enter a valid phone number with country code"),
   dateOfBirth: z.string().refine(date => {
     const birthDate = new Date(date);
     const today = new Date();
@@ -67,11 +73,28 @@ const kycSchema = z.object({
     }
     return age >= 18;
   }, "You must be at least 18 years old"),
-  streetAddress: z.string().min(1, "Street address is required"),
+  nationality: z.string().min(1, "Nationality is required"),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z
+    .string()
+    .min(10, "Please enter a valid phone number with country code"),
+  address: z.string().min(1, "Address is required"),
   city: z.string().min(1, "City is required"),
-  state: z.string().min(1, "State/Province is required"),
   postalCode: z.string().min(1, "Postal code is required"),
   country: z.string().min(1, "Country is required"),
+  occupation: z.string().min(1, "Occupation is required"),
+  employer: z.string().min(1, "Employer is required"),
+  annualIncome: z
+    .enum([
+      "0-25000",
+      "25000-50000",
+      "50000-100000",
+      "100000-250000",
+      "250000+",
+    ])
+    .refine(val => val !== undefined, "Please select an annual income range"),
+  sourceOfFunds: z.string().min(1, "Source of funds is required"),
+  purposeOfAccount: z.string().min(1, "Purpose of account is required"),
   documentType: z
     .enum(["passport", "drivers_license", "national_id"])
     .refine(val => val !== undefined, "Please select a document type"),
@@ -125,6 +148,14 @@ const documentTypes = [
   { value: "national_id", label: "National ID" },
 ];
 
+const incomeRanges = [
+  { value: "0-25000", label: "$0 - $25,000" },
+  { value: "25000-50000", label: "$25,000 - $50,000" },
+  { value: "50000-100000", label: "$50,000 - $100,000" },
+  { value: "100000-250000", label: "$100,000 - $250,000" },
+  { value: "250000+", label: "$250,000+" },
+];
+
 export const KYCModal: React.FC<KYCModalProps> = ({
   isOpen,
   onClose,
@@ -144,12 +175,35 @@ export const KYCModal: React.FC<KYCModalProps> = ({
     setValue,
     trigger,
     getValues,
+    reset,
   } = useForm<FormData>({
     resolver: zodResolver(kycSchema),
     mode: "onBlur",
   });
 
   const watchedValues = watch();
+
+  // Reset form when modal opens
+  React.useEffect(() => {
+    if (isOpen) {
+      reset();
+      setCurrentStep(1);
+      setUploadedFile(null);
+    }
+  }, [isOpen, reset]);
+
+  // Debug: Log form values when they change
+  React.useEffect(() => {
+    console.log("=== FORM VALUES DEBUG ===");
+    console.log("Date of Birth:", watchedValues.dateOfBirth);
+    console.log("Phone:", watchedValues.phone);
+    console.log("Occupation:", watchedValues.occupation);
+    console.log("Employer:", watchedValues.employer);
+    console.log("Source of Funds:", watchedValues.sourceOfFunds);
+    console.log("Purpose of Account:", watchedValues.purposeOfAccount);
+    console.log("All values:", watchedValues);
+    console.log("=========================");
+  }, [watchedValues]);
 
   const handleFileUpload = (file: File) => {
     if (file.size > 5 * 1024 * 1024) {
@@ -194,7 +248,7 @@ export const KYCModal: React.FC<KYCModalProps> = ({
     const fieldsToValidate = getFieldsForStep(currentStep);
     const isValid = await trigger(fieldsToValidate);
     if (isValid) {
-      setCurrentStep(prev => Math.min(prev + 1, 3));
+      setCurrentStep(prev => Math.min(prev + 1, 5));
     }
   };
 
@@ -205,10 +259,14 @@ export const KYCModal: React.FC<KYCModalProps> = ({
   const getFieldsForStep = (step: number): (keyof FormData)[] => {
     switch (step) {
       case 1:
-        return ["firstName", "lastName", "email", "phone", "dateOfBirth"];
+        return ["firstName", "lastName", "dateOfBirth", "nationality"];
       case 2:
-        return ["streetAddress", "city", "state", "postalCode", "country"];
+        return ["email", "phone", "address", "city", "postalCode", "country"];
       case 3:
+        return ["occupation", "employer", "annualIncome"];
+      case 4:
+        return ["sourceOfFunds", "purposeOfAccount"];
+      case 5:
         return ["documentType", "documentNumber", "documentFile"];
       default:
         return [];
@@ -250,7 +308,7 @@ export const KYCModal: React.FC<KYCModalProps> = ({
   const renderStepIndicator = () => (
     <div className="flex items-center justify-center mb-6">
       <div className="flex items-center space-x-2">
-        {[1, 2, 3].map(step => (
+        {[1, 2, 3, 4, 5].map(step => (
           <div key={step} className="flex items-center">
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
@@ -261,7 +319,7 @@ export const KYCModal: React.FC<KYCModalProps> = ({
             >
               {step < currentStep ? <CheckCircle className="w-4 h-4" /> : step}
             </div>
-            {step < 3 && (
+            {step < 5 && (
               <div
                 className={`w-8 h-0.5 mx-2 ${
                   step < currentStep ? "bg-primary" : "bg-muted"
@@ -278,9 +336,9 @@ export const KYCModal: React.FC<KYCModalProps> = ({
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="firstName">First Name *</Label>
+          <Label htmlFor="firstName-step1">First Name *</Label>
           <Input
-            id="firstName"
+            id="firstName-step1"
             {...register("firstName")}
             className={errors.firstName ? "border-destructive" : ""}
           />
@@ -291,9 +349,9 @@ export const KYCModal: React.FC<KYCModalProps> = ({
           )}
         </div>
         <div>
-          <Label htmlFor="lastName">Last Name *</Label>
+          <Label htmlFor="lastName-step1">Last Name *</Label>
           <Input
-            id="lastName"
+            id="lastName-step1"
             {...register("lastName")}
             className={errors.lastName ? "border-destructive" : ""}
           />
@@ -306,9 +364,54 @@ export const KYCModal: React.FC<KYCModalProps> = ({
       </div>
 
       <div>
-        <Label htmlFor="email">Email Address *</Label>
+        <Label htmlFor="dateOfBirth-step1">Date of Birth *</Label>
         <Input
-          id="email"
+          id="dateOfBirth-step1"
+          type="date"
+          {...register("dateOfBirth")}
+          className={errors.dateOfBirth ? "border-destructive" : ""}
+        />
+        {errors.dateOfBirth && (
+          <p className="text-sm text-destructive mt-1">
+            {errors.dateOfBirth.message}
+          </p>
+        )}
+      </div>
+
+      <div>
+        <Label htmlFor="nationality-step1">Nationality *</Label>
+        <Select
+          value={watchedValues.nationality}
+          onValueChange={value => setValue("nationality", value)}
+        >
+          <SelectTrigger
+            className={errors.nationality ? "border-destructive" : ""}
+          >
+            <SelectValue placeholder="Select nationality" />
+          </SelectTrigger>
+          <SelectContent>
+            {countries.map(country => (
+              <SelectItem key={country} value={country}>
+                {country}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {errors.nationality && (
+          <p className="text-sm text-destructive mt-1">
+            {errors.nationality.message}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+
+  const renderStep2 = () => (
+    <div className="space-y-4">
+      <div>
+        <Label htmlFor="email-step2">Email Address *</Label>
+        <Input
+          id="email-step2"
           type="email"
           {...register("email")}
           className={errors.email ? "border-destructive" : ""}
@@ -321,9 +424,9 @@ export const KYCModal: React.FC<KYCModalProps> = ({
       </div>
 
       <div>
-        <Label htmlFor="phone">Phone Number *</Label>
+        <Label htmlFor="phone-step2">Phone Number *</Label>
         <Input
-          id="phone"
+          id="phone-step2"
           type="tel"
           placeholder="+1 (555) 123-4567"
           {...register("phone")}
@@ -337,43 +440,24 @@ export const KYCModal: React.FC<KYCModalProps> = ({
       </div>
 
       <div>
-        <Label htmlFor="dateOfBirth">Date of Birth *</Label>
+        <Label htmlFor="address-step2">Address *</Label>
         <Input
-          id="dateOfBirth"
-          type="date"
-          {...register("dateOfBirth")}
-          className={errors.dateOfBirth ? "border-destructive" : ""}
+          id="address-step2"
+          {...register("address")}
+          className={errors.address ? "border-destructive" : ""}
         />
-        {errors.dateOfBirth && (
+        {errors.address && (
           <p className="text-sm text-destructive mt-1">
-            {errors.dateOfBirth.message}
-          </p>
-        )}
-      </div>
-    </div>
-  );
-
-  const renderStep2 = () => (
-    <div className="space-y-4">
-      <div>
-        <Label htmlFor="streetAddress">Street Address *</Label>
-        <Input
-          id="streetAddress"
-          {...register("streetAddress")}
-          className={errors.streetAddress ? "border-destructive" : ""}
-        />
-        {errors.streetAddress && (
-          <p className="text-sm text-destructive mt-1">
-            {errors.streetAddress.message}
+            {errors.address.message}
           </p>
         )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="city">City *</Label>
+          <Label htmlFor="city-step2">City *</Label>
           <Input
-            id="city"
+            id="city-step2"
             {...register("city")}
             className={errors.city ? "border-destructive" : ""}
           />
@@ -384,25 +468,9 @@ export const KYCModal: React.FC<KYCModalProps> = ({
           )}
         </div>
         <div>
-          <Label htmlFor="state">State/Province *</Label>
+          <Label htmlFor="postalCode-step2">Postal Code *</Label>
           <Input
-            id="state"
-            {...register("state")}
-            className={errors.state ? "border-destructive" : ""}
-          />
-          {errors.state && (
-            <p className="text-sm text-destructive mt-1">
-              {errors.state.message}
-            </p>
-          )}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="postalCode">Postal Code *</Label>
-          <Input
-            id="postalCode"
+            id="postalCode-step2"
             {...register("postalCode")}
             className={errors.postalCode ? "border-destructive" : ""}
           />
@@ -412,31 +480,30 @@ export const KYCModal: React.FC<KYCModalProps> = ({
             </p>
           )}
         </div>
-        <div>
-          <Label htmlFor="country">Country *</Label>
-          <Select
-            value={watchedValues.country}
-            onValueChange={value => setValue("country", value)}
-          >
-            <SelectTrigger
-              className={errors.country ? "border-destructive" : ""}
-            >
-              <SelectValue placeholder="Select country" />
-            </SelectTrigger>
-            <SelectContent>
-              {countries.map(country => (
-                <SelectItem key={country} value={country}>
-                  {country}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {errors.country && (
-            <p className="text-sm text-destructive mt-1">
-              {errors.country.message}
-            </p>
-          )}
-        </div>
+      </div>
+
+      <div>
+        <Label htmlFor="country-step2">Country *</Label>
+        <Select
+          value={watchedValues.country}
+          onValueChange={value => setValue("country", value)}
+        >
+          <SelectTrigger className={errors.country ? "border-destructive" : ""}>
+            <SelectValue placeholder="Select country" />
+          </SelectTrigger>
+          <SelectContent>
+            {countries.map(country => (
+              <SelectItem key={country} value={country}>
+                {country}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {errors.country && (
+          <p className="text-sm text-destructive mt-1">
+            {errors.country.message}
+          </p>
+        )}
       </div>
     </div>
   );
@@ -444,7 +511,107 @@ export const KYCModal: React.FC<KYCModalProps> = ({
   const renderStep3 = () => (
     <div className="space-y-4">
       <div>
-        <Label htmlFor="documentType">Document Type *</Label>
+        <Label htmlFor="occupation-step3">Occupation *</Label>
+        <Input
+          id="occupation-step3"
+          {...register("occupation")}
+          className={errors.occupation ? "border-destructive" : ""}
+        />
+        {errors.occupation && (
+          <p className="text-sm text-destructive mt-1">
+            {errors.occupation.message}
+          </p>
+        )}
+      </div>
+
+      <div>
+        <Label htmlFor="employer-step3">Employer *</Label>
+        <Input
+          id="employer-step3"
+          {...register("employer")}
+          className={errors.employer ? "border-destructive" : ""}
+        />
+        {errors.employer && (
+          <p className="text-sm text-destructive mt-1">
+            {errors.employer.message}
+          </p>
+        )}
+      </div>
+
+      <div>
+        <Label htmlFor="annualIncome-step3">Annual Income *</Label>
+        <Select
+          value={watchedValues.annualIncome}
+          onValueChange={value =>
+            setValue(
+              "annualIncome",
+              value as
+                | "0-25000"
+                | "25000-50000"
+                | "50000-100000"
+                | "100000-250000"
+                | "250000+"
+            )
+          }
+        >
+          <SelectTrigger
+            className={errors.annualIncome ? "border-destructive" : ""}
+          >
+            <SelectValue placeholder="Select annual income range" />
+          </SelectTrigger>
+          <SelectContent>
+            {incomeRanges.map(range => (
+              <SelectItem key={range.value} value={range.value}>
+                {range.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {errors.annualIncome && (
+          <p className="text-sm text-destructive mt-1">
+            {errors.annualIncome.message}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+
+  const renderStep4 = () => (
+    <div className="space-y-4">
+      <div>
+        <Label htmlFor="sourceOfFunds-step4">Source of Funds *</Label>
+        <Input
+          id="sourceOfFunds-step4"
+          {...register("sourceOfFunds")}
+          className={errors.sourceOfFunds ? "border-destructive" : ""}
+        />
+        {errors.sourceOfFunds && (
+          <p className="text-sm text-destructive mt-1">
+            {errors.sourceOfFunds.message}
+          </p>
+        )}
+      </div>
+
+      <div>
+        <Label htmlFor="purposeOfAccount-step4">Purpose of Account *</Label>
+        <Input
+          id="purposeOfAccount-step4"
+          {...register("purposeOfAccount")}
+          className={errors.purposeOfAccount ? "border-destructive" : ""}
+        />
+        {errors.purposeOfAccount && (
+          <p className="text-sm text-destructive mt-1">
+            {errors.purposeOfAccount.message}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+
+  const renderStep5 = () => (
+    <div className="space-y-4">
+      <div>
+        <Label htmlFor="documentType-step5">Document Type *</Label>
         <Select
           value={watchedValues.documentType}
           onValueChange={value =>
@@ -475,9 +642,9 @@ export const KYCModal: React.FC<KYCModalProps> = ({
       </div>
 
       <div>
-        <Label htmlFor="documentNumber">Document Number *</Label>
+        <Label htmlFor="documentNumber-step5">Document Number *</Label>
         <Input
-          id="documentNumber"
+          id="documentNumber-step5"
           {...register("documentNumber")}
           className={errors.documentNumber ? "border-destructive" : ""}
         />
@@ -489,7 +656,7 @@ export const KYCModal: React.FC<KYCModalProps> = ({
       </div>
 
       <div>
-        <Label>Document Upload *</Label>
+        <Label htmlFor="documentUpload-step5">Document Upload *</Label>
         <div
           className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
             isDragOver
@@ -545,6 +712,10 @@ export const KYCModal: React.FC<KYCModalProps> = ({
         return renderStep2();
       case 3:
         return renderStep3();
+      case 4:
+        return renderStep4();
+      case 5:
+        return renderStep5();
       default:
         return null;
     }
@@ -555,8 +726,12 @@ export const KYCModal: React.FC<KYCModalProps> = ({
       case 1:
         return "Personal Information";
       case 2:
-        return "Address Information";
+        return "Contact Information";
       case 3:
+        return "Professional Information";
+      case 4:
+        return "Additional Information";
+      case 5:
         return "Identity Verification";
       default:
         return "";
@@ -576,12 +751,12 @@ export const KYCModal: React.FC<KYCModalProps> = ({
           <div className="text-center">
             <h3 className="text-lg font-semibold">{getStepTitle()}</h3>
             <p className="text-sm text-muted-foreground">
-              Step {currentStep} of 3
+              Step {currentStep} of 5
             </p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {renderStepContent()}
+            <div key={`step-${currentStep}`}>{renderStepContent()}</div>
 
             <div className="flex justify-between pt-6">
               <Button
@@ -594,7 +769,7 @@ export const KYCModal: React.FC<KYCModalProps> = ({
                 Previous
               </Button>
 
-              {currentStep < 3 ? (
+              {currentStep < 5 ? (
                 <Button
                   type="button"
                   onClick={nextStep}
